@@ -4,9 +4,7 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   font-family: Arial, sans-serif;
@@ -77,13 +75,15 @@ body {
 
 .nav-links {
   display: flex;
-  gap: 18px;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .nav-links a {
   text-decoration: none;
   color: white;
   opacity: .85;
+  font-size: .85rem;
 }
 
 .hero {
@@ -95,9 +95,7 @@ body {
   padding: 80px 20px;
 }
 
-.hero-content {
-  max-width: 1100px;
-}
+.hero-content { max-width: 1100px; }
 
 .eyebrow {
   color: #7df9ff;
@@ -155,11 +153,21 @@ body {
   margin-top: 40px;
 }
 
-.stat-card {
+.stat-card,
+.bottle-card,
+.info-card,
+.form-card,
+.card,
+.step,
+.comment,
+.progress-card,
+.zodiac-card,
+.battle-card {
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.08);
-  padding: 25px;
   border-radius: 25px;
+  padding: 25px;
+  backdrop-filter: blur(12px);
 }
 
 .stat-card h3 {
@@ -167,9 +175,7 @@ body {
   color: #7df9ff;
 }
 
-.hero-product {
-  margin-top: 50px;
-}
+.hero-product { margin-top: 50px; }
 
 .hero-product img {
   width: min(95%,600px);
@@ -203,27 +209,31 @@ body {
   gap: 30px;
 }
 
-.bottle-card,
-.info-card,
-.form-card,
-.card,
-.step,
-.comment,
-.progress-card,
-.zodiac-card,
-.battle-card {
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 25px;
-  padding: 25px;
+.bottle { text-align: center; }
+
+.zodiac-big { font-size: 4rem; }
+
+.info-card h3,
+.card h3,
+.step h3,
+.zodiac-card h3,
+.progress-card h3,
+.battle-card h3 {
+  color: #7df9ff;
+  margin-bottom: 12px;
 }
 
-.bottle {
-  text-align: center;
-}
-
-.zodiac-big {
-  font-size: 4rem;
+.info-card p,
+.card p,
+.step p,
+.zodiac-card p,
+.progress-card p,
+.battle-card p,
+.form-card p,
+.comment p {
+  color: #d8d8d8;
+  line-height: 1.7;
+  margin-bottom: 10px;
 }
 
 .ingredient-pills {
@@ -282,9 +292,7 @@ select {
   color: white;
 }
 
-textarea {
-  min-height: 130px;
-}
+textarea { min-height: 130px; }
 
 .bar {
   width: 100%;
@@ -311,6 +319,7 @@ textarea {
 .vs {
   font-size: 2rem;
   font-weight: 900;
+  text-align: center;
 }
 
 .timeline {
@@ -338,9 +347,7 @@ footer {
   padding: 60px 20px;
 }
 
-.small {
-  opacity: .6;
-}
+.small { opacity: .6; }
 
 @media (max-width: 850px) {
   .showcase,
