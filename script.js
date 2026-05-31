@@ -72,9 +72,7 @@ function renderZodiacs(votes = {}) {
       <div class="symbol">${item.symbol}</div>
       <h3>${item.sign}</h3>
       <p>${item.flavor}</p>
-      <button class="vote-btn" onclick="vote('${item.sign}')">
-        Vote For ${item.sign}
-      </button>
+      <button class="vote-btn" onclick="vote('${item.sign}')">Vote For ${item.sign}</button>
       <div class="vote-count">${count} Votes</div>
     `;
 
