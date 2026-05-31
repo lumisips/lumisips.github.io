@@ -1,4 +1,29 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+  get,
+  onValue,
+  runTransaction
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xkoeaqkg";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDW_HC9OVcpkLc4TFY6MR8brufTPniwXEg",
+  authDomain: "lumisips-b280f.firebaseapp.com",
+  databaseURL: "https://lumisips-b280f-default-rtdb.firebaseio.com",
+  projectId: "lumisips-b280f",
+  storageBucket: "lumisips-b280f.firebasestorage.app",
+  messagingSenderId: "980927514380",
+  appId: "1:980927514380:web:5e92f1aeb27ba46a9eeb29",
+  measurementId: "G-D307MPGWL1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 const zodiacFlavors = [
   { sign: "Aries", symbol: "♈", flavor: "Blood Orange Mango Heat", profile: "Bold citrus, tropical mango, light spicy finish." },
@@ -15,45 +40,25 @@ const zodiacFlavors = [
   { sign: "Pisces", symbol: "♓", flavor: "Peach Dragon Fruit Lychee", profile: "Dreamy, soft, tropical, emotional." }
 ];
 
-function getVotes() {
-  return JSON.parse(localStorage.getItem("lumisipsVotes")) || {};
+async function sendToFormspree(data) {
+  try {
+    await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+  } catch (error) {
+    console.error("Formspree error:", error);
+  }
 }
 
-function saveVotes(votes) {
-  localStorage.setItem("lumisipsVotes", JSON.stringify(votes));
-}
-
-async function sendToLumiSips(data) {
-  const response = await fetch(FORMSPREE_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
-    body: JSON.stringify(data)
-  });
-
-  return response.ok;
-}
-
-async function vote(sign) {
-  const votes = getVotes();
-  votes[sign] = (votes[sign] || 0) + 1;
-  saveVotes(votes);
-  renderZodiacs();
-
-  await sendToLumiSips({
-    submission_type: "Zodiac Vote",
-    vote_for: sign,
-    date: new Date().toLocaleString()
-  });
-}
-
-function renderZodiacs() {
+function renderZodiacs(votes = {}) {
   const grid = document.getElementById("zodiacGrid");
   if (!grid) return;
 
-  const votes = getVotes();
   grid.innerHTML = "";
 
   zodiacFlavors.forEach(item => {
@@ -75,15 +80,26 @@ function renderZodiacs() {
   });
 }
 
-function getComments() {
-  return JSON.parse(localStorage.getItem("lumisipsComments")) || [];
-}
+window.vote = async function(sign) {
+  const voteRef = ref(db, "votes/" + sign);
 
-function saveComments(comments) {
-  localStorage.setItem("lumisipsComments", JSON.stringify(comments));
-}
+  await runTransaction(voteRef, currentValue => {
+    return (currentValue || 0) + 1;
+  });
 
-async function addComment() {
+  await sendToFormspree({
+    submission_type: "Zodiac Vote",
+    vote_for: sign,
+    date: new Date().toLocaleString()
+  });
+};
+
+onValue(ref(db, "votes"), snapshot => {
+  const votes = snapshot.val() || {};
+  renderZodiacs(votes);
+});
+
+window.addComment = async function() {
   const name = document.getElementById("nameInput").value.trim();
   const zodiac = document.getElementById("zodiacInput").value;
   const flavor = document.getElementById("flavorInput").value.trim();
@@ -99,52 +115,48 @@ async function addComment() {
     name,
     zodiac,
     flavor_idea: flavor,
-    reason: comment,
+    comment,
     date: new Date().toLocaleString()
   };
 
-  const comments = getComments();
-  comments.unshift(entry);
-  saveComments(comments);
-  renderComments();
-
-  const sent = await sendToLumiSips(entry);
-
-  if (sent) {
-    alert("Flavor idea sent to LumiSips!");
-  } else {
-    alert("Saved on the site, but email sending failed. Try again.");
-  }
+  await push(ref(db, "flavorSuggestions"), entry);
+  await sendToFormspree(entry);
 
   document.getElementById("nameInput").value = "";
   document.getElementById("zodiacInput").value = "";
   document.getElementById("flavorInput").value = "";
   document.getElementById("commentInput").value = "";
-}
+
+  alert("Flavor idea submitted to LumiSips!");
+};
 
 function renderComments() {
   const commentsBox = document.getElementById("comments");
   if (!commentsBox) return;
 
-  const comments = getComments();
-  commentsBox.innerHTML = "";
+  onValue(ref(db, "flavorSuggestions"), snapshot => {
+    commentsBox.innerHTML = "";
 
-  comments.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "comment";
+    const data = snapshot.val() || {};
+    const comments = Object.values(data).reverse().slice(0, 10);
 
-    div.innerHTML = `
-      <p><strong>${item.name}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
-      <p><strong>Flavor Idea:</strong> ${item.flavor_idea || item.flavor}</p>
-      <p>${item.reason || item.comment}</p>
-      <p style="font-size:0.8rem; opacity:0.65;">${item.date}</p>
-    `;
+    comments.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "comment";
 
-    commentsBox.appendChild(div);
+      div.innerHTML = `
+        <p><strong>${item.name}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
+        <p><strong>Flavor Idea:</strong> ${item.flavor_idea}</p>
+        <p>${item.comment}</p>
+        <p style="font-size:0.8rem; opacity:0.65;">${item.date}</p>
+      `;
+
+      commentsBox.appendChild(div);
+    });
   });
 }
 
-async function joinList() {
+window.joinList = async function() {
   const name = document.getElementById("joinName").value.trim();
   const email = document.getElementById("joinEmail").value.trim();
   const zodiac = document.getElementById("joinZodiac").value;
@@ -163,18 +175,15 @@ async function joinList() {
     date: new Date().toLocaleString()
   };
 
-  const sent = await sendToLumiSips(member);
-
-  if (sent) {
-    message.textContent = "You're on the LumiList. Welcome to the movement.";
-  } else {
-    message.textContent = "Something went wrong. Please try again.";
-  }
+  await push(ref(db, "lumiList"), member);
+  await sendToFormspree(member);
 
   document.getElementById("joinName").value = "";
   document.getElementById("joinEmail").value = "";
   document.getElementById("joinZodiac").value = "";
-}
+
+  message.textContent = "You're on the LumiList. Welcome to the movement.";
+};
 
 renderZodiacs();
 renderComments();
