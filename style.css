@@ -17,9 +17,9 @@ body {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.28), transparent 30%),
-    radial-gradient(circle at 85% 35%, rgba(255, 77, 255, 0.28), transparent 30%),
-    radial-gradient(circle at 50% 100%, rgba(98, 70, 255, 0.3), transparent 40%);
+    radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.30), transparent 30%),
+    radial-gradient(circle at 85% 35%, rgba(255, 77, 255, 0.30), transparent 30%),
+    radial-gradient(circle at 50% 100%, rgba(98, 70, 255, 0.32), transparent 40%);
   z-index: -3;
 }
 
@@ -60,15 +60,16 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(3, 7, 18, 0.78);
-  backdrop-filter: blur(16px);
+  background: rgba(3, 7, 18, 0.82);
+  backdrop-filter: blur(18px);
   border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
 .brand {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 900;
-  background: linear-gradient(90deg, #00d9ff, #ff4dff);
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #00d9ff, #ffffff, #ff4dff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -83,6 +84,12 @@ body {
   text-decoration: none;
   font-size: 0.9rem;
   opacity: 0.85;
+  transition: 0.2s ease;
+}
+
+.nav-links a:hover {
+  opacity: 1;
+  color: #7df9ff;
 }
 
 .hero {
@@ -111,7 +118,7 @@ body {
   background: linear-gradient(90deg, #00d9ff, #ffffff, #ff4dff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 25px rgba(0,217,255,0.5));
+  filter: drop-shadow(0 0 25px rgba(0,217,255,0.55));
 }
 
 .tagline {
@@ -142,6 +149,11 @@ body {
   border-radius: 999px;
   text-decoration: none;
   font-weight: 900;
+  transition: 0.25s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
 }
 
 .primary {
@@ -183,7 +195,7 @@ body {
 .section h2 {
   text-align: center;
   font-size: clamp(2.2rem, 6vw, 4rem);
-  background: linear-gradient(90deg, #00d9ff, #ff4dff);
+  background: linear-gradient(90deg, #00d9ff, #ffffff, #ff4dff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -350,6 +362,13 @@ body {
   color: white;
   font-weight: 900;
   cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.vote-btn:hover,
+.form-card button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0,217,255,0.35);
 }
 
 .vote-count {
@@ -374,6 +393,14 @@ textarea {
   background: rgba(0,0,0,0.38);
   color: white;
   outline: none;
+  font-size: 1rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #7df9ff;
+  box-shadow: 0 0 18px rgba(0,217,255,0.22);
 }
 
 textarea {
@@ -407,6 +434,20 @@ textarea {
   font-weight: bold;
 }
 
+.success-message {
+  color: #7df9ff;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: 800;
+}
+
+.error-message {
+  color: #ff7aa8;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: 800;
+}
+
 footer {
   padding: 65px 20px;
   text-align: center;
@@ -415,7 +456,7 @@ footer {
 
 footer h2 {
   font-size: 3.2rem;
-  background: linear-gradient(90deg, #00d9ff, #ff4dff);
+  background: linear-gradient(90deg, #00d9ff, #ffffff, #ff4dff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -445,5 +486,13 @@ footer p {
 
   .hero-product img {
     width: 94%;
+  }
+
+  .section {
+    padding: 70px 6%;
+  }
+
+  .bottle {
+    width: 220px;
   }
 }
