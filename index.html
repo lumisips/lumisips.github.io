@@ -15,6 +15,8 @@
     <div class="brand">LumiSips</div>
     <div class="nav-links">
       <a href="#flagship">Cancer</a>
+      <a href="#progress">Progress</a>
+      <a href="#collection">Collection</a>
       <a href="#leaderboard">Leaderboard</a>
       <a href="#battle">Battle</a>
       <a href="#zodiac">Vote</a>
@@ -45,10 +47,12 @@
           <h3 id="voteTotal">0</h3>
           <p>Total Votes</p>
         </div>
+
         <div class="stat-card">
           <h3 id="flavorTotal">0</h3>
           <p>Flavor Ideas</p>
         </div>
+
         <div class="stat-card">
           <h3 id="memberTotal">0</h3>
           <p>LumiList Members</p>
@@ -108,32 +112,72 @@
     </p>
 
     <div class="progress-grid">
-      <div class="progress-card"><h3>Sweetness</h3><div class="bar"><span style="width:85%"></span></div><p>85%</p></div>
-      <div class="progress-card"><h3>Acidity</h3><div class="bar"><span style="width:78%"></span></div><p>78%</p></div>
-      <div class="progress-card"><h3>Color</h3><div class="bar"><span style="width:92%"></span></div><p>92%</p></div>
-      <div class="progress-card"><h3>Body</h3><div class="bar"><span style="width:80%"></span></div><p>80%</p></div>
-      <div class="progress-card"><h3>Carbonation</h3><div class="bar"><span style="width:70%"></span></div><p>70%</p></div>
-      <div class="progress-card"><h3>Market Readiness</h3><div class="bar"><span style="width:55%"></span></div><p>55%</p></div>
+      <div class="progress-card">
+        <h3>Sweetness</h3>
+        <div class="bar"><span style="width:85%"></span></div>
+        <p>85%</p>
+      </div>
+
+      <div class="progress-card">
+        <h3>Acidity</h3>
+        <div class="bar"><span style="width:78%"></span></div>
+        <p>78%</p>
+      </div>
+
+      <div class="progress-card">
+        <h3>Color</h3>
+        <div class="bar"><span style="width:92%"></span></div>
+        <p>92%</p>
+      </div>
+
+      <div class="progress-card">
+        <h3>Body</h3>
+        <div class="bar"><span style="width:80%"></span></div>
+        <p>80%</p>
+      </div>
+
+      <div class="progress-card">
+        <h3>Carbonation</h3>
+        <div class="bar"><span style="width:70%"></span></div>
+        <p>70%</p>
+      </div>
+
+      <div class="progress-card">
+        <h3>Market Readiness</h3>
+        <div class="bar"><span style="width:55%"></span></div>
+        <p>55%</p>
+      </div>
     </div>
   </section>
 
-  <section id="leaderboard" class="section">
-    <h2>🏆 Zodiac Leaderboard</h2>
+  <section id="collection" class="section">
+    <h2>🌌 Zodiac Collection</h2>
     <p class="section-subtitle">
-      The LumiSips community decides which zodiac flavor gets developed next.
+      Every zodiac receives its own flavor profile, colorway, lore, ingredients, and limited release.
+    </p>
+
+    <div id="collectionGrid" class="zodiac-grid"></div>
+  </section>
+
+  <section id="leaderboard" class="section">
+    <h2>🏆 Zodiac Flavor Rankings</h2>
+    <p class="section-subtitle">
+      The community decides which flavor launches next.
     </p>
 
     <div class="form-card">
       <div id="leaderboardList">
-        <div class="comment"><p>Loading leaderboard...</p></div>
+        <div class="comment">
+          <p>Loading leaderboard...</p>
+        </div>
       </div>
     </div>
   </section>
 
   <section id="battle" class="section">
-    <h2>Flavor Battle Arena</h2>
+    <h2>⚔️ Flavor Battle Arena</h2>
     <p class="section-subtitle">
-      Pick a side. The strongest community flavor moves closer to development.
+      Choose the flavor you would buy today.
     </p>
 
     <div class="battle-grid">
@@ -164,15 +208,6 @@
     <div id="zodiacGrid" class="zodiac-grid"></div>
   </section>
 
-  <section id="collection" class="section">
-    <h2>Zodiac Collection Preview</h2>
-    <p class="section-subtitle">
-      Twelve zodiac drops. One community-built flavor universe.
-    </p>
-
-    <div id="collectionGrid" class="zodiac-grid"></div>
-  </section>
-
   <section id="community" class="section">
     <h2>Community Flavor Lab</h2>
     <p class="section-subtitle">
@@ -184,9 +219,18 @@
 
       <select id="zodiacInput">
         <option value="">Choose zodiac sign</option>
-        <option>Aries</option><option>Taurus</option><option>Gemini</option><option>Cancer</option>
-        <option>Leo</option><option>Virgo</option><option>Libra</option><option>Scorpio</option>
-        <option>Sagittarius</option><option>Capricorn</option><option>Aquarius</option><option>Pisces</option>
+        <option>Aries</option>
+        <option>Taurus</option>
+        <option>Gemini</option>
+        <option>Cancer</option>
+        <option>Leo</option>
+        <option>Virgo</option>
+        <option>Libra</option>
+        <option>Scorpio</option>
+        <option>Sagittarius</option>
+        <option>Capricorn</option>
+        <option>Aquarius</option>
+        <option>Pisces</option>
       </select>
 
       <input id="flavorInput" placeholder="Flavor idea example: Kiwi Black Cherry Lime" />
@@ -199,37 +243,97 @@
   </section>
 
   <section id="story" class="section">
-    <h2>Founder Story</h2>
+    <h2>👑 Why LumiSips Exists</h2>
+
     <div class="form-card">
       <p>
-        LumiSips started in Anaheim, California with a simple goal: create a beverage
-        people could help build from the ground up. Every formula, every flavor, and
-        every drop is influenced by real testing, real feedback, and community voting.
+        LumiSips started in Anaheim, California with a simple goal:
+        create a beverage brand built around identity, community feedback,
+        and flavors people actually want.
       </p>
+
       <p>
-        The first flagship flavor begins with Cancer: Blue Raspberry, Dragon Fruit,
-        and Hibiscus — a bold, emotional, luminous flavor built batch by batch.
+        Instead of guessing what customers want, the community helps shape every future release.
+        Every vote, every flavor idea, and every interaction helps build LumiSips.
       </p>
     </div>
   </section>
 
   <section id="lab" class="section">
     <h2>LumiSips Development Lab</h2>
+
     <div class="timeline">
-      <div class="step"><h3>01 — Concept</h3><p>Zodiac-based drink line with Cancer as the first official flavor.</p></div>
-      <div class="step"><h3>02 — Formula Testing</h3><p>Testing sweetness, acidity, carbonation, color, aroma, and body.</p></div>
-      <div class="step"><h3>03 — Branding</h3><p>Dark cosmic visuals, neon glow, premium packaging direction.</p></div>
-      <div class="step"><h3>04 — Launch Path</h3><p>Perfect the formula, gather feedback, sample locally, then prepare for manufacturing.</p></div>
+      <div class="step">
+        <h3>01 — Concept</h3>
+        <p>Zodiac-based drink line with Cancer as the first official flavor.</p>
+      </div>
+
+      <div class="step">
+        <h3>02 — Formula Testing</h3>
+        <p>Testing sweetness, acidity, carbonation, color, aroma, and body.</p>
+      </div>
+
+      <div class="step">
+        <h3>03 — Branding</h3>
+        <p>Dark cosmic visuals, neon glow, premium packaging direction.</p>
+      </div>
+
+      <div class="step">
+        <h3>04 — Launch Path</h3>
+        <p>Perfect the formula, gather feedback, sample locally, then prepare for manufacturing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>🚀 LumiSips Roadmap</h2>
+
+    <div class="timeline">
+      <div class="step">
+        <h3>2026</h3>
+        <p>Perfect Cancer Formula</p>
+      </div>
+
+      <div class="step">
+        <h3>2026</h3>
+        <p>Build Community</p>
+      </div>
+
+      <div class="step">
+        <h3>2027</h3>
+        <p>First Production Run</p>
+      </div>
+
+      <div class="step">
+        <h3>2027</h3>
+        <p>Retail Expansion</p>
+      </div>
     </div>
   </section>
 
   <section class="section">
     <h2>Future Product Lines</h2>
+
     <div class="cards">
-      <div class="card"><h3>Still Hydration</h3><p>Non-carbonated, smooth, refreshing, no caffeine.</p></div>
-      <div class="card"><h3>Sparkling Hydration</h3><p>Carbonated version with stronger flavor lift and clean fizz.</p></div>
-      <div class="card"><h3>Energy Line</h3><p>Future caffeinated version with bolder flavor and functional energy.</p></div>
-      <div class="card"><h3>Limited Zodiac Drops</h3><p>Community-voted flavors released by zodiac collection.</p></div>
+      <div class="card">
+        <h3>Still Hydration</h3>
+        <p>Non-carbonated, smooth, refreshing, no caffeine.</p>
+      </div>
+
+      <div class="card">
+        <h3>Sparkling Hydration</h3>
+        <p>Carbonated version with stronger flavor lift and clean fizz.</p>
+      </div>
+
+      <div class="card">
+        <h3>Energy Line</h3>
+        <p>Future caffeinated version with bolder flavor and functional energy.</p>
+      </div>
+
+      <div class="card">
+        <h3>Limited Zodiac Drops</h3>
+        <p>Community-voted flavors released by zodiac collection.</p>
+      </div>
     </div>
   </section>
 
@@ -245,9 +349,18 @@
 
       <select id="joinZodiac">
         <option value="">Your zodiac sign</option>
-        <option>Aries</option><option>Taurus</option><option>Gemini</option><option>Cancer</option>
-        <option>Leo</option><option>Virgo</option><option>Libra</option><option>Scorpio</option>
-        <option>Sagittarius</option><option>Capricorn</option><option>Aquarius</option><option>Pisces</option>
+        <option>Aries</option>
+        <option>Taurus</option>
+        <option>Gemini</option>
+        <option>Cancer</option>
+        <option>Leo</option>
+        <option>Virgo</option>
+        <option>Libra</option>
+        <option>Scorpio</option>
+        <option>Sagittarius</option>
+        <option>Capricorn</option>
+        <option>Aquarius</option>
+        <option>Pisces</option>
       </select>
 
       <button onclick="joinList()">Join The LumiList</button>
@@ -257,6 +370,7 @@
 
   <section class="section">
     <h2>Connect With LumiSips</h2>
+
     <div class="social-links">
       <a href="#">Instagram</a>
       <a href="#">TikTok</a>
