@@ -1,446 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>LumiSips | Hydrate • Elevate • Glow</title>
-
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body{
-  font-family:Arial, sans-serif;
-  background:
-    radial-gradient(circle at top left, rgba(0,207,255,.25), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(255,77,255,.25), transparent 30%),
-    #050814;
-  color:white;
-  overflow-x:hidden;
-}
-
-header{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:40px 20px;
-}
-
-.hero{
-  max-width:900px;
-}
-
-.logo{
-  font-size:4.5rem;
-  font-weight:900;
-  background:linear-gradient(90deg,#00d9ff,#ff4dff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  text-shadow:0 0 35px rgba(0,217,255,.5);
-}
-
-.tagline{
-  letter-spacing:5px;
-  margin:15px 0;
-  color:#d7f8ff;
-}
-
-.hero p{
-  font-size:1.2rem;
-  line-height:1.7;
-  color:#d8d8d8;
-  margin:20px auto;
-  max-width:700px;
-}
-
-.btn{
-  display:inline-block;
-  margin-top:20px;
-  padding:15px 28px;
-  border-radius:40px;
-  background:linear-gradient(90deg,#00d9ff,#ff4dff);
-  color:white;
-  font-weight:bold;
-  text-decoration:none;
-  box-shadow:0 0 25px rgba(255,77,255,.45);
-}
-
-section{
-  padding:70px 20px;
-  max-width:1200px;
-  margin:auto;
-}
-
-h2{
-  text-align:center;
-  font-size:2.5rem;
-  margin-bottom:20px;
-  background:linear-gradient(90deg,#00d9ff,#ff4dff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.sub{
-  text-align:center;
-  color:#ccc;
-  max-width:750px;
-  margin:0 auto 40px;
-  line-height:1.6;
-}
-
-.card-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:25px;
-}
-
-.card{
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:22px;
-  padding:25px;
-  backdrop-filter:blur(12px);
-  box-shadow:0 0 25px rgba(0,0,0,.35);
-}
-
-.card h3{
-  color:#7defff;
-  margin-bottom:10px;
-}
-
-.card p{
-  color:#ddd;
-  line-height:1.5;
-}
-
-.flagship{
-  border:1px solid rgba(255,77,255,.45);
-  box-shadow:0 0 35px rgba(255,77,255,.25);
-}
-
-.zodiac-card{
-  text-align:center;
-}
-
-.zodiac-symbol{
-  font-size:3rem;
-  margin-bottom:10px;
-}
-
-.vote-btn{
-  margin-top:15px;
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:25px;
-  background:linear-gradient(90deg,#00d9ff,#ff4dff);
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.vote-count{
-  margin-top:10px;
-  color:#7defff;
-  font-weight:bold;
-}
-
-.form-box{
-  max-width:700px;
-  margin:auto;
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.15);
-  padding:25px;
-  border-radius:22px;
-}
-
-input, textarea, select{
-  width:100%;
-  margin-bottom:15px;
-  padding:14px;
-  border-radius:12px;
-  border:none;
-  outline:none;
-  background:#111827;
-  color:white;
-}
-
-textarea{
-  min-height:120px;
-}
-
-.submit-btn{
-  width:100%;
-  padding:15px;
-  border:none;
-  border-radius:30px;
-  background:linear-gradient(90deg,#00d9ff,#ff4dff);
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.comment{
-  background:rgba(255,255,255,.08);
-  border-radius:15px;
-  padding:15px;
-  margin-top:15px;
-}
-
-.comment strong{
-  color:#7defff;
-}
-
-footer{
-  text-align:center;
-  padding:40px 20px;
-  color:#aaa;
-  border-top:1px solid rgba(255,255,255,.12);
-}
-
-@media(max-width:600px){
-  .logo{
-    font-size:3rem;
-  }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LumiSips | Hydrate • Elevate • Glow</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+  <div class="stars"></div>
 
-<header>
-  <div class="hero">
-    <h1 class="logo">LumiSips</h1>
-    <div class="tagline">HYDRATE • ELEVATE • GLOW</div>
-    <p>
-      A cosmic beverage brand built around zodiac-inspired flavors,
-      clean hydration, bold fruit profiles, and community-created flavor drops.
+  <nav class="navbar">
+    <div class="brand">LumiSips</div>
+    <div class="nav-links">
+      <a href="#flavor">Flavor</a>
+      <a href="#zodiac">Vote</a>
+      <a href="#lab">Lab</a>
+      <a href="#community">Community</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">COSMIC HYDRATION EXPERIENCE</p>
+      <h1>LumiSips</h1>
+      <p class="tagline">Hydrate • Elevate • Glow</p>
+      <p class="hero-text">
+        A zodiac-inspired beverage brand built from real formulation, real feedback,
+        and one-of-one flavor drops created with the community.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#zodiac" class="btn primary">Vote On Flavors</a>
+        <a href="#community" class="btn secondary">Suggest A Flavor</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="flavor" class="section">
+    <h2>Flagship Drop</h2>
+    <p class="section-subtitle">
+      The first LumiSips flavor starts with Cancer — bold, emotional, refreshing,
+      vibrant, and realistic to manufacture.
     </p>
-    <a href="#vote" class="btn">Vote On The Next Flavor</a>
-  </div>
-</header>
 
-<section>
-  <h2>Flagship Flavor</h2>
-  <p class="sub">
-    The first LumiSips drop starts with Cancer — a vibrant blue raspberry,
-    dragon fruit, and hibiscus concept designed to be bold, memorable,
-    refreshing, and realistic to manufacture.
-  </p>
-
-  <div class="card-grid">
-    <div class="card flagship">
-      <h3>♋ Cancer</h3>
-      <p><strong>Flavor:</strong> Blue Raspberry • Dragon Fruit • Hibiscus</p>
-      <p><strong>Style:</strong> Bright, tropical, floral, slightly tart, smooth finish.</p>
-      <p><strong>Formula Direction:</strong> Distilled water, allulose, monk fruit, citric acid, malic acid, blue spirulina, natural extracts.</p>
-    </div>
-
-    <div class="card">
-      <h3>Clean Direction</h3>
-      <p>
-        Zero sugar, low or zero calorie, no caffeine for the hydration line,
-        with future options for sparkling and energy versions.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>Built By Feedback</h3>
-      <p>
-        Every zodiac flavor can be shaped by customer votes, comments,
-        and flavor ideas before official drops are finalized.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section id="vote">
-  <h2>Vote By Zodiac</h2>
-  <p class="sub">
-    Pick the zodiac flavor you want LumiSips to develop next.
-  </p>
-
-  <div class="card-grid" id="zodiacGrid"></div>
-</section>
-
-<section>
-  <h2>Suggest A Flavor</h2>
-  <p class="sub">
-    Drop your own flavor idea. Keep it bold, vibrant, and realistic to manufacture.
-  </p>
-
-  <div class="form-box">
-    <input id="nameInput" placeholder="Your name or nickname" />
-
-    <select id="zodiacInput">
-      <option value="">Choose zodiac sign</option>
-      <option>Aries</option>
-      <option>Taurus</option>
-      <option>Gemini</option>
-      <option>Cancer</option>
-      <option>Leo</option>
-      <option>Virgo</option>
-      <option>Libra</option>
-      <option>Scorpio</option>
-      <option>Sagittarius</option>
-      <option>Capricorn</option>
-      <option>Aquarius</option>
-      <option>Pisces</option>
-    </select>
-
-    <input id="flavorInput" placeholder="Flavor idea example: Kiwi Black Cherry Lime" />
-
-    <textarea id="commentInput" placeholder="Why should this flavor be made?"></textarea>
-
-    <button class="submit-btn" onclick="addComment()">Submit Flavor Idea</button>
-
-    <div id="comments"></div>
-  </div>
-</section>
-
-<section>
-  <h2>Future LumiSips Lines</h2>
-
-  <div class="card-grid">
-    <div class="card">
-      <h3>Still Hydration</h3>
-      <p>Non-carbonated, smooth, refreshing, no caffeine.</p>
-    </div>
-
-    <div class="card">
-      <h3>Sparkling Hydration</h3>
-      <p>Carbonated version with bright flavor and clean fizz.</p>
-    </div>
-
-    <div class="card">
-      <h3>Energy Line</h3>
-      <p>Future caffeinated version with focus, energy, and stronger flavor impact.</p>
-    </div>
-
-    <div class="card">
-      <h3>Community Drops</h3>
-      <p>Limited flavors chosen by customer voting and zodiac feedback.</p>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <p>LumiSips © 2026</p>
-  <p>Hydrate • Elevate • Glow</p>
-</footer>
-
-<script>
-const zodiacFlavors = [
-  {sign:"Aries", symbol:"♈", flavor:"Blood Orange Mango Heat"},
-  {sign:"Taurus", symbol:"♉", flavor:"Honeydew Pear Vanilla"},
-  {sign:"Gemini", symbol:"♊", flavor:"Lemon Lime Blueberry"},
-  {sign:"Cancer", symbol:"♋", flavor:"Blue Raspberry Dragon Fruit Hibiscus"},
-  {sign:"Leo", symbol:"♌", flavor:"Pineapple Passion Fruit"},
-  {sign:"Virgo", symbol:"♍", flavor:"Cucumber Green Apple Mint"},
-  {sign:"Libra", symbol:"♎", flavor:"Strawberry Rose Lemonade"},
-  {sign:"Scorpio", symbol:"♏", flavor:"Black Cherry Pomegranate"},
-  {sign:"Sagittarius", symbol:"♐", flavor:"Kiwi Black Cherry"},
-  {sign:"Capricorn", symbol:"♑", flavor:"Sour Watermelon Strawberry"},
-  {sign:"Aquarius", symbol:"♒", flavor:"Blueberry Lavender Citrus"},
-  {sign:"Pisces", symbol:"♓", flavor:"Peach Dragon Fruit Lychee"}
-];
-
-function loadVotes(){
-  return JSON.parse(localStorage.getItem("lumisipsVotes")) || {};
-}
-
-function saveVotes(votes){
-  localStorage.setItem("lumisipsVotes", JSON.stringify(votes));
-}
-
-function vote(sign){
-  const votes = loadVotes();
-  votes[sign] = (votes[sign] || 0) + 1;
-  saveVotes(votes);
-  renderZodiacs();
-}
-
-function renderZodiacs(){
-  const grid = document.getElementById("zodiacGrid");
-  const votes = loadVotes();
-  grid.innerHTML = "";
-
-  zodiacFlavors.forEach(item => {
-    grid.innerHTML += `
-      <div class="card zodiac-card">
-        <div class="zodiac-symbol">${item.symbol}</div>
-        <h3>${item.sign}</h3>
-        <p>${item.flavor}</p>
-        <button class="vote-btn" onclick="vote('${item.sign}')">Vote For ${item.sign}</button>
-        <div class="vote-count">${votes[item.sign] || 0} votes</div>
+    <div class="showcase">
+      <div class="bottle-card">
+        <div class="bottle">
+          <div class="bottle-glow"></div>
+          <h3>LumiSips</h3>
+          <p>♋ Cancer</p>
+          <span>Blue Raspberry</span>
+          <span>Dragon Fruit</span>
+          <span>Hibiscus</span>
+        </div>
       </div>
-    `;
-  });
-}
 
-function loadComments(){
-  return JSON.parse(localStorage.getItem("lumisipsComments")) || [];
-}
-
-function saveComments(comments){
-  localStorage.setItem("lumisipsComments", JSON.stringify(comments));
-}
-
-function addComment(){
-  const name = document.getElementById("nameInput").value.trim();
-  const zodiac = document.getElementById("zodiacInput").value;
-  const flavor = document.getElementById("flavorInput").value.trim();
-  const comment = document.getElementById("commentInput").value.trim();
-
-  if(!name || !zodiac || !flavor || !comment){
-    alert("Please fill out every section.");
-    return;
-  }
-
-  const comments = loadComments();
-
-  comments.unshift({
-    name,
-    zodiac,
-    flavor,
-    comment
-  });
-
-  saveComments(comments);
-
-  document.getElementById("nameInput").value = "";
-  document.getElementById("zodiacInput").value = "";
-  document.getElementById("flavorInput").value = "";
-  document.getElementById("commentInput").value = "";
-
-  renderComments();
-}
-
-function renderComments(){
-  const commentsBox = document.getElementById("comments");
-  const comments = loadComments();
-
-  commentsBox.innerHTML = "";
-
-  comments.forEach(item => {
-    commentsBox.innerHTML += `
-      <div class="comment">
-        <strong>${item.name}</strong> voted for <strong>${item.zodiac}</strong>
-        <p><strong>Flavor Idea:</strong> ${item.flavor}</p>
-        <p>${item.comment}</p>
+      <div class="info-card">
+        <h3>♋ Cancer Collection</h3>
+        <p><strong>Flavor:</strong> Blue Raspberry • Dragon Fruit • Hibiscus</p>
+        <p><strong>Profile:</strong> Bright blue raspberry up front, tropical dragon fruit body, floral hibiscus finish.</p>
+        <p><strong>Formula Direction:</strong> Distilled water, allulose, monk fruit, citric acid, malic acid, blue spirulina, natural extracts.</p>
+        <p><strong>Line:</strong> Still hydration first, then sparkling and energy versions later.</p>
       </div>
-    `;
-  });
-}
+    </div>
+  </section>
 
-renderZodiacs();
-renderComments();
-</script>
+  <section id="zodiac" class="section">
+    <h2>Choose The Next Zodiac Flavor</h2>
+    <p class="section-subtitle">
+      Vote for the zodiac flavor you want LumiSips to develop next.
+    </p>
 
+    <div id="zodiacGrid" class="zodiac-grid"></div>
+  </section>
+
+  <section id="community" class="section">
+    <h2>Community Flavor Lab</h2>
+    <p class="section-subtitle">
+      Drop a flavor idea. Keep it bold, clean, easy to manufacture, and shelf-worthy.
+    </p>
+
+    <div class="form-card">
+      <input id="nameInput" placeholder="Your name or nickname" />
+
+      <select id="zodiacInput">
+        <option value="">Choose zodiac sign</option>
+        <option>Aries</option>
+        <option>Taurus</option>
+        <option>Gemini</option>
+        <option>Cancer</option>
+        <option>Leo</option>
+        <option>Virgo</option>
+        <option>Libra</option>
+        <option>Scorpio</option>
+        <option>Sagittarius</option>
+        <option>Capricorn</option>
+        <option>Aquarius</option>
+        <option>Pisces</option>
+      </select>
+
+      <input id="flavorInput" placeholder="Flavor idea example: Kiwi Black Cherry Lime" />
+
+      <textarea id="commentInput" placeholder="Why should LumiSips make this flavor?"></textarea>
+
+      <button onclick="addComment()">Submit Flavor Idea</button>
+
+      <div id="comments"></div>
+    </div>
+  </section>
+
+  <section id="lab" class="section">
+    <h2>LumiSips Development Lab</h2>
+    <p class="section-subtitle">
+      Built one batch at a time — testing sweetness, acidity, color, carbonation,
+      aroma, mouthfeel, and customer reaction.
+    </p>
+
+    <div class="timeline">
+      <div class="step">
+        <h3>01 — Concept</h3>
+        <p>Zodiac-based drink line with Cancer as the first official flavor.</p>
+      </div>
+
+      <div class="step">
+        <h3>02 — Formula Testing</h3>
+        <p>Testing blue raspberry, dragon fruit, hibiscus, citric acid, malic acid, monk fruit, and allulose.</p>
+      </div>
+
+      <div class="step">
+        <h3>03 — Branding</h3>
+        <p>Dark cosmic visuals, neon glow, premium bottle/can direction, and community-led flavor drops.</p>
+      </div>
+
+      <div class="step">
+        <h3>04 — Launch Path</h3>
+        <p>Perfect flagship formula, gather feedback, build audience, sample locally, then prepare for manufacturing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Future Product Lines</h2>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Still Hydration</h3>
+        <p>Non-carbonated, smooth, refreshing, no caffeine.</p>
+      </div>
+
+      <div class="card">
+        <h3>Sparkling Hydration</h3>
+        <p>Carbonated version with stronger flavor lift and clean fizz.</p>
+      </div>
+
+      <div class="card">
+        <h3>Energy Line</h3>
+        <p>Future caffeinated version with bolder flavor and functional energy.</p>
+      </div>
+
+      <div class="card">
+        <h3>Limited Zodiac Drops</h3>
+        <p>Community-voted flavors released by zodiac collection.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <h2>LumiSips</h2>
+    <p>Hydrate • Elevate • Glow</p>
+    <p>Built from Anaheim, California</p>
+    <p class="small">© 2026 LumiSips. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
