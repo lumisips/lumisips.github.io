@@ -3,8 +3,6 @@ import {
   getDatabase,
   ref,
   push,
-  set,
-  get,
   onValue,
   runTransaction
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -62,6 +60,8 @@ function renderZodiacs(votes = {}) {
   grid.innerHTML = "";
 
   zodiacFlavors.forEach(item => {
+    const alreadyVoted = localStorage.getItem(`voted-${item.sign}`);
+
     const card = document.createElement("div");
     card.className = "zodiac-card";
 
@@ -70,8 +70,8 @@ function renderZodiacs(votes = {}) {
       <h3>${item.sign}</h3>
       <p><strong>${item.flavor}</strong></p>
       <p>${item.profile}</p>
-      <button class="vote-btn" onclick="vote('${item.sign}')">
-        Vote For ${item.sign}
+      <button class="vote-btn" onclick="vote('${item.sign}')" ${alreadyVoted ? "disabled" : ""}>
+        ${alreadyVoted ? "Already Voted" : `Vote For ${item.sign}`}
       </button>
       <div class="vote-count">${votes[item.sign] || 0} votes</div>
     `;
@@ -80,12 +80,39 @@ function renderZodiacs(votes = {}) {
   });
 }
 
+function renderLeaderboard(votes = {}) {
+  const leaderboard = document.getElementById("leaderboardList");
+  if (!leaderboard) return;
+
+  const ranked = zodiacFlavors
+    .map(item => ({
+      ...item,
+      votes: votes[item.sign] || 0
+    }))
+    .sort((a, b) => b.votes - a.votes);
+
+  leaderboard.innerHTML = ranked.map((item, index) => `
+    <div class="comment">
+      <p><strong>#${index + 1} ${item.symbol} ${item.sign}</strong></p>
+      <p>${item.flavor}</p>
+      <p><strong>${item.votes}</strong> votes</p>
+    </div>
+  `).join("");
+}
+
 window.vote = async function(sign) {
+  if (localStorage.getItem(`voted-${sign}`)) {
+    alert("You already voted for this zodiac on this device.");
+    return;
+  }
+
   const voteRef = ref(db, "votes/" + sign);
 
   await runTransaction(voteRef, currentValue => {
     return (currentValue || 0) + 1;
   });
+
+  localStorage.setItem(`voted-${sign}`, "true");
 
   await sendToFormspree({
     submission_type: "Zodiac Vote",
@@ -97,6 +124,7 @@ window.vote = async function(sign) {
 onValue(ref(db, "votes"), snapshot => {
   const votes = snapshot.val() || {};
   renderZodiacs(votes);
+  renderLeaderboard(votes);
 });
 
 window.addComment = async function() {
@@ -116,6 +144,7 @@ window.addComment = async function() {
     zodiac,
     flavor_idea: flavor,
     comment,
+    upvotes: 0,
     date: new Date().toLocaleString()
   };
 
@@ -138,7 +167,10 @@ function renderComments() {
     commentsBox.innerHTML = "";
 
     const data = snapshot.val() || {};
-    const comments = Object.values(data).reverse().slice(0, 10);
+    const comments = Object.entries(data)
+      .map(([id, value]) => ({ id, ...value }))
+      .sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0))
+      .slice(0, 10);
 
     comments.forEach(item => {
       const div = document.createElement("div");
@@ -148,6 +180,8 @@ function renderComments() {
         <p><strong>${item.name}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
         <p><strong>Flavor Idea:</strong> ${item.flavor_idea}</p>
         <p>${item.comment}</p>
+        <p>🔥 ${item.upvotes || 0} upvotes</p>
+        <button class="vote-btn" onclick="upvoteFlavor('${item.id}')">Upvote This Flavor</button>
         <p style="font-size:0.8rem; opacity:0.65;">${item.date}</p>
       `;
 
@@ -155,6 +189,21 @@ function renderComments() {
     });
   });
 }
+
+window.upvoteFlavor = async function(id) {
+  if (localStorage.getItem(`upvoted-${id}`)) {
+    alert("You already upvoted this flavor idea.");
+    return;
+  }
+
+  const upvoteRef = ref(db, "flavorSuggestions/" + id + "/upvotes");
+
+  await runTransaction(upvoteRef, currentValue => {
+    return (currentValue || 0) + 1;
+  });
+
+  localStorage.setItem(`upvoted-${id}`, "true");
+};
 
 window.joinList = async function() {
   const name = document.getElementById("joinName").value.trim();
