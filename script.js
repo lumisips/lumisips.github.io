@@ -72,14 +72,10 @@ function renderZodiacs(votes = {}) {
       <div class="symbol">${item.symbol}</div>
       <h3>${item.sign}</h3>
       <p>${item.flavor}</p>
-
       <button class="vote-btn" onclick="vote('${item.sign}')">
         Vote For ${item.sign}
       </button>
-
-      <div class="vote-count">
-        ${count} Votes
-      </div>
+      <div class="vote-count">${count} Votes</div>
     `;
 
     grid.appendChild(card);
@@ -150,13 +146,17 @@ window.joinList = async function() {
   document.getElementById("joinEmail").value = "";
   document.getElementById("joinZodiac").value = "";
 
-  document.getElementById("joinMessage").textContent = "Welcome to the LumiList!";
+  const message = document.getElementById("joinMessage");
+  if (message) {
+    message.textContent = "Welcome to the LumiList!";
+  }
 };
 
 onValue(ref(db, "votes"), snapshot => {
   const votes = snapshot.val() || {};
 
   renderZodiacs(votes);
+  renderLeaderboard(votes);
 
   let totalVotes = 0;
 
@@ -165,12 +165,9 @@ onValue(ref(db, "votes"), snapshot => {
   });
 
   const voteTotal = document.getElementById("voteTotal");
-
   if (voteTotal) {
     voteTotal.textContent = totalVotes;
   }
-
-  renderLeaderboard(votes);
 });
 
 onValue(ref(db, "battleVotes"), snapshot => {
@@ -189,16 +186,15 @@ onValue(ref(db, "battleVotes"), snapshot => {
 });
 
 onValue(ref(db, "flavorSuggestions"), snapshot => {
-  const comments = document.getElementById("comments");
-  const flavorTotal = document.getElementById("flavorTotal");
-
   const data = snapshot.val() || {};
   const list = Object.values(data).reverse();
 
+  const flavorTotal = document.getElementById("flavorTotal");
   if (flavorTotal) {
     flavorTotal.textContent = list.length;
   }
 
+  const comments = document.getElementById("comments");
   if (!comments) return;
 
   comments.innerHTML = "";
@@ -208,22 +204,10 @@ onValue(ref(db, "flavorSuggestions"), snapshot => {
     div.className = "comment";
 
     div.innerHTML = `
-      <p>
-        <strong>${item.name}</strong>
-        suggested a flavor for
-        <strong>${item.zodiac}</strong>
-      </p>
-
-      <p>
-        <strong>Flavor:</strong>
-        ${item.flavor_idea}
-      </p>
-
+      <p><strong>${item.name}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
+      <p><strong>Flavor:</strong> ${item.flavor_idea}</p>
       <p>${item.comment}</p>
-
-      <p style="opacity:.6;">
-        ${item.date}
-      </p>
+      <p style="opacity:.6;">${item.date}</p>
     `;
 
     comments.appendChild(div);
@@ -235,7 +219,6 @@ onValue(ref(db, "lumiList"), snapshot => {
   const count = Object.keys(data).length;
 
   const memberTotal = document.getElementById("memberTotal");
-
   if (memberTotal) {
     memberTotal.textContent = count;
   }
@@ -258,19 +241,18 @@ function renderLeaderboard(votes) {
     return;
   }
 
-  sorted.forEach((entry, index) => {
+  sorted.forEach(([sign, count], index) => {
     const div = document.createElement("div");
     div.className = "comment";
 
     let medal = "";
-
     if (index === 0) medal = "🥇";
     if (index === 1) medal = "🥈";
     if (index === 2) medal = "🥉";
 
     div.innerHTML = `
-      <h3>${medal} ${entry[0]}</h3>
-      <p>${entry[1]} votes</p>
+      <h3>${medal} ${sign}</h3>
+      <p>${count} votes</p>
     `;
 
     board.appendChild(div);
