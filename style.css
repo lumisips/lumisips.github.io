@@ -4,7 +4,9 @@
   box-sizing: border-box;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: Arial, sans-serif;
@@ -17,8 +19,8 @@ body {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.30), transparent 30%),
-    radial-gradient(circle at 85% 35%, rgba(255, 77, 255, 0.30), transparent 30%),
+    radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.3), transparent 30%),
+    radial-gradient(circle at 85% 35%, rgba(255, 77, 255, 0.3), transparent 30%),
     radial-gradient(circle at 50% 100%, rgba(98, 70, 255, 0.32), transparent 40%);
   z-index: -3;
 }
@@ -84,12 +86,11 @@ body {
   text-decoration: none;
   font-size: 0.9rem;
   opacity: 0.85;
-  transition: 0.2s ease;
 }
 
 .nav-links a:hover {
-  opacity: 1;
   color: #7df9ff;
+  opacity: 1;
 }
 
 .hero {
@@ -220,7 +221,8 @@ body {
 .card,
 .zodiac-card,
 .form-card,
-.step {
+.step,
+.comment {
   background: rgba(255,255,255,0.075);
   border: 1px solid rgba(255,255,255,0.14);
   border-radius: 28px;
@@ -292,7 +294,6 @@ body {
 
 .bottle small {
   margin-top: 18px;
-  color: #ffffff;
   opacity: 0.8;
 }
 
@@ -371,6 +372,12 @@ body {
   box-shadow: 0 0 25px rgba(0,217,255,0.35);
 }
 
+.vote-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: rgba(255,255,255,0.18);
+}
+
 .vote-count {
   margin-top: 12px;
   color: #7df9ff;
@@ -410,14 +417,25 @@ textarea {
 
 .comment {
   margin-top: 16px;
-  padding: 18px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
 }
 
 .comment strong {
   color: #7df9ff;
+}
+
+#leaderboardList .comment:first-child {
+  border-color: rgba(255, 215, 0, 0.65);
+  box-shadow:
+    0 0 28px rgba(255, 215, 0, 0.22),
+    0 0 38px rgba(0,0,0,0.38);
+}
+
+#leaderboardList .comment:nth-child(2) {
+  border-color: rgba(0, 217, 255, 0.45);
+}
+
+#leaderboardList .comment:nth-child(3) {
+  border-color: rgba(255, 77, 255, 0.45);
 }
 
 .timeline {
@@ -432,20 +450,6 @@ textarea {
   margin-top: 15px;
   color: #7df9ff;
   font-weight: bold;
-}
-
-.success-message {
-  color: #7df9ff;
-  text-align: center;
-  margin-top: 15px;
-  font-weight: 800;
-}
-
-.error-message {
-  color: #ff7aa8;
-  text-align: center;
-  margin-top: 15px;
-  font-weight: 800;
 }
 
 footer {
