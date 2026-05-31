@@ -173,5 +173,34 @@ function renderComments() {
   });
 }
 
+function joinList() {
+  const name = document.getElementById("joinName").value.trim();
+  const email = document.getElementById("joinEmail").value.trim();
+  const zodiac = document.getElementById("joinZodiac").value;
+  const message = document.getElementById("joinMessage");
+
+  if (!name || !email || !zodiac) {
+    message.textContent = "Please fill out every section.";
+    return;
+  }
+
+  const members = JSON.parse(localStorage.getItem("lumisipsMembers")) || [];
+
+  members.unshift({
+    name,
+    email,
+    zodiac,
+    date: new Date().toLocaleDateString()
+  });
+
+  localStorage.setItem("lumisipsMembers", JSON.stringify(members));
+
+  document.getElementById("joinName").value = "";
+  document.getElementById("joinEmail").value = "";
+  document.getElementById("joinZodiac").value = "";
+
+  message.textContent = "You're on the LumiList. Welcome to the movement.";
+}
+
 renderZodiacs();
 renderComments();
