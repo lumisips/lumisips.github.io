@@ -23,33 +23,30 @@ function saveVotes(votes) {
   localStorage.setItem("lumisipsVotes", JSON.stringify(votes));
 }
 
-async function sendToEmail(data) {
-  try {
-    await fetch(FORMSPREE_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
-  } catch (error) {
-    console.error("Formspree error:", error);
-  }
+async function sendToLumiSips(data) {
+  const response = await fetch(FORMSPREE_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+
+  return response.ok;
 }
 
-function vote(sign) {
+async function vote(sign) {
   const votes = getVotes();
   votes[sign] = (votes[sign] || 0) + 1;
   saveVotes(votes);
+  renderZodiacs();
 
-  sendToEmail({
+  await sendToLumiSips({
     submission_type: "Zodiac Vote",
-    zodiac_vote: sign,
+    vote_for: sign,
     date: new Date().toLocaleString()
   });
-
-  renderZodiacs();
 }
 
 function renderZodiacs() {
@@ -102,23 +99,27 @@ async function addComment() {
     name,
     zodiac,
     flavor_idea: flavor,
-    comment,
+    reason: comment,
     date: new Date().toLocaleString()
   };
 
   const comments = getComments();
   comments.unshift(entry);
   saveComments(comments);
+  renderComments();
 
-  await sendToEmail(entry);
+  const sent = await sendToLumiSips(entry);
+
+  if (sent) {
+    alert("Flavor idea sent to LumiSips!");
+  } else {
+    alert("Saved on the site, but email sending failed. Try again.");
+  }
 
   document.getElementById("nameInput").value = "";
   document.getElementById("zodiacInput").value = "";
   document.getElementById("flavorInput").value = "";
   document.getElementById("commentInput").value = "";
-
-  alert("Flavor idea submitted to LumiSips!");
-  renderComments();
 }
 
 function renderComments() {
@@ -135,7 +136,7 @@ function renderComments() {
     div.innerHTML = `
       <p><strong>${item.name}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
       <p><strong>Flavor Idea:</strong> ${item.flavor_idea || item.flavor}</p>
-      <p>${item.comment}</p>
+      <p>${item.reason || item.comment}</p>
       <p style="font-size:0.8rem; opacity:0.65;">${item.date}</p>
     `;
 
@@ -162,17 +163,17 @@ async function joinList() {
     date: new Date().toLocaleString()
   };
 
-  const members = JSON.parse(localStorage.getItem("lumisipsMembers")) || [];
-  members.unshift(member);
-  localStorage.setItem("lumisipsMembers", JSON.stringify(members));
+  const sent = await sendToLumiSips(member);
 
-  await sendToEmail(member);
+  if (sent) {
+    message.textContent = "You're on the LumiList. Welcome to the movement.";
+  } else {
+    message.textContent = "Something went wrong. Please try again.";
+  }
 
   document.getElementById("joinName").value = "";
   document.getElementById("joinEmail").value = "";
   document.getElementById("joinZodiac").value = "";
-
-  message.textContent = "You're on the LumiList. Welcome to the movement.";
 }
 
 renderZodiacs();
