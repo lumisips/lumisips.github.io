@@ -7,232 +7,334 @@ import {
   runTransaction
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/xkoeaqkg";
-
 const firebaseConfig = {
-  apiKey: "AIzaSyDW_HC9OVcpkLc4TFY6MR8brufTPniwXEg",
+  apiKey: "YOUR_API_KEY",
   authDomain: "lumisips-b280f.firebaseapp.com",
   databaseURL: "https://lumisips-b280f-default-rtdb.firebaseio.com",
   projectId: "lumisips-b280f",
   storageBucket: "lumisips-b280f.firebasestorage.app",
   messagingSenderId: "980927514380",
-  appId: "1:980927514380:web:5e92f1aeb27ba46a9eeb29",
-  measurementId: "G-D307MPGWL1"
+  appId: "1:980927514380:web:5e92f1aeb27ba46a9eeb29"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const zodiacFlavors = [
-  { sign: "Aries", symbol: "♈", flavor: "Blood Orange Mango Heat", profile: "Bold citrus, tropical mango, light spicy finish." },
-  { sign: "Taurus", symbol: "♉", flavor: "Honeydew Pear Vanilla", profile: "Smooth, sweet, mellow, soft luxury profile." },
-  { sign: "Gemini", symbol: "♊", flavor: "Lemon Lime Blueberry", profile: "Bright, playful, sharp, refreshing." },
-  { sign: "Cancer", symbol: "♋", flavor: "Blue Raspberry Dragon Fruit Hibiscus", profile: "Flagship flavor. Emotional, bold, blue, floral, tropical." },
-  { sign: "Leo", symbol: "♌", flavor: "Pineapple Passion Fruit", profile: "Loud, tropical, golden, confident." },
-  { sign: "Virgo", symbol: "♍", flavor: "Cucumber Green Apple Mint", profile: "Clean, crisp, organized, wellness-focused." },
-  { sign: "Libra", symbol: "♎", flavor: "Strawberry Rose Lemonade", profile: "Balanced, pretty, romantic, lightly floral." },
-  { sign: "Scorpio", symbol: "♏", flavor: "Black Cherry Pomegranate", profile: "Dark, deep, intense, slightly tart." },
-  { sign: "Sagittarius", symbol: "♐", flavor: "Kiwi Black Cherry", profile: "Adventurous, bright, bold, unique." },
-  { sign: "Capricorn", symbol: "♑", flavor: "Sour Watermelon Strawberry", profile: "Focused, strong, sharp, marketable." },
-  { sign: "Aquarius", symbol: "♒", flavor: "Blueberry Lavender Citrus", profile: "Futuristic, smooth, floral, unexpected." },
-  { sign: "Pisces", symbol: "♓", flavor: "Peach Dragon Fruit Lychee", profile: "Dreamy, soft, tropical, emotional." }
+  { sign:"Aries", symbol:"♈", flavor:"Blood Orange Mango Heat" },
+  { sign:"Taurus", symbol:"♉", flavor:"Honeydew Pear Vanilla" },
+  { sign:"Gemini", symbol:"♊", flavor:"Lemon Lime Blueberry" },
+  { sign:"Cancer", symbol:"♋", flavor:"Blue Raspberry Dragon Fruit Hibiscus" },
+  { sign:"Leo", symbol:"♌", flavor:"Pineapple Passion Fruit" },
+  { sign:"Virgo", symbol:"♍", flavor:"Cucumber Green Apple Mint" },
+  { sign:"Libra", symbol:"♎", flavor:"Strawberry Rose Lemonade" },
+  { sign:"Scorpio", symbol:"♏", flavor:"Black Cherry Pomegranate" },
+  { sign:"Sagittarius", symbol:"♐", flavor:"Kiwi Black Cherry" },
+  { sign:"Capricorn", symbol:"♑", flavor:"Sour Watermelon Strawberry" },
+  { sign:"Aquarius", symbol:"♒", flavor:"Blueberry Lavender Citrus" },
+  { sign:"Pisces", symbol:"♓", flavor:"Peach Dragon Fruit Lychee" }
 ];
 
-async function sendToFormspree(data) {
-  try {
-    await fetch(FORMSPREE_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      },
-      body: JSON.stringify(data)
-    });
-  } catch (error) {
-    console.error("Formspree error:", error);
-  }
-}
-
-function renderZodiacs(votes = {}) {
-  const grid = document.getElementById("zodiacGrid");
+function renderCollection() {
+  const grid = document.getElementById("collectionGrid");
   if (!grid) return;
 
   grid.innerHTML = "";
 
   zodiacFlavors.forEach(item => {
-    const alreadyVoted = localStorage.getItem(`voted-${item.sign}`);
-
     const card = document.createElement("div");
+
     card.className = "zodiac-card";
 
     card.innerHTML = `
       <div class="symbol">${item.symbol}</div>
       <h3>${item.sign}</h3>
-      <p><strong>${item.flavor}</strong></p>
-      <p>${item.profile}</p>
-      <button class="vote-btn" onclick="vote('${item.sign}')" ${alreadyVoted ? "disabled" : ""}>
-        ${alreadyVoted ? "Already Voted" : `Vote For ${item.sign}`}
-      </button>
-      <div class="vote-count">${votes[item.sign] || 0} votes</div>
+      <p>${item.flavor}</p>
+      <p><strong>Coming Soon</strong></p>
     `;
 
     grid.appendChild(card);
   });
 }
 
-function renderLeaderboard(votes = {}) {
-  const leaderboard = document.getElementById("leaderboardList");
-  if (!leaderboard) return;
+function renderZodiacs(votes = {}) {
 
-  const ranked = zodiacFlavors
-    .map(item => ({
-      ...item,
-      votes: votes[item.sign] || 0
-    }))
-    .sort((a, b) => b.votes - a.votes);
+  const grid = document.getElementById("zodiacGrid");
 
-  leaderboard.innerHTML = ranked.map((item, index) => `
-    <div class="comment">
-      <p><strong>#${index + 1} ${item.symbol} ${item.sign}</strong></p>
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  zodiacFlavors.forEach(item => {
+
+    const count = votes[item.sign] || 0;
+
+    const card = document.createElement("div");
+
+    card.className = "zodiac-card";
+
+    card.innerHTML = `
+      <div class="symbol">${item.symbol}</div>
+      <h3>${item.sign}</h3>
       <p>${item.flavor}</p>
-      <p><strong>${item.votes}</strong> votes</p>
-    </div>
-  `).join("");
+
+      <button
+        class="vote-btn"
+        onclick="vote('${item.sign}')"
+      >
+        Vote For ${item.sign}
+      </button>
+
+      <div class="vote-count">
+        ${count} Votes
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
 }
 
 window.vote = async function(sign) {
-  if (localStorage.getItem(`voted-${sign}`)) {
-    alert("You already voted for this zodiac on this device.");
-    return;
-  }
 
   const voteRef = ref(db, "votes/" + sign);
 
-  await runTransaction(voteRef, currentValue => {
-    return (currentValue || 0) + 1;
-  });
-
-  localStorage.setItem(`voted-${sign}`, "true");
-
-  await sendToFormspree({
-    submission_type: "Zodiac Vote",
-    vote_for: sign,
-    date: new Date().toLocaleString()
+  await runTransaction(voteRef, current => {
+    return (current || 0) + 1;
   });
 };
 
-onValue(ref(db, "votes"), snapshot => {
-  const votes = snapshot.val() || {};
-  renderZodiacs(votes);
-  renderLeaderboard(votes);
-});
+window.battleVote = async function(sign) {
+
+  const battleRef = ref(db, "battleVotes/" + sign);
+
+  await runTransaction(battleRef, current => {
+    return (current || 0) + 1;
+  });
+};
 
 window.addComment = async function() {
-  const name = document.getElementById("nameInput").value.trim();
-  const zodiac = document.getElementById("zodiacInput").value;
-  const flavor = document.getElementById("flavorInput").value.trim();
-  const comment = document.getElementById("commentInput").value.trim();
+
+  const name =
+    document.getElementById("nameInput").value.trim();
+
+  const zodiac =
+    document.getElementById("zodiacInput").value;
+
+  const flavor =
+    document.getElementById("flavorInput").value.trim();
+
+  const comment =
+    document.getElementById("commentInput").value.trim();
 
   if (!name || !zodiac || !flavor || !comment) {
-    alert("Please fill out every section before submitting.");
+
+    alert("Please complete all fields.");
+
     return;
   }
 
-  const entry = {
-    submission_type: "Flavor Suggestion",
-    name,
-    zodiac,
-    flavor_idea: flavor,
-    comment,
-    upvotes: 0,
-    date: new Date().toLocaleString()
-  };
-
-  await push(ref(db, "flavorSuggestions"), entry);
-  await sendToFormspree(entry);
+  await push(
+    ref(db, "flavorSuggestions"),
+    {
+      name,
+      zodiac,
+      flavor_idea: flavor,
+      comment,
+      date: new Date().toLocaleString()
+    }
+  );
 
   document.getElementById("nameInput").value = "";
   document.getElementById("zodiacInput").value = "";
   document.getElementById("flavorInput").value = "";
   document.getElementById("commentInput").value = "";
 
-  alert("Flavor idea submitted to LumiSips!");
-};
-
-function renderComments() {
-  const commentsBox = document.getElementById("comments");
-  if (!commentsBox) return;
-
-  onValue(ref(db, "flavorSuggestions"), snapshot => {
-    commentsBox.innerHTML = "";
-
-    const data = snapshot.val() || {};
-    const comments = Object.entries(data)
-      .map(([id, value]) => ({ id, ...value }))
-      .sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0))
-      .slice(0, 10);
-
-    comments.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "comment";
-
-      div.innerHTML = `
-        <p><strong>${item.name}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
-        <p><strong>Flavor Idea:</strong> ${item.flavor_idea}</p>
-        <p>${item.comment}</p>
-        <p>🔥 ${item.upvotes || 0} upvotes</p>
-        <button class="vote-btn" onclick="upvoteFlavor('${item.id}')">Upvote This Flavor</button>
-        <p style="font-size:0.8rem; opacity:0.65;">${item.date}</p>
-      `;
-
-      commentsBox.appendChild(div);
-    });
-  });
-}
-
-window.upvoteFlavor = async function(id) {
-  if (localStorage.getItem(`upvoted-${id}`)) {
-    alert("You already upvoted this flavor idea.");
-    return;
-  }
-
-  const upvoteRef = ref(db, "flavorSuggestions/" + id + "/upvotes");
-
-  await runTransaction(upvoteRef, currentValue => {
-    return (currentValue || 0) + 1;
-  });
-
-  localStorage.setItem(`upvoted-${id}`, "true");
+  alert("Flavor idea submitted!");
 };
 
 window.joinList = async function() {
-  const name = document.getElementById("joinName").value.trim();
-  const email = document.getElementById("joinEmail").value.trim();
-  const zodiac = document.getElementById("joinZodiac").value;
-  const message = document.getElementById("joinMessage");
+
+  const name =
+    document.getElementById("joinName").value.trim();
+
+  const email =
+    document.getElementById("joinEmail").value.trim();
+
+  const zodiac =
+    document.getElementById("joinZodiac").value;
 
   if (!name || !email || !zodiac) {
-    message.textContent = "Please fill out every section.";
+
+    alert("Please fill all fields.");
+
     return;
   }
 
-  const member = {
-    submission_type: "LumiList Signup",
-    name,
-    email,
-    zodiac,
-    date: new Date().toLocaleString()
-  };
-
-  await push(ref(db, "lumiList"), member);
-  await sendToFormspree(member);
+  await push(
+    ref(db, "lumiList"),
+    {
+      name,
+      email,
+      zodiac,
+      date: new Date().toLocaleString()
+    }
+  );
 
   document.getElementById("joinName").value = "";
   document.getElementById("joinEmail").value = "";
   document.getElementById("joinZodiac").value = "";
 
-  message.textContent = "You're on the LumiList. Welcome to the movement.";
+  document.getElementById("joinMessage").textContent =
+    "Welcome to the LumiList!";
 };
 
-renderZodiacs();
-renderComments();
+onValue(ref(db, "votes"), snapshot => {
+
+  const votes = snapshot.val() || {};
+
+  renderZodiacs(votes);
+
+  let totalVotes = 0;
+
+  Object.values(votes).forEach(v => {
+    totalVotes += Number(v);
+  });
+
+  const voteTotal =
+    document.getElementById("voteTotal");
+
+  if (voteTotal) {
+    voteTotal.textContent = totalVotes;
+  }
+
+  renderLeaderboard(votes);
+});
+
+onValue(ref(db, "battleVotes"), snapshot => {
+
+  const data = snapshot.val() || {};
+
+  const cancer =
+    document.getElementById("battleCancer");
+
+  const capricorn =
+    document.getElementById("battleCapricorn");
+
+  if (cancer) {
+    cancer.textContent =
+      (data.Cancer || 0) + " battle votes";
+  }
+
+  if (capricorn) {
+    capricorn.textContent =
+      (data.Capricorn || 0) + " battle votes";
+  }
+});
+
+onValue(ref(db, "flavorSuggestions"), snapshot => {
+
+  const comments =
+    document.getElementById("comments");
+
+  if (!comments) return;
+
+  comments.innerHTML = "";
+
+  const data = snapshot.val() || {};
+
+  const list =
+    Object.values(data).reverse();
+
+  const flavorTotal =
+    document.getElementById("flavorTotal");
+
+  if (flavorTotal) {
+    flavorTotal.textContent = list.length;
+  }
+
+  list.slice(0, 10).forEach(item => {
+
+    const div = document.createElement("div");
+
+    div.className = "comment";
+
+    div.innerHTML = `
+      <p>
+        <strong>${item.name}</strong>
+        suggested a flavor for
+        <strong>${item.zodiac}</strong>
+      </p>
+
+      <p>
+        <strong>Flavor:</strong>
+        ${item.flavor_idea}
+      </p>
+
+      <p>${item.comment}</p>
+
+      <p style="opacity:.6;">
+        ${item.date}
+      </p>
+    `;
+
+    comments.appendChild(div);
+  });
+});
+
+onValue(ref(db, "lumiList"), snapshot => {
+
+  const data = snapshot.val() || {};
+
+  const count =
+    Object.keys(data).length;
+
+  const memberTotal =
+    document.getElementById("memberTotal");
+
+  if (memberTotal) {
+    memberTotal.textContent = count;
+  }
+});
+
+function renderLeaderboard(votes) {
+
+  const board =
+    document.getElementById("leaderboardList");
+
+  if (!board) return;
+
+  board.innerHTML = "";
+
+  const sorted =
+    Object.entries(votes)
+      .sort((a,b) => b[1] - a[1]);
+
+  sorted.forEach((entry,index) => {
+
+    const div =
+      document.createElement("div");
+
+    div.className = "comment";
+
+    let medal = "";
+
+    if(index === 0) medal = "🥇";
+    if(index === 1) medal = "🥈";
+    if(index === 2) medal = "🥉";
+
+    div.innerHTML = `
+      <h3>
+        ${medal}
+        ${entry[0]}
+      </h3>
+
+      <p>
+        ${entry[1]} votes
+      </p>
+    `;
+
+    board.appendChild(div);
+  });
+}
+
+renderCollection();
