@@ -62,7 +62,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(3, 7, 18, 0.82);
+  background: rgba(3, 7, 18, 0.84);
   backdrop-filter: blur(18px);
   border-bottom: 1px solid rgba(255,255,255,0.12);
 }
@@ -70,7 +70,6 @@ body {
 .brand {
   font-size: 1.7rem;
   font-weight: 900;
-  letter-spacing: 1px;
   background: linear-gradient(90deg, #00d9ff, #ffffff, #ff4dff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -78,13 +77,13 @@ body {
 
 .nav-links {
   display: flex;
-  gap: 18px;
+  gap: 16px;
 }
 
 .nav-links a {
   color: white;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   opacity: 0.85;
 }
 
@@ -125,7 +124,6 @@ body {
 .tagline {
   margin-top: 20px;
   letter-spacing: 6px;
-  color: #f2f2f2;
   font-size: 1.1rem;
 }
 
@@ -167,6 +165,34 @@ body {
   color: white;
   border: 1px solid rgba(255,255,255,0.38);
   background: rgba(255,255,255,0.08);
+}
+
+.live-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
+  margin: 45px auto 0;
+  max-width: 760px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 22px;
+  padding: 22px;
+  backdrop-filter: blur(12px);
+}
+
+.stat-card h3 {
+  font-size: 2.7rem;
+  background: linear-gradient(90deg, #00d9ff, #ff4dff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-card p {
+  color: #d8d8d8;
+  margin-top: 8px;
 }
 
 .hero-product {
@@ -222,7 +248,9 @@ body {
 .zodiac-card,
 .form-card,
 .step,
-.comment {
+.comment,
+.progress-card,
+.battle-card {
   background: rgba(255,255,255,0.075);
   border: 1px solid rgba(255,255,255,0.14);
   border-radius: 28px;
@@ -292,15 +320,12 @@ body {
   letter-spacing: 1px;
 }
 
-.bottle small {
-  margin-top: 18px;
-  opacity: 0.8;
-}
-
 .info-card h3,
 .card h3,
 .step h3,
-.zodiac-card h3 {
+.zodiac-card h3,
+.progress-card h3,
+.battle-card h3 {
   color: #7df9ff;
   margin-bottom: 14px;
 }
@@ -308,7 +333,10 @@ body {
 .info-card p,
 .card p,
 .step p,
-.zodiac-card p {
+.zodiac-card p,
+.progress-card p,
+.battle-card p,
+.form-card p {
   color: #d8d8d8;
   line-height: 1.7;
   margin-bottom: 12px;
@@ -331,7 +359,8 @@ body {
 }
 
 .zodiac-grid,
-.cards {
+.cards,
+.progress-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 22px;
@@ -430,12 +459,41 @@ textarea {
     0 0 38px rgba(0,0,0,0.38);
 }
 
-#leaderboardList .comment:nth-child(2) {
-  border-color: rgba(0, 217, 255, 0.45);
+.bar {
+  width: 100%;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  overflow: hidden;
+  margin: 18px 0 10px;
 }
 
-#leaderboardList .comment:nth-child(3) {
-  border-color: rgba(255, 77, 255, 0.45);
+.bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #00d9ff, #ff4dff);
+  box-shadow: 0 0 18px rgba(0,217,255,0.35);
+}
+
+.battle-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 22px;
+  align-items: center;
+  max-width: 980px;
+  margin: auto;
+}
+
+.battle-card {
+  text-align: center;
+}
+
+.vs {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #ff4dff;
+  text-shadow: 0 0 20px rgba(255,77,255,0.6);
 }
 
 .timeline {
@@ -450,6 +508,26 @@ textarea {
   margin-top: 15px;
   color: #7df9ff;
   font-weight: bold;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.social-links a {
+  padding: 14px 24px;
+  border-radius: 999px;
+  color: white;
+  text-decoration: none;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+.social-links a:hover {
+  background: linear-gradient(90deg, #00d9ff, #ff4dff);
 }
 
 footer {
@@ -476,8 +554,13 @@ footer p {
 }
 
 @media (max-width: 800px) {
-  .showcase {
+  .showcase,
+  .battle-grid {
     grid-template-columns: 1fr;
+  }
+
+  .vs {
+    font-size: 2rem;
   }
 
   .nav-links {
