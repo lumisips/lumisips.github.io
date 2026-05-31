@@ -8,15 +8,17 @@
 </head>
 
 <body>
+  <div class="background-glow"></div>
   <div class="stars"></div>
 
   <nav class="navbar">
     <div class="brand">LumiSips</div>
     <div class="nav-links">
-      <a href="#flavor">Flavor</a>
+      <a href="#flagship">Cancer</a>
       <a href="#zodiac">Vote</a>
       <a href="#lab">Lab</a>
       <a href="#community">Community</a>
+      <a href="#join">Join</a>
     </div>
   </nav>
 
@@ -25,6 +27,7 @@
       <p class="eyebrow">COSMIC HYDRATION EXPERIENCE</p>
       <h1>LumiSips</h1>
       <p class="tagline">Hydrate • Elevate • Glow</p>
+
       <p class="hero-text">
         A zodiac-inspired beverage brand built from real formulation, real feedback,
         and one-of-one flavor drops created with the community.
@@ -34,14 +37,18 @@
         <a href="#zodiac" class="btn primary">Vote On Flavors</a>
         <a href="#community" class="btn secondary">Suggest A Flavor</a>
       </div>
+
+      <div class="hero-product">
+        <img src="brand-infographic.png" alt="LumiSips Brand Infographic" />
+      </div>
     </div>
   </header>
 
-  <section id="flavor" class="section">
+  <section id="flagship" class="section">
     <h2>Flagship Drop</h2>
     <p class="section-subtitle">
-      The first LumiSips flavor starts with Cancer — bold, emotional, refreshing,
-      vibrant, and realistic to manufacture.
+      The first official LumiSips flavor starts with Cancer — bold, emotional,
+      refreshing, vibrant, and realistic to manufacture.
     </p>
 
     <div class="showcase">
@@ -49,10 +56,12 @@
         <div class="bottle">
           <div class="bottle-glow"></div>
           <h3>LumiSips</h3>
-          <p>♋ Cancer</p>
+          <p class="zodiac-big">♋</p>
+          <span>Cancer Collection</span>
           <span>Blue Raspberry</span>
           <span>Dragon Fruit</span>
           <span>Hibiscus</span>
+          <small>No Caffeine • Zero Sugar</small>
         </div>
       </div>
 
@@ -60,8 +69,18 @@
         <h3>♋ Cancer Collection</h3>
         <p><strong>Flavor:</strong> Blue Raspberry • Dragon Fruit • Hibiscus</p>
         <p><strong>Profile:</strong> Bright blue raspberry up front, tropical dragon fruit body, floral hibiscus finish.</p>
-        <p><strong>Formula Direction:</strong> Distilled water, allulose, monk fruit, citric acid, malic acid, blue spirulina, natural extracts.</p>
-        <p><strong>Line:</strong> Still hydration first, then sparkling and energy versions later.</p>
+        <p><strong>Formula Direction:</strong> Distilled water, allulose, monk fruit, citric acid, malic acid, blue spirulina, and natural extracts.</p>
+        <p><strong>Launch Direction:</strong> Still hydration first, then sparkling and energy versions later.</p>
+
+        <div class="ingredient-pills">
+          <span>Blue Raspberry</span>
+          <span>Dragon Fruit</span>
+          <span>Hibiscus</span>
+          <span>Malic Acid</span>
+          <span>Citric Acid</span>
+          <span>Allulose</span>
+          <span>Monk Fruit</span>
+        </div>
       </div>
     </div>
   </section>
@@ -163,6 +182,36 @@
         <h3>Limited Zodiac Drops</h3>
         <p>Community-voted flavors released by zodiac collection.</p>
       </div>
+    </div>
+  </section>
+
+  <section id="join" class="section">
+    <h2>Join The LumiList</h2>
+    <p class="section-subtitle">
+      Be first to vote on drops, test flavors, and follow the launch.
+    </p>
+
+    <div class="form-card">
+      <input id="joinName" placeholder="Your name" />
+      <input id="joinEmail" placeholder="Your email" />
+      <select id="joinZodiac">
+        <option value="">Your zodiac sign</option>
+        <option>Aries</option>
+        <option>Taurus</option>
+        <option>Gemini</option>
+        <option>Cancer</option>
+        <option>Leo</option>
+        <option>Virgo</option>
+        <option>Libra</option>
+        <option>Scorpio</option>
+        <option>Sagittarius</option>
+        <option>Capricorn</option>
+        <option>Aquarius</option>
+        <option>Pisces</option>
+      </select>
+
+      <button onclick="joinList()">Join The LumiList</button>
+      <p id="joinMessage" class="join-message"></p>
     </div>
   </section>
 
