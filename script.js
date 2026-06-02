@@ -88,14 +88,6 @@ window.vote = async function(sign) {
   });
 };
 
-window.battleVote = async function(sign) {
-  const battleRef = ref(db, "battleVotes/" + sign);
-
-  await runTransaction(battleRef, current => {
-    return (current || 0) + 1;
-  });
-};
-
 window.addComment = async function() {
   const name = document.getElementById("nameInput").value.trim();
   const zodiac = document.getElementById("zodiacInput").value;
@@ -168,21 +160,6 @@ onValue(ref(db, "votes"), snapshot => {
   }
 });
 
-onValue(ref(db, "battleVotes"), snapshot => {
-  const data = snapshot.val() || {};
-
-  const cancer = document.getElementById("battleCancer");
-  const capricorn = document.getElementById("battleCapricorn");
-
-  if (cancer) {
-    cancer.textContent = (data.Cancer || 0) + " battle votes";
-  }
-
-  if (capricorn) {
-    capricorn.textContent = (data.Capricorn || 0) + " battle votes";
-  }
-});
-
 onValue(ref(db, "flavorSuggestions"), snapshot => {
   const data = snapshot.val() || {};
   const list = Object.values(data).reverse();
@@ -231,11 +208,7 @@ function renderLeaderboard(votes) {
   const sorted = Object.entries(votes).sort((a, b) => b[1] - a[1]);
 
   if (sorted.length === 0) {
-    board.innerHTML = `
-      <div class="comment">
-        <p>No votes yet. Be the first to vote.</p>
-      </div>
-    `;
+    board.innerHTML = `<p>No votes yet. Be the first to vote.</p>`;
     return;
   }
 
