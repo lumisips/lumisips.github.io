@@ -6,8 +6,7 @@ import {
   push,
   onValue,
   runTransaction,
-  get,
-  set
+  get
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 import {
@@ -39,26 +38,31 @@ let currentUserVote = null;
 let latestVotes = {};
 
 const zodiacFlavors = [
-  { sign: "Aries", symbol: "ARIES", flavor: "Blood Orange Mango Heat" },
-  { sign: "Taurus", symbol: "TAURUS", flavor: "Honeydew Pear Vanilla" },
-  { sign: "Gemini", symbol: "GEMINI", flavor: "Lemon Lime Blueberry" },
-  { sign: "Cancer", symbol: "CANCER", flavor: "Blue Raspberry Dragon Fruit Hibiscus" },
-  { sign: "Leo", symbol: "LEO", flavor: "Pineapple Passion Fruit" },
-  { sign: "Virgo", symbol: "VIRGO", flavor: "Cucumber Green Apple Mint" },
-  { sign: "Libra", symbol: "LIBRA", flavor: "Strawberry Rose Lemonade" },
-  { sign: "Scorpio", symbol: "SCORPIO", flavor: "Black Cherry Pomegranate" },
-  { sign: "Sagittarius", symbol: "SAGITTARIUS", flavor: "Kiwi Black Cherry" },
-  { sign: "Capricorn", symbol: "CAPRICORN", flavor: "Sour Watermelon Strawberry" },
-  { sign: "Aquarius", symbol: "AQUARIUS", flavor: "Blueberry Lavender Citrus" },
-  { sign: "Pisces", symbol: "PISCES", flavor: "Peach Dragon Fruit Lychee" }
+  { sign: "Aries", label: "ARIES", flavor: "Blood Orange Mango Heat" },
+  { sign: "Taurus", label: "TAURUS", flavor: "Honeydew Pear Vanilla" },
+  { sign: "Gemini", label: "GEMINI", flavor: "Lemon Lime Blueberry" },
+  { sign: "Cancer", label: "CANCER", flavor: "Blue Raspberry Dragon Fruit Hibiscus" },
+  { sign: "Leo", label: "LEO", flavor: "Pineapple Passion Fruit" },
+  { sign: "Virgo", label: "VIRGO", flavor: "Cucumber Green Apple Mint" },
+  { sign: "Libra", label: "LIBRA", flavor: "Strawberry Rose Lemonade" },
+  { sign: "Scorpio", label: "SCORPIO", flavor: "Black Cherry Pomegranate" },
+  { sign: "Sagittarius", label: "SAGITTARIUS", flavor: "Kiwi Black Cherry" },
+  { sign: "Capricorn", label: "CAPRICORN", flavor: "Sour Watermelon Strawberry" },
+  { sign: "Aquarius", label: "AQUARIUS", flavor: "Blueberry Lavender Citrus" },
+  { sign: "Pisces", label: "PISCES", flavor: "Peach Dragon Fruit Lychee" }
 ];
 
 getRedirectResult(auth).catch(error => {
-  console.error("Redirect error:", error);
+  console.error("Google redirect error:", error);
 });
 
 window.signInWithGoogle = async function () {
-  await signInWithRedirect(auth, provider);
+  try {
+    await signInWithRedirect(auth, provider);
+  } catch (error) {
+    console.error(error);
+    alert("Google sign-in failed.");
+  }
 };
 
 window.logOut = async function () {
@@ -72,17 +76,14 @@ function renderCollection() {
   grid.innerHTML = "";
 
   zodiacFlavors.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "zodiac-card";
-
-    card.innerHTML = `
-      <div class="symbol">${item.symbol}</div>
-      <h3>${item.sign}</h3>
-      <p>${item.flavor}</p>
-      <p><strong>Coming Soon</strong></p>
+    grid.innerHTML += `
+      <div class="zodiac-card">
+        <div class="symbol">${item.label}</div>
+        <h3>${item.sign}</h3>
+        <p>${item.flavor}</p>
+        <p><strong>Coming Soon</strong></p>
+      </div>
     `;
-
-    grid.appendChild(card);
   });
 }
 
@@ -96,26 +97,21 @@ function renderZodiacs(votes = {}) {
     const count = votes[item.sign] || 0;
     const hasVoted = currentUserVote !== null;
 
-    const card = document.createElement("div");
-    card.className = "zodiac-card";
+    let buttonText = "Vote For " + item.sign;
+    if (currentUserVote === item.sign) buttonText = "Your Vote";
+    else if (hasVoted) buttonText = "Vote Locked";
 
-    card.innerHTML = `
-      <div class="symbol">${item.symbol}</div>
-      <h3>${item.sign}</h3>
-      <p>${item.flavor}</p>
-      <button class="vote-btn" onclick="vote('${item.sign}')" ${hasVoted ? "disabled" : ""}>
-        ${
-          currentUserVote === item.sign
-            ? "Your Vote"
-            : hasVoted
-            ? "Vote Locked"
-            : "Vote For " + item.sign
-        }
-      </button>
-      <div class="vote-count">${count} Votes</div>
+    grid.innerHTML += `
+      <div class="zodiac-card">
+        <div class="symbol">${item.label}</div>
+        <h3>${item.sign}</h3>
+        <p>${item.flavor}</p>
+        <button class="vote-btn" onclick="vote('${item.sign}')" ${hasVoted ? "disabled" : ""}>
+          ${buttonText}
+        </button>
+        <div class="vote-count">${count} Votes</div>
+      </div>
     `;
-
-    grid.appendChild(card);
   });
 }
 
@@ -128,16 +124,19 @@ window.vote = async function (sign) {
   }
 
   const userVoteRef = ref(db, `userVotes/${user.uid}`);
-  const existingVote = await get(userVoteRef);
 
-  if (existingVote.exists()) {
-    currentUserVote = existingVote.val();
+  const voteResult = await runTransaction(userVoteRef, currentVote => {
+    if (currentVote !== null) return;
+    return sign;
+  });
+
+  if (!voteResult.committed) {
+    const existingVote = voteResult.snapshot.val();
+    currentUserVote = existingVote;
     renderZodiacs(latestVotes);
-    alert("You already voted for " + existingVote.val() + ".");
+    alert("You already voted for " + existingVote + ".");
     return;
   }
-
-  await set(userVoteRef, sign);
 
   const voteRef = ref(db, "votes/" + sign);
 
@@ -259,17 +258,14 @@ onValue(ref(db, "flavorSuggestions"), snapshot => {
   comments.innerHTML = "";
 
   list.slice(0, 10).forEach(item => {
-    const div = document.createElement("div");
-    div.className = "comment";
-
-    div.innerHTML = `
-      <p><strong>${item.name}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
-      <p><strong>Flavor:</strong> ${item.flavor_idea}</p>
-      <p>${item.comment}</p>
-      <p style="opacity:.6;">${item.date}</p>
+    comments.innerHTML += `
+      <div class="comment">
+        <p><strong>${item.name || "Anonymous"}</strong> suggested a flavor for <strong>${item.zodiac || "Unknown"}</strong></p>
+        <p><strong>Flavor:</strong> ${item.flavor_idea || ""}</p>
+        <p>${item.comment || ""}</p>
+        <p style="opacity:.6;">${item.date || ""}</p>
+      </div>
     `;
-
-    comments.appendChild(div);
   });
 });
 
@@ -283,32 +279,30 @@ function renderLeaderboard(votes) {
   const board = document.getElementById("leaderboardList");
   if (!board) return;
 
-  board.innerHTML = "";
-
-  const sorted = Object.entries(votes).sort((a, b) => b[1] - a[1]);
+  const sorted = Object.entries(votes).sort((a, b) => Number(b[1]) - Number(a[1]));
 
   if (sorted.length === 0) {
     board.innerHTML = `<p>No votes yet. Be the first to vote.</p>`;
     return;
   }
 
+  board.innerHTML = "";
+
   sorted.forEach(([sign, count], index) => {
-    const div = document.createElement("div");
-    div.className = "comment";
+    let rank = "";
+    if (index === 0) rank = "1st";
+    if (index === 1) rank = "2nd";
+    if (index === 2) rank = "3rd";
 
-    let medal = "";
-    if (index === 0) medal = "1st";
-    if (index === 1) medal = "2nd";
-    if (index === 2) medal = "3rd";
-
-    div.innerHTML = `
-      <h3>${medal} ${sign}</h3>
-      <p>${count} votes</p>
+    board.innerHTML += `
+      <div class="comment">
+        <h3>${rank} ${sign}</h3>
+        <p>${count} votes</p>
+      </div>
     `;
-
-    board.appendChild(div);
   });
 }
 
 renderCollection();
 renderZodiacs();
+renderLeaderboard({});
