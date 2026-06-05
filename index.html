@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LumiSips | Hydrate • Elevate • Glow</title>
-  <link rel="stylesheet" href="style.css?v=30" />
+  <link rel="stylesheet" href="style.css?v=50" />
 </head>
 
 <body>
   <nav class="navbar">
     <div class="brand">LumiSips</div>
+
     <div class="nav-links">
       <a href="#flagship">Flagship</a>
       <a href="#vote">Vote</a>
@@ -28,6 +29,7 @@
 
   <section id="flagship" class="section">
     <h2>Flagship Flavor</h2>
+
     <div class="feature-card">
       <div class="symbol">♋</div>
       <h3>Cancer</h3>
@@ -47,7 +49,7 @@
     <p>Sign in with Google to vote. One Google account gets one vote.</p>
 
     <div id="authBox" class="auth-box">
-      <button onclick="signInWithGoogle()">Sign In With Google To Vote</button>
+      Loading sign-in...
     </div>
 
     <div class="stats">
@@ -55,10 +57,12 @@
         <h3 id="voteTotal">0</h3>
         <p>Total Votes</p>
       </div>
+
       <div>
         <h3 id="flavorTotal">0</h3>
         <p>Flavor Ideas</p>
       </div>
+
       <div>
         <h3 id="memberTotal">0</h3>
         <p>LumiList Members</p>
@@ -96,9 +100,13 @@
       </select>
 
       <input id="flavorInput" type="text" placeholder="Flavor idea" />
-      <textarea id="commentInput" placeholder="Why would this flavor be fire?"></textarea>
 
-      <button onclick="addComment()">Submit Flavor Idea</button>
+      <textarea
+        id="commentInput"
+        placeholder="Why would this flavor be fire?"
+      ></textarea>
+
+      <button type="button" onclick="addComment()">Submit Flavor Idea</button>
     </div>
 
     <div id="comments"></div>
@@ -128,7 +136,7 @@
         <option>Pisces</option>
       </select>
 
-      <button onclick="joinList()">Join LumiList</button>
+      <button type="button" onclick="joinList()">Join LumiList</button>
       <p id="joinMessage"></p>
     </div>
   </section>
@@ -138,6 +146,6 @@
     <p>Formulated in Anaheim, California</p>
   </footer>
 
-  <script type="module" src="script.js?v=30"></script>
+  <script type="module" src="script.js?v=50"></script>
 </body>
 </html>
