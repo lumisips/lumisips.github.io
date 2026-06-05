@@ -1,11 +1,22 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 import {
   getDatabase,
   ref,
   push,
   onValue,
-  runTransaction
+  runTransaction,
+  get,
+  set
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDW_HC9OVcpkLc4TFY6MR8brufTPniwXEg",
@@ -20,6 +31,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 const zodiacFlavors = [
   { sign: "Aries", symbol: "♈", flavor: "Blood Orange Mango Heat" },
@@ -35,6 +48,22 @@ const zodiacFlavors = [
   { sign: "Aquarius", symbol: "♒", flavor: "Blueberry Lavender Citrus" },
   { sign: "Pisces", symbol: "♓", flavor: "Peach Dragon Fruit Lychee" }
 ];
+
+let currentUserVote = null;
+let latestVotes = {};
+
+window.signInWithGoogle = async function () {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    console.error(error);
+    alert("Google sign-in failed.");
+  }
+};
+
+window.logOut = async function () {
+  await signOut(auth);
+};
 
 function renderCollection() {
   const grid = document.getElementById("collectionGrid");
@@ -65,6 +94,15 @@ function renderZodiacs(votes = {}) {
 
   zodiacFlavors.forEach(item => {
     const count = votes[item.sign] || 0;
+    const hasVoted = currentUserVote !== null;
+
+    const buttonText =
+      currentUserVote === item.sign
+        ? "Your Vote"
+        : hasVoted
+        ? "Vote Locked"
+        : "Vote For " + item.sign;
+
     const card = document.createElement("div");
     card.className = "zodiac-card";
 
@@ -72,7 +110,9 @@ function renderZodiacs(votes = {}) {
       <div class="symbol">${item.symbol}</div>
       <h3>${item.sign}</h3>
       <p>${item.flavor}</p>
-      <button class="vote-btn" onclick="vote('${item.sign}')">Vote For ${item.sign}</button>
+      <button class="vote-btn" onclick="vote('${item.sign}')" ${hasVoted ? "disabled" : ""}>
+        ${buttonText}
+      </button>
       <div class="vote-count">${count} Votes</div>
     `;
 
@@ -81,11 +121,37 @@ function renderZodiacs(votes = {}) {
 }
 
 window.vote = async function(sign) {
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("Please sign in with Google before voting.");
+    return;
+  }
+
+  const uid = user.uid;
+  const userVoteRef = ref(db, `userVotes/${uid}`);
+
+  const existingVote = await get(userVoteRef);
+
+  if (existingVote.exists()) {
+    currentUserVote = existingVote.val();
+    renderZodiacs(latestVotes);
+    alert("You already voted for " + existingVote.val() + ".");
+    return;
+  }
+
+  await set(userVoteRef, sign);
+
   const voteRef = ref(db, "votes/" + sign);
 
   await runTransaction(voteRef, current => {
     return (current || 0) + 1;
   });
+
+  currentUserVote = sign;
+  renderZodiacs(latestVotes);
+
+  alert("Vote submitted for " + sign + "!");
 };
 
 window.addComment = async function() {
@@ -142,8 +208,35 @@ window.joinList = async function() {
   }
 };
 
+onAuthStateChanged(auth, async user => {
+  const authBox = document.getElementById("authBox");
+
+  if (user) {
+    const voteSnap = await get(ref(db, `userVotes/${user.uid}`));
+    currentUserVote = voteSnap.exists() ? voteSnap.val() : null;
+
+    if (authBox) {
+      authBox.innerHTML = `
+        <p>Signed in as <strong>${user.displayName}</strong></p>
+        <button onclick="logOut()">Log Out</button>
+      `;
+    }
+  } else {
+    currentUserVote = null;
+
+    if (authBox) {
+      authBox.innerHTML = `
+        <button onclick="signInWithGoogle()">Sign In With Google To Vote</button>
+      `;
+    }
+  }
+
+  renderZodiacs(latestVotes);
+});
+
 onValue(ref(db, "votes"), snapshot => {
   const votes = snapshot.val() || {};
+  latestVotes = votes;
 
   renderZodiacs(votes);
   renderLeaderboard(votes);
