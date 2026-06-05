@@ -48,8 +48,8 @@ body {
 }
 
 .hero {
-  min-height: 65vh;
-  padding: 80px 7% 60px;
+  min-height: 55vh;
+  padding: 70px 7% 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -215,11 +215,19 @@ footer {
   }
 
   .hero {
-    min-height: 55vh;
-    padding-top: 55px;
+    min-height: 42vh;
+    padding: 45px 7% 35px;
   }
 
   .hero h1 {
     font-size: 4rem;
+  }
+
+  .hero h2 {
+    font-size: 1.35rem;
+  }
+
+  .section {
+    padding: 50px 7%;
   }
 }
