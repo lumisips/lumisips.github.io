@@ -5,18 +5,8 @@ import {
   ref,
   push,
   onValue,
-  runTransaction,
-  get
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDW_HC9OVcpkLc4TFY6MR8brufTPniwXEg",
@@ -31,10 +21,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
 
-let currentUserVote = null;
 let latestVotes = {};
 
 const zodiacFlavors = [
@@ -52,22 +39,13 @@ const zodiacFlavors = [
   { sign: "Pisces", label: "PISCES", flavor: "Peach Dragon Fruit Lychee" }
 ];
 
-getRedirectResult(auth).catch(error => {
-  console.error("Google redirect error:", error);
-});
+function getDeviceVote() {
+  return localStorage.getItem("lumisips_vote");
+}
 
-window.signInWithGoogle = async function () {
-  try {
-    await signInWithRedirect(auth, provider);
-  } catch (error) {
-    console.error(error);
-    alert("Google sign-in failed.");
-  }
-};
-
-window.logOut = async function () {
-  await signOut(auth);
-};
+function setDeviceVote(sign) {
+  localStorage.setItem("lumisips_vote", sign);
+}
 
 function renderCollection() {
   const grid = document.getElementById("collectionGrid");
@@ -91,14 +69,16 @@ function renderZodiacs(votes = {}) {
   const grid = document.getElementById("zodiacGrid");
   if (!grid) return;
 
+  const currentVote = getDeviceVote();
+
   grid.innerHTML = "";
 
   zodiacFlavors.forEach(item => {
     const count = votes[item.sign] || 0;
-    const hasVoted = currentUserVote !== null;
+    const hasVoted = currentVote !== null;
 
     let buttonText = "Vote For " + item.sign;
-    if (currentUserVote === item.sign) buttonText = "Your Vote";
+    if (currentVote === item.sign) buttonText = "Your Vote";
     else if (hasVoted) buttonText = "Vote Locked";
 
     grid.innerHTML += `
@@ -115,26 +95,15 @@ function renderZodiacs(votes = {}) {
   });
 }
 
+window.signInWithGoogle = function () {
+  alert("Voting no longer requires Google sign-in. Just pick one flavor below.");
+};
+
 window.vote = async function (sign) {
-  const user = auth.currentUser;
+  const currentVote = getDeviceVote();
 
-  if (!user) {
-    alert("Please sign in with Google before voting.");
-    return;
-  }
-
-  const userVoteRef = ref(db, `userVotes/${user.uid}`);
-
-  const voteResult = await runTransaction(userVoteRef, currentVote => {
-    if (currentVote !== null) return;
-    return sign;
-  });
-
-  if (!voteResult.committed) {
-    const existingVote = voteResult.snapshot.val();
-    currentUserVote = existingVote;
-    renderZodiacs(latestVotes);
-    alert("You already voted for " + existingVote + ".");
+  if (currentVote) {
+    alert("You already voted for " + currentVote + ".");
     return;
   }
 
@@ -144,7 +113,7 @@ window.vote = async function (sign) {
     return (current || 0) + 1;
   });
 
-  currentUserVote = sign;
+  setDeviceVote(sign);
   renderZodiacs(latestVotes);
 
   alert("Vote submitted for " + sign + "!");
@@ -199,36 +168,8 @@ window.joinList = async function () {
   document.getElementById("joinZodiac").value = "";
 
   const message = document.getElementById("joinMessage");
-  if (message) {
-    message.textContent = "Welcome to the LumiList!";
-  }
+  if (message) message.textContent = "Welcome to the LumiList!";
 };
-
-onAuthStateChanged(auth, async user => {
-  const authBox = document.getElementById("authBox");
-
-  if (user) {
-    const voteSnap = await get(ref(db, `userVotes/${user.uid}`));
-    currentUserVote = voteSnap.exists() ? voteSnap.val() : null;
-
-    if (authBox) {
-      authBox.innerHTML = `
-        <p>Signed in as <strong>${user.displayName || user.email}</strong></p>
-        <button type="button" onclick="logOut()">Log Out</button>
-      `;
-    }
-  } else {
-    currentUserVote = null;
-
-    if (authBox) {
-      authBox.innerHTML = `
-        <button type="button" onclick="signInWithGoogle()">Sign In With Google To Vote</button>
-      `;
-    }
-  }
-
-  renderZodiacs(latestVotes);
-});
 
 onValue(ref(db, "votes"), snapshot => {
   const votes = snapshot.val() || {};
@@ -301,6 +242,14 @@ function renderLeaderboard(votes) {
       </div>
     `;
   });
+}
+
+const authBox = document.getElementById("authBox");
+if (authBox) {
+  authBox.innerHTML = `
+    <p>No Google sign-in needed.</p>
+    <p>Pick one flavor below. One vote per device.</p>
+  `;
 }
 
 renderCollection();
