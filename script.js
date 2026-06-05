@@ -39,39 +39,30 @@ let currentUserVote = null;
 let latestVotes = {};
 
 const zodiacFlavors = [
-  { sign: "Aries", symbol: "♈", flavor: "Blood Orange Mango Heat" },
-  { sign: "Taurus", symbol: "♉", flavor: "Honeydew Pear Vanilla" },
-  { sign: "Gemini", symbol: "♊", flavor: "Lemon Lime Blueberry" },
-  { sign: "Cancer", symbol: "♋", flavor: "Blue Raspberry Dragon Fruit Hibiscus" },
-  { sign: "Leo", symbol: "♌", flavor: "Pineapple Passion Fruit" },
-  { sign: "Virgo", symbol: "♍", flavor: "Cucumber Green Apple Mint" },
-  { sign: "Libra", symbol: "♎", flavor: "Strawberry Rose Lemonade" },
-  { sign: "Scorpio", symbol: "♏", flavor: "Black Cherry Pomegranate" },
-  { sign: "Sagittarius", symbol: "♐", flavor: "Kiwi Black Cherry" },
-  { sign: "Capricorn", symbol: "♑", flavor: "Sour Watermelon Strawberry" },
-  { sign: "Aquarius", symbol: "♒", flavor: "Blueberry Lavender Citrus" },
-  { sign: "Pisces", symbol: "♓", flavor: "Peach Dragon Fruit Lychee" }
+  { sign: "Aries", symbol: "ARIES", flavor: "Blood Orange Mango Heat" },
+  { sign: "Taurus", symbol: "TAURUS", flavor: "Honeydew Pear Vanilla" },
+  { sign: "Gemini", symbol: "GEMINI", flavor: "Lemon Lime Blueberry" },
+  { sign: "Cancer", symbol: "CANCER", flavor: "Blue Raspberry Dragon Fruit Hibiscus" },
+  { sign: "Leo", symbol: "LEO", flavor: "Pineapple Passion Fruit" },
+  { sign: "Virgo", symbol: "VIRGO", flavor: "Cucumber Green Apple Mint" },
+  { sign: "Libra", symbol: "LIBRA", flavor: "Strawberry Rose Lemonade" },
+  { sign: "Scorpio", symbol: "SCORPIO", flavor: "Black Cherry Pomegranate" },
+  { sign: "Sagittarius", symbol: "SAGITTARIUS", flavor: "Kiwi Black Cherry" },
+  { sign: "Capricorn", symbol: "CAPRICORN", flavor: "Sour Watermelon Strawberry" },
+  { sign: "Aquarius", symbol: "AQUARIUS", flavor: "Blueberry Lavender Citrus" },
+  { sign: "Pisces", symbol: "PISCES", flavor: "Peach Dragon Fruit Lychee" }
 ];
 
 getRedirectResult(auth).catch(error => {
-  console.error("Redirect sign-in error:", error);
+  console.error("Redirect error:", error);
 });
 
 window.signInWithGoogle = async function () {
-  try {
-    await signInWithRedirect(auth, provider);
-  } catch (error) {
-    console.error(error);
-    alert("Google sign-in failed. Try refreshing the page.");
-  }
+  await signInWithRedirect(auth, provider);
 };
 
 window.logOut = async function () {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.error(error);
-  }
+  await signOut(auth);
 };
 
 function renderCollection() {
@@ -105,13 +96,6 @@ function renderZodiacs(votes = {}) {
     const count = votes[item.sign] || 0;
     const hasVoted = currentUserVote !== null;
 
-    const buttonText =
-      currentUserVote === item.sign
-        ? "Your Vote"
-        : hasVoted
-        ? "Vote Locked"
-        : "Vote For " + item.sign;
-
     const card = document.createElement("div");
     card.className = "zodiac-card";
 
@@ -120,7 +104,13 @@ function renderZodiacs(votes = {}) {
       <h3>${item.sign}</h3>
       <p>${item.flavor}</p>
       <button class="vote-btn" onclick="vote('${item.sign}')" ${hasVoted ? "disabled" : ""}>
-        ${buttonText}
+        ${
+          currentUserVote === item.sign
+            ? "Your Vote"
+            : hasVoted
+            ? "Vote Locked"
+            : "Vote For " + item.sign
+        }
       </button>
       <div class="vote-count">${count} Votes</div>
     `;
@@ -129,7 +119,7 @@ function renderZodiacs(votes = {}) {
   });
 }
 
-window.vote = async function(sign) {
+window.vote = async function (sign) {
   const user = auth.currentUser;
 
   if (!user) {
@@ -137,9 +127,7 @@ window.vote = async function(sign) {
     return;
   }
 
-  const uid = user.uid;
-  const userVoteRef = ref(db, `userVotes/${uid}`);
-
+  const userVoteRef = ref(db, `userVotes/${user.uid}`);
   const existingVote = await get(userVoteRef);
 
   if (existingVote.exists()) {
@@ -163,7 +151,7 @@ window.vote = async function(sign) {
   alert("Vote submitted for " + sign + "!");
 };
 
-window.addComment = async function() {
+window.addComment = async function () {
   const name = document.getElementById("nameInput")?.value.trim();
   const zodiac = document.getElementById("zodiacInput")?.value;
   const flavor = document.getElementById("flavorInput")?.value.trim();
@@ -190,7 +178,7 @@ window.addComment = async function() {
   alert("Flavor idea submitted!");
 };
 
-window.joinList = async function() {
+window.joinList = async function () {
   const name = document.getElementById("joinName")?.value.trim();
   const email = document.getElementById("joinEmail")?.value.trim();
   const zodiac = document.getElementById("joinZodiac")?.value;
@@ -227,7 +215,7 @@ onAuthStateChanged(auth, async user => {
     if (authBox) {
       authBox.innerHTML = `
         <p>Signed in as <strong>${user.displayName || user.email}</strong></p>
-        <button onclick="logOut()">Log Out</button>
+        <button type="button" onclick="logOut()">Log Out</button>
       `;
     }
   } else {
@@ -235,7 +223,7 @@ onAuthStateChanged(auth, async user => {
 
     if (authBox) {
       authBox.innerHTML = `
-        <button onclick="signInWithGoogle()">Sign In With Google To Vote</button>
+        <button type="button" onclick="signInWithGoogle()">Sign In With Google To Vote</button>
       `;
     }
   }
@@ -250,16 +238,12 @@ onValue(ref(db, "votes"), snapshot => {
   renderZodiacs(votes);
   renderLeaderboard(votes);
 
-  let totalVotes = 0;
-
-  Object.values(votes).forEach(v => {
-    totalVotes += Number(v);
-  });
+  const totalVotes = Object.values(votes).reduce((sum, value) => {
+    return sum + Number(value || 0);
+  }, 0);
 
   const voteTotal = document.getElementById("voteTotal");
-  if (voteTotal) {
-    voteTotal.textContent = totalVotes;
-  }
+  if (voteTotal) voteTotal.textContent = totalVotes;
 });
 
 onValue(ref(db, "flavorSuggestions"), snapshot => {
@@ -267,9 +251,7 @@ onValue(ref(db, "flavorSuggestions"), snapshot => {
   const list = Object.values(data).reverse();
 
   const flavorTotal = document.getElementById("flavorTotal");
-  if (flavorTotal) {
-    flavorTotal.textContent = list.length;
-  }
+  if (flavorTotal) flavorTotal.textContent = list.length;
 
   const comments = document.getElementById("comments");
   if (!comments) return;
@@ -281,7 +263,7 @@ onValue(ref(db, "flavorSuggestions"), snapshot => {
     div.className = "comment";
 
     div.innerHTML = `
-      <p><strong>${item.name || "Anonymous"}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
+      <p><strong>${item.name}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
       <p><strong>Flavor:</strong> ${item.flavor_idea}</p>
       <p>${item.comment}</p>
       <p style="opacity:.6;">${item.date}</p>
@@ -293,12 +275,8 @@ onValue(ref(db, "flavorSuggestions"), snapshot => {
 
 onValue(ref(db, "lumiList"), snapshot => {
   const data = snapshot.val() || {};
-  const count = Object.keys(data).length;
-
   const memberTotal = document.getElementById("memberTotal");
-  if (memberTotal) {
-    memberTotal.textContent = count;
-  }
+  if (memberTotal) memberTotal.textContent = Object.keys(data).length;
 });
 
 function renderLeaderboard(votes) {
@@ -319,9 +297,9 @@ function renderLeaderboard(votes) {
     div.className = "comment";
 
     let medal = "";
-    if (index === 0) medal = "🥇";
-    if (index === 1) medal = "🥈";
-    if (index === 2) medal = "🥉";
+    if (index === 0) medal = "1st";
+    if (index === 1) medal = "2nd";
+    if (index === 2) medal = "3rd";
 
     div.innerHTML = `
       <h3>${medal} ${sign}</h3>
