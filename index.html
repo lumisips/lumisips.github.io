@@ -13,123 +13,76 @@
 
   <nav class="navbar">
     <div class="brand">LumiSips</div>
-
     <div class="nav-links">
-      <a href="#flagship">Cancer</a>
-      <a href="#collection">Collection</a>
-      <a href="#zodiac">Vote</a>
+      <a href="#flagship">Flagship</a>
+      <a href="#vote">Vote</a>
+      <a href="#leaderboard">Leaderboard</a>
       <a href="#community">Suggest</a>
       <a href="#join">Join</a>
-      <a href="https://www.instagram.com/lumisips" target="_blank">Instagram</a>
-      <a href="https://www.tiktok.com/@lumisips" target="_blank">TikTok</a>
     </div>
   </nav>
 
   <header class="hero">
-    <div class="hero-content">
-      <p class="eyebrow">COSMIC HYDRATION EXPERIENCE</p>
-      <h1>LumiSips</h1>
-      <p class="tagline">Hydrate • Elevate • Glow</p>
-
-      <p class="hero-text">
-        A zodiac-inspired beverage brand built from real formulation, real feedback,
-        and one-of-one flavor drops created with the community.
-      </p>
-
-      <div class="hero-buttons">
-        <a href="#zodiac" class="btn primary">Vote On Flavors</a>
-        <a href="#community" class="btn secondary">Suggest A Flavor</a>
-        <a href="https://www.instagram.com/lumisips" target="_blank" class="btn social">Instagram</a>
-        <a href="https://www.tiktok.com/@lumisips" target="_blank" class="btn social">TikTok</a>
-      </div>
-
-      <div class="live-stats">
-        <div class="stat-card">
-          <h3 id="voteTotal">0</h3>
-          <p>Total Votes</p>
-        </div>
-
-        <div class="stat-card">
-          <h3 id="flavorTotal">0</h3>
-          <p>Flavor Ideas</p>
-        </div>
-
-        <div class="stat-card">
-          <h3 id="memberTotal">0</h3>
-          <p>LumiList Members</p>
-        </div>
-      </div>
-    </div>
+    <h1>LumiSips</h1>
+    <p>Hydrate • Elevate • Glow</p>
+    <h2>Premium zodiac-inspired hydration, sparkling, and energy drinks.</h2>
+    <a href="#vote" class="hero-btn">Vote For The Next Flavor</a>
   </header>
 
   <section id="flagship" class="section">
-    <h2>Flagship Drop</h2>
-    <p class="section-subtitle">
-      The first official LumiSips flavor starts with Cancer — bold, emotional,
-      refreshing, vibrant, and realistic to manufacture.
-    </p>
-
-    <div class="showcase">
-      <div class="bottle-card">
-        <h3>LumiSips</h3>
-        <p class="zodiac-big">♋</p>
-        <p>Cancer Collection</p>
-        <p>Blue Raspberry • Dragon Fruit • Hibiscus</p>
-        <p>No Caffeine • Zero Sugar</p>
-      </div>
-
-      <div class="info-card">
-        <h3>♋ Cancer Collection</h3>
-        <p><strong>Flavor:</strong> Blue Raspberry • Dragon Fruit • Hibiscus</p>
-        <p><strong>Profile:</strong> Bright, tropical, floral, refreshing, and clean.</p>
-
-        <div class="ingredient-pills">
-          <span>Blue Raspberry</span>
-          <span>Dragon Fruit</span>
-          <span>Hibiscus</span>
-          <span>Malic Acid</span>
-          <span>Citric Acid</span>
-          <span>Allulose</span>
-          <span>Monk Fruit</span>
-          <span>Blue Spirulina</span>
-        </div>
-      </div>
+    <h2>Flagship Flavor</h2>
+    <div class="feature-card">
+      <div class="symbol">♋</div>
+      <h3>Cancer</h3>
+      <p>Blue Raspberry • Dragon Fruit • Hibiscus</p>
+      <p>The first LumiSips flavor currently being developed in the lab.</p>
     </div>
   </section>
 
   <section id="collection" class="section">
-    <h2>🌌 Zodiac Collection</h2>
-    <p class="section-subtitle">
-      Every zodiac gets its own flavor profile, colorway, story, and limited release.
-    </p>
+    <h2>Zodiac Collection</h2>
+    <p>Every sign deserves its own signature sip.</p>
+    <div id="collectionGrid" class="grid"></div>
+  </section>
 
-    <div id="collectionGrid" class="zodiac-grid"></div>
+  <section id="vote" class="section">
+    <h2>Vote For The Next Flavor</h2>
+    <p>Sign in with Google to vote. One Google account gets one vote.</p>
+
+    <div id="authBox" class="auth-box"></div>
+
+    <div class="stats">
+      <div>
+        <h3 id="voteTotal">0</h3>
+        <p>Total Votes</p>
+      </div>
+      <div>
+        <h3 id="flavorTotal">0</h3>
+        <p>Flavor Ideas</p>
+      </div>
+      <div>
+        <h3 id="memberTotal">0</h3>
+        <p>LumiList Members</p>
+      </div>
+    </div>
+
+    <div id="zodiacGrid" class="grid"></div>
   </section>
 
   <section id="leaderboard" class="section">
-    <h2>🏆 Zodiac Flavor Rankings</h2>
-    <p class="section-subtitle">The community decides which flavor launches next.</p>
-    <div id="leaderboardList" class="form-card"></div>
-  </section>
-
-  <section id="zodiac" class="section">
-    <h2>Vote For The Next Flavor</h2>
-    <p class="section-subtitle">
-      Vote for the zodiac flavor you want LumiSips to develop next.
-    </p>
-
-    <div id="zodiacGrid" class="zodiac-grid"></div>
+    <h2>Flavor Leaderboard</h2>
+    <div id="leaderboardList"></div>
   </section>
 
   <section id="community" class="section">
-    <h2>Community Flavor Lab</h2>
-    <p class="section-subtitle">Drop a flavor idea for LumiSips.</p>
+    <h2>Suggest A Flavor</h2>
+    <p>Drop a flavor idea for any zodiac sign.</p>
 
-    <div class="form-card">
-      <input id="nameInput" placeholder="Your name or nickname" />
+    <div class="form-box">
+      <input id="nameInput" type="text" placeholder="Your name" />
 
       <select id="zodiacInput">
-        <option value="">Choose zodiac sign</option>
+        <option value="">Choose Zodiac Sign</option>
         <option>Aries</option>
         <option>Taurus</option>
         <option>Gemini</option>
@@ -144,27 +97,25 @@
         <option>Pisces</option>
       </select>
 
-      <input id="flavorInput" placeholder="Flavor idea example: Kiwi Black Cherry Lime" />
-      <textarea id="commentInput" placeholder="Why should LumiSips make this flavor?"></textarea>
+      <input id="flavorInput" type="text" placeholder="Flavor idea" />
+      <textarea id="commentInput" placeholder="Why would this flavor be fire?"></textarea>
 
       <button onclick="addComment()">Submit Flavor Idea</button>
-
-      <div id="comments"></div>
     </div>
+
+    <div id="comments"></div>
   </section>
 
   <section id="join" class="section">
     <h2>Join The LumiList</h2>
-    <p class="section-subtitle">
-      Be first to vote on drops, test flavors, and follow the launch.
-    </p>
+    <p>Be first to know when LumiSips launches.</p>
 
-    <div class="form-card">
-      <input id="joinName" placeholder="Your name" />
+    <div class="form-box">
+      <input id="joinName" type="text" placeholder="Your name" />
       <input id="joinEmail" type="email" placeholder="Your email" />
 
       <select id="joinZodiac">
-        <option value="">Your zodiac sign</option>
+        <option value="">Your Zodiac Sign</option>
         <option>Aries</option>
         <option>Taurus</option>
         <option>Gemini</option>
@@ -179,27 +130,14 @@
         <option>Pisces</option>
       </select>
 
-      <button onclick="joinList()">Join The LumiList</button>
+      <button onclick="joinList()">Join LumiList</button>
       <p id="joinMessage"></p>
     </div>
   </section>
 
-  <section class="section">
-    <h2>Connect With LumiSips</h2>
-
-    <div class="social-links">
-      <a href="https://www.instagram.com/lumisips" target="_blank">Instagram</a>
-      <a href="https://www.tiktok.com/@lumisips" target="_blank">TikTok</a>
-      <a href="https://youtube.com/@lumisips" target="_blank">YouTube</a>
-      <a href="mailto:lumisips@gmail.com">Email</a>
-    </div>
-  </section>
-
-  <footer>
-    <h2>LumiSips</h2>
-    <p>Hydrate • Elevate • Glow</p>
-    <p>Built from Anaheim, California</p>
-    <p class="small">© 2026 LumiSips. All rights reserved.</p>
+  <footer class="footer">
+    <p>LumiSips © 2026</p>
+    <p>Formulated in Anaheim, California</p>
   </footer>
 
   <script type="module" src="script.js"></script>
