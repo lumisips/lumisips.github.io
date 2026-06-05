@@ -13,7 +13,8 @@ import {
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -34,6 +35,9 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+let currentUserVote = null;
+let latestVotes = {};
+
 const zodiacFlavors = [
   { sign: "Aries", symbol: "♈", flavor: "Blood Orange Mango Heat" },
   { sign: "Taurus", symbol: "♉", flavor: "Honeydew Pear Vanilla" },
@@ -49,20 +53,25 @@ const zodiacFlavors = [
   { sign: "Pisces", symbol: "♓", flavor: "Peach Dragon Fruit Lychee" }
 ];
 
-let currentUserVote = null;
-let latestVotes = {};
+getRedirectResult(auth).catch(error => {
+  console.error("Redirect sign-in error:", error);
+});
 
 window.signInWithGoogle = async function () {
   try {
-    await signInWithPopup(auth, provider);
+    await signInWithRedirect(auth, provider);
   } catch (error) {
     console.error(error);
-    alert("Google sign-in failed.");
+    alert("Google sign-in failed. Try refreshing the page.");
   }
 };
 
 window.logOut = async function () {
-  await signOut(auth);
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 function renderCollection() {
@@ -155,10 +164,10 @@ window.vote = async function(sign) {
 };
 
 window.addComment = async function() {
-  const name = document.getElementById("nameInput").value.trim();
-  const zodiac = document.getElementById("zodiacInput").value;
-  const flavor = document.getElementById("flavorInput").value.trim();
-  const comment = document.getElementById("commentInput").value.trim();
+  const name = document.getElementById("nameInput")?.value.trim();
+  const zodiac = document.getElementById("zodiacInput")?.value;
+  const flavor = document.getElementById("flavorInput")?.value.trim();
+  const comment = document.getElementById("commentInput")?.value.trim();
 
   if (!name || !zodiac || !flavor || !comment) {
     alert("Please complete all fields.");
@@ -182,9 +191,9 @@ window.addComment = async function() {
 };
 
 window.joinList = async function() {
-  const name = document.getElementById("joinName").value.trim();
-  const email = document.getElementById("joinEmail").value.trim();
-  const zodiac = document.getElementById("joinZodiac").value;
+  const name = document.getElementById("joinName")?.value.trim();
+  const email = document.getElementById("joinEmail")?.value.trim();
+  const zodiac = document.getElementById("joinZodiac")?.value;
 
   if (!name || !email || !zodiac) {
     alert("Please fill all fields.");
@@ -217,7 +226,7 @@ onAuthStateChanged(auth, async user => {
 
     if (authBox) {
       authBox.innerHTML = `
-        <p>Signed in as <strong>${user.displayName}</strong></p>
+        <p>Signed in as <strong>${user.displayName || user.email}</strong></p>
         <button onclick="logOut()">Log Out</button>
       `;
     }
@@ -272,7 +281,7 @@ onValue(ref(db, "flavorSuggestions"), snapshot => {
     div.className = "comment";
 
     div.innerHTML = `
-      <p><strong>${item.name}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
+      <p><strong>${item.name || "Anonymous"}</strong> suggested a flavor for <strong>${item.zodiac}</strong></p>
       <p><strong>Flavor:</strong> ${item.flavor_idea}</p>
       <p>${item.comment}</p>
       <p style="opacity:.6;">${item.date}</p>
@@ -324,3 +333,4 @@ function renderLeaderboard(votes) {
 }
 
 renderCollection();
+renderZodiacs();
