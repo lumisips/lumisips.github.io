@@ -44,11 +44,11 @@ body {
 .nav-links a {
   color: white;
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
 }
 
 .hero {
-  min-height: 70vh;
+  min-height: 65vh;
   padding: 80px 7% 60px;
   display: flex;
   flex-direction: column;
@@ -59,7 +59,7 @@ body {
 }
 
 .hero h1 {
-  font-size: clamp(4rem, 15vw, 9rem);
+  font-size: clamp(3.5rem, 14vw, 8rem);
   line-height: 0.95;
   background: linear-gradient(90deg,#00d9ff,#fff,#ff4dff);
   -webkit-background-clip: text;
@@ -72,9 +72,9 @@ body {
 }
 
 .hero h2 {
-  margin-top: 20px;
+  margin-top: 18px;
   max-width: 700px;
-  font-size: clamp(1.4rem, 5vw, 2.6rem);
+  font-size: clamp(1.35rem, 5vw, 2.5rem);
   line-height: 1.15;
 }
 
@@ -99,7 +99,7 @@ button:disabled {
 }
 
 .section {
-  padding: 70px 7%;
+  padding: 65px 7%;
 }
 
 .section h2 {
@@ -130,7 +130,7 @@ button:disabled {
 }
 
 .symbol {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 900;
   letter-spacing: 1px;
   color: #7df9ff;
@@ -190,7 +190,8 @@ textarea {
   min-height: 120px;
 }
 
-.footer {
+.footer,
+footer {
   text-align: center;
   padding: 45px 20px;
   background: #02040c;
@@ -214,8 +215,8 @@ textarea {
   }
 
   .hero {
-    min-height: 60vh;
-    padding-top: 60px;
+    min-height: 55vh;
+    padding-top: 55px;
   }
 
   .hero h1 {
