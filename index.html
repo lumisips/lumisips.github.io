@@ -4,13 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LumiSips | Hydrate • Elevate • Glow</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=30" />
 </head>
 
 <body>
-  <div class="background-glow"></div>
-  <div class="stars"></div>
-
   <nav class="navbar">
     <div class="brand">LumiSips</div>
     <div class="nav-links">
@@ -49,7 +46,9 @@
     <h2>Vote For The Next Flavor</h2>
     <p>Sign in with Google to vote. One Google account gets one vote.</p>
 
-    <div id="authBox" class="auth-box"></div>
+    <div id="authBox" class="auth-box">
+      <button onclick="signInWithGoogle()">Sign In With Google To Vote</button>
+    </div>
 
     <div class="stats">
       <div>
@@ -76,19 +75,32 @@
 
   <section id="community" class="section">
     <h2>Suggest A Flavor</h2>
+
     <div class="form-box">
       <input id="nameInput" type="text" placeholder="Your name" />
+
       <select id="zodiacInput">
         <option value="">Choose Zodiac Sign</option>
-        <option>Aries</option><option>Taurus</option><option>Gemini</option>
-        <option>Cancer</option><option>Leo</option><option>Virgo</option>
-        <option>Libra</option><option>Scorpio</option><option>Sagittarius</option>
-        <option>Capricorn</option><option>Aquarius</option><option>Pisces</option>
+        <option>Aries</option>
+        <option>Taurus</option>
+        <option>Gemini</option>
+        <option>Cancer</option>
+        <option>Leo</option>
+        <option>Virgo</option>
+        <option>Libra</option>
+        <option>Scorpio</option>
+        <option>Sagittarius</option>
+        <option>Capricorn</option>
+        <option>Aquarius</option>
+        <option>Pisces</option>
       </select>
+
       <input id="flavorInput" type="text" placeholder="Flavor idea" />
       <textarea id="commentInput" placeholder="Why would this flavor be fire?"></textarea>
+
       <button onclick="addComment()">Submit Flavor Idea</button>
     </div>
+
     <div id="comments"></div>
   </section>
 
@@ -99,13 +111,23 @@
     <div class="form-box">
       <input id="joinName" type="text" placeholder="Your name" />
       <input id="joinEmail" type="email" placeholder="Your email" />
+
       <select id="joinZodiac">
         <option value="">Your Zodiac Sign</option>
-        <option>Aries</option><option>Taurus</option><option>Gemini</option>
-        <option>Cancer</option><option>Leo</option><option>Virgo</option>
-        <option>Libra</option><option>Scorpio</option><option>Sagittarius</option>
-        <option>Capricorn</option><option>Aquarius</option><option>Pisces</option>
+        <option>Aries</option>
+        <option>Taurus</option>
+        <option>Gemini</option>
+        <option>Cancer</option>
+        <option>Leo</option>
+        <option>Virgo</option>
+        <option>Libra</option>
+        <option>Scorpio</option>
+        <option>Sagittarius</option>
+        <option>Capricorn</option>
+        <option>Aquarius</option>
+        <option>Pisces</option>
       </select>
+
       <button onclick="joinList()">Join LumiList</button>
       <p id="joinMessage"></p>
     </div>
@@ -116,6 +138,6 @@
     <p>Formulated in Anaheim, California</p>
   </footer>
 
-  <script type="module" src="script.js"></script>
+  <script type="module" src="script.js?v=30"></script>
 </body>
 </html>
