@@ -25,19 +25,39 @@ const db = getDatabase(app);
 let latestVotes = {};
 
 const zodiacFlavors = [
-  { sign: "Aries", label: "♈ ARIES", flavor: "Blood Orange Mango Heat" },
-  { sign: "Taurus", label: "♉ TAURUS", flavor: "Lemon Orange Citrus" },
-  { sign: "Gemini", label: "♊ GEMINI", flavor: "Lemon Lime Blueberry" },
-  { sign: "Cancer", label: "♋ CANCER", flavor: "Blue Raspberry Dragon Fruit Hibiscus" },
-  { sign: "Leo", label: "♌ LEO", flavor: "Pineapple Passion Fruit" },
-  { sign: "Virgo", label: "♍ VIRGO", flavor: "Cucumber Green Apple Mint" },
-  { sign: "Libra", label: "♎ LIBRA", flavor: "Strawberry Rose Lemonade" },
-  { sign: "Scorpio", label: "♏ SCORPIO", flavor: "Black Cherry Pomegranate" },
-  { sign: "Sagittarius", label: "♐ SAGITTARIUS", flavor: "Kiwi Black Cherry" },
-  { sign: "Capricorn", label: "♑ CAPRICORN", flavor: "Strawberry Sour Watermelon" },
-  { sign: "Aquarius", label: "♒ AQUARIUS", flavor: "Blueberry Lavender Citrus" },
-  { sign: "Pisces", label: "♓ PISCES", flavor: "Peach Dragon Fruit Lychee" }
+  { sign: "Aries", label: "♈ ARIES", flavor: "Blood Orange Mango Heat", color1: "#ff2a00", color2: "#ffb000" },
+  { sign: "Taurus", label: "♉ TAURUS", flavor: "Lemon Orange Citrus", color1: "#ffb000", color2: "#ff6a00" },
+  { sign: "Gemini", label: "♊ GEMINI", flavor: "Lemon Lime Blueberry", color1: "#00eaff", color2: "#ff4dff" },
+  { sign: "Cancer", label: "♋ CANCER", flavor: "Blue Raspberry Dragon Fruit Hibiscus", color1: "#00aaff", color2: "#ff3cff" },
+  { sign: "Leo", label: "♌ LEO", flavor: "Pineapple Passion Fruit", color1: "#ffcc00", color2: "#ff3b00" },
+  { sign: "Virgo", label: "♍ VIRGO", flavor: "Cucumber Green Apple Mint", color1: "#7cff6b", color2: "#00d084" },
+  { sign: "Libra", label: "♎ LIBRA", flavor: "Strawberry Rose Lemonade", color1: "#ff9ff3", color2: "#74b9ff" },
+  { sign: "Scorpio", label: "♏ SCORPIO", flavor: "Black Cherry Pomegranate", color1: "#8e00ff", color2: "#ff004c" },
+  { sign: "Sagittarius", label: "♐ SAGITTARIUS", flavor: "Kiwi Black Cherry", color1: "#9b5cff", color2: "#d000ff" },
+  { sign: "Capricorn", label: "♑ CAPRICORN", flavor: "Strawberry Sour Watermelon", color1: "#ff2fa3", color2: "#7cff00" },
+  { sign: "Aquarius", label: "♒ AQUARIUS", flavor: "Blueberry Lavender Citrus", color1: "#00f5ff", color2: "#0066ff" },
+  { sign: "Pisces", label: "♓ PISCES", flavor: "Peach Dragon Fruit Lychee", color1: "#5d5cff", color2: "#00ffd5" }
 ];
+
+function applyRandomZodiacTheme() {
+  const theme = zodiacFlavors[Math.floor(Math.random() * zodiacFlavors.length)];
+
+  document.documentElement.style.setProperty("--theme-one", theme.color1);
+  document.documentElement.style.setProperty("--theme-two", theme.color2);
+  document.body.setAttribute("data-zodiac", theme.sign);
+
+  const hero = document.querySelector(".hero");
+
+  if (hero && !document.querySelector(".zodiac-login-theme")) {
+    hero.innerHTML += `
+      <div class="zodiac-login-theme">
+        <span>${theme.label.split(" ")[0]}</span>
+        <p>Today's LumiSips Energy: <strong>${theme.sign}</strong></p>
+        <p>${theme.flavor}</p>
+      </div>
+    `;
+  }
+}
 
 function getDeviceVote() {
   return localStorage.getItem("lumisips_vote");
@@ -55,7 +75,7 @@ function renderCollection() {
 
   zodiacFlavors.forEach(item => {
     grid.innerHTML += `
-      <div class="zodiac-card">
+      <div class="zodiac-card" style="--card-one:${item.color1}; --card-two:${item.color2};">
         <div class="symbol">${item.label}</div>
         <h3>${item.sign}</h3>
         <p>${item.flavor}</p>
@@ -70,7 +90,6 @@ function renderZodiacs(votes = {}) {
   if (!grid) return;
 
   const currentVote = getDeviceVote();
-
   grid.innerHTML = "";
 
   zodiacFlavors.forEach(item => {
@@ -82,7 +101,7 @@ function renderZodiacs(votes = {}) {
     else if (hasVoted) buttonText = "Vote Locked";
 
     grid.innerHTML += `
-      <div class="zodiac-card">
+      <div class="zodiac-card" style="--card-one:${item.color1}; --card-two:${item.color2};">
         <div class="symbol">${item.label}</div>
         <h3>${item.sign}</h3>
         <p>${item.flavor}</p>
@@ -181,11 +200,9 @@ function renderLeaderboard(votes) {
   board.innerHTML = "";
 
   sorted.forEach(([sign, count], index) => {
-    const rank = index + 1;
-
     board.innerHTML += `
       <div class="comment">
-        <h3>#${rank} ${sign}</h3>
+        <h3>#${index + 1} ${sign}</h3>
         <p>${count} votes</p>
       </div>
     `;
@@ -245,6 +262,7 @@ if (authBox) {
   `;
 }
 
+applyRandomZodiacTheme();
 renderCollection();
 renderZodiacs();
 renderLeaderboard({});
