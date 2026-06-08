@@ -25,18 +25,18 @@ const db = getDatabase(app);
 let latestVotes = {};
 
 const zodiacFlavors = [
-  { sign: "Aries", label: "ARIES", flavor: "Blood Orange Mango Heat" },
-  { sign: "Taurus", label: "TAURUS", flavor: "Honeydew Pear Vanilla" },
-  { sign: "Gemini", label: "GEMINI", flavor: "Lemon Lime Blueberry" },
-  { sign: "Cancer", label: "CANCER", flavor: "Blue Raspberry Dragon Fruit Hibiscus" },
-  { sign: "Leo", label: "LEO", flavor: "Pineapple Passion Fruit" },
-  { sign: "Virgo", label: "VIRGO", flavor: "Cucumber Green Apple Mint" },
-  { sign: "Libra", label: "LIBRA", flavor: "Strawberry Rose Lemonade" },
-  { sign: "Scorpio", label: "SCORPIO", flavor: "Black Cherry Pomegranate" },
-  { sign: "Sagittarius", label: "SAGITTARIUS", flavor: "Kiwi Black Cherry" },
-  { sign: "Capricorn", label: "CAPRICORN", flavor: "Sour Watermelon Strawberry" },
-  { sign: "Aquarius", label: "AQUARIUS", flavor: "Blueberry Lavender Citrus" },
-  { sign: "Pisces", label: "PISCES", flavor: "Peach Dragon Fruit Lychee" }
+  { sign: "Aries", label: "♈ ARIES", flavor: "Blood Orange Mango Heat" },
+  { sign: "Taurus", label: "♉ TAURUS", flavor: "Lemon Orange Citrus" },
+  { sign: "Gemini", label: "♊ GEMINI", flavor: "Lemon Lime Blueberry" },
+  { sign: "Cancer", label: "♋ CANCER", flavor: "Blue Raspberry Dragon Fruit Hibiscus" },
+  { sign: "Leo", label: "♌ LEO", flavor: "Pineapple Passion Fruit" },
+  { sign: "Virgo", label: "♍ VIRGO", flavor: "Cucumber Green Apple Mint" },
+  { sign: "Libra", label: "♎ LIBRA", flavor: "Strawberry Rose Lemonade" },
+  { sign: "Scorpio", label: "♏ SCORPIO", flavor: "Black Cherry Pomegranate" },
+  { sign: "Sagittarius", label: "♐ SAGITTARIUS", flavor: "Kiwi Black Cherry" },
+  { sign: "Capricorn", label: "♑ CAPRICORN", flavor: "Strawberry Sour Watermelon" },
+  { sign: "Aquarius", label: "♒ AQUARIUS", flavor: "Blueberry Lavender Citrus" },
+  { sign: "Pisces", label: "♓ PISCES", flavor: "Peach Dragon Fruit Lychee" }
 ];
 
 function getDeviceVote() {
@@ -94,10 +94,6 @@ function renderZodiacs(votes = {}) {
     `;
   });
 }
-
-window.signInWithGoogle = function () {
-  alert("Voting no longer requires Google sign-in. Just pick one flavor below.");
-};
 
 window.vote = async function (sign) {
   const currentVote = getDeviceVote();
@@ -171,6 +167,31 @@ window.joinList = async function () {
   if (message) message.textContent = "Welcome to the LumiList!";
 };
 
+function renderLeaderboard(votes) {
+  const board = document.getElementById("leaderboardList");
+  if (!board) return;
+
+  const sorted = Object.entries(votes).sort((a, b) => Number(b[1]) - Number(a[1]));
+
+  if (sorted.length === 0) {
+    board.innerHTML = `<p>No votes yet. Be the first to vote.</p>`;
+    return;
+  }
+
+  board.innerHTML = "";
+
+  sorted.forEach(([sign, count], index) => {
+    const rank = index + 1;
+
+    board.innerHTML += `
+      <div class="comment">
+        <h3>#${rank} ${sign}</h3>
+        <p>${count} votes</p>
+      </div>
+    `;
+  });
+}
+
 onValue(ref(db, "votes"), snapshot => {
   const votes = snapshot.val() || {};
   latestVotes = votes;
@@ -215,34 +236,6 @@ onValue(ref(db, "lumiList"), snapshot => {
   const memberTotal = document.getElementById("memberTotal");
   if (memberTotal) memberTotal.textContent = Object.keys(data).length;
 });
-
-function renderLeaderboard(votes) {
-  const board = document.getElementById("leaderboardList");
-  if (!board) return;
-
-  const sorted = Object.entries(votes).sort((a, b) => Number(b[1]) - Number(a[1]));
-
-  if (sorted.length === 0) {
-    board.innerHTML = `<p>No votes yet. Be the first to vote.</p>`;
-    return;
-  }
-
-  board.innerHTML = "";
-
-  sorted.forEach(([sign, count], index) => {
-    let rank = "";
-    if (index === 0) rank = "1st";
-    if (index === 1) rank = "2nd";
-    if (index === 2) rank = "3rd";
-
-    board.innerHTML += `
-      <div class="comment">
-        <h3>${rank} ${sign}</h3>
-        <p>${count} votes</p>
-      </div>
-    `;
-  });
-}
 
 const authBox = document.getElementById("authBox");
 if (authBox) {
