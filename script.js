@@ -29,9 +29,7 @@ menuToggle.addEventListener("click", () => {
 });
 
 document.querySelectorAll(".nav-links a").forEach(link => {
-  link.addEventListener("click", () => {
-    navLinks.classList.remove("show");
-  });
+  link.addEventListener("click", () => navLinks.classList.remove("show"));
 });
 
 function getVotes() {
@@ -57,13 +55,11 @@ function renderZodiacGrid() {
   zodiacSigns.forEach(item => {
     const card = document.createElement("div");
     card.className = item.locked ? "zodiac-card flagship" : "zodiac-card";
-
     card.innerHTML = `
       <h3>${item.symbol} ${item.sign}</h3>
       <p>${item.flavor}</p>
       ${item.locked ? "<span class='badge'>Flagship Locked</span>" : "<span class='badge'>Coming Soon</span>"}
     `;
-
     grid.appendChild(card);
   });
 }
@@ -73,22 +69,18 @@ function renderVoteGrid() {
   const votes = getVotes();
   grid.innerHTML = "";
 
-  zodiacSigns
-    .filter(item => !item.locked)
-    .forEach(item => {
-      if (!votes[item.sign]) votes[item.sign] = 0;
+  zodiacSigns.filter(item => !item.locked).forEach(item => {
+    votes[item.sign] = votes[item.sign] || 0;
 
-      const card = document.createElement("div");
-      card.className = "vote-card";
-
-      card.innerHTML = `
-        <h3>${item.symbol} ${item.sign}</h3>
-        <p>Votes: <strong>${votes[item.sign]}</strong></p>
-        <button class="btn primary" onclick="voteForZodiac('${item.sign}')">Vote ${item.symbol}</button>
-      `;
-
-      grid.appendChild(card);
-    });
+    const card = document.createElement("div");
+    card.className = "vote-card";
+    card.innerHTML = `
+      <h3>${item.symbol} ${item.sign}</h3>
+      <p>Votes: <strong>${votes[item.sign]}</strong></p>
+      <button class="btn primary" onclick="voteForZodiac('${item.sign}')">Vote ${item.symbol}</button>
+    `;
+    grid.appendChild(card);
+  });
 
   saveVotes(votes);
 }
@@ -123,12 +115,7 @@ function renderLeaderboard() {
   ranked.forEach((item, index) => {
     const row = document.createElement("div");
     row.className = item.locked ? "leaderboard-row flagship" : "leaderboard-row";
-
-    row.innerHTML = `
-      <span>${index + 1}. ${item.symbol} ${item.sign}</span>
-      <strong>${item.votes}</strong>
-    `;
-
+    row.innerHTML = `<span>${index + 1}. ${item.symbol} ${item.sign}</span><strong>${item.votes}</strong>`;
     container.appendChild(row);
   });
 }
@@ -143,14 +130,11 @@ function renderBattles() {
     const key = `battle-${index}`;
 
     if (!battleVotes[key]) {
-      battleVotes[key] = {
-        [optionA]: 0,
-        [optionB]: 0
-      };
+      battleVotes[key] = { [optionA]: 0, [optionB]: 0 };
     }
 
-    const aVotes = battleVotes[key][optionA];
-    const bVotes = battleVotes[key][optionB];
+    const aVotes = battleVotes[key][optionA] || 0;
+    const bVotes = battleVotes[key][optionB] || 0;
 
     let winner = "Tie";
     if (aVotes > bVotes) winner = optionA;
@@ -158,7 +142,6 @@ function renderBattles() {
 
     const card = document.createElement("div");
     card.className = "battle-card";
-
     card.innerHTML = `
       <h3>${optionA} vs ${optionB}</h3>
       <p>${optionA}: <strong>${aVotes}</strong></p>
@@ -167,7 +150,6 @@ function renderBattles() {
       <button class="btn secondary" onclick="voteBattle('${key}', '${optionA}')">${optionA}</button>
       <button class="btn primary" onclick="voteBattle('${key}', '${optionB}')">${optionB}</button>
     `;
-
     grid.appendChild(card);
   });
 
@@ -176,20 +158,13 @@ function renderBattles() {
 
 function voteBattle(key, option) {
   const battleVotes = getBattleVotes();
-
-  if (!battleVotes[key]) {
-    battleVotes[key] = {};
-  }
-
   battleVotes[key][option] = (battleVotes[key][option] || 0) + 1;
   saveBattleVotes(battleVotes);
   renderBattles();
 }
 
 function animateProgressBars() {
-  const items = document.querySelectorAll(".progress-item");
-
-  items.forEach(item => {
+  document.querySelectorAll(".progress-item").forEach(item => {
     const progress = item.getAttribute("data-progress");
     const bar = item.querySelector(".progress-bar div");
 
@@ -209,6 +184,39 @@ function initFoundingMembers() {
     localStorage.setItem("lumisipsFoundingMembers", "128");
   }
 }
+
+document.querySelectorAll(".ajax-form").forEach(form => {
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const status = form.querySelector(".form-status");
+    status.textContent = "Sending...";
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { "Accept": "application/json" }
+      });
+
+      if (response.ok) {
+        status.textContent = form.dataset.success || "Submitted successfully.";
+        form.reset();
+
+        if (form.querySelector("[name='form_type']")?.value === "Waitlist Signup") {
+          let count = Number(localStorage.getItem("lumisipsFoundingMembers") || 128);
+          count += 1;
+          localStorage.setItem("lumisipsFoundingMembers", count);
+          document.getElementById("memberCount").textContent = count;
+        }
+      } else {
+        status.textContent = "Something went wrong. Please try again.";
+      }
+    } catch (error) {
+      status.textContent = "Connection error. Please try again.";
+    }
+  });
+});
 
 renderZodiacGrid();
 renderVoteGrid();
