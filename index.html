@@ -17,6 +17,7 @@
   <div id="scrollProgress"></div>
   <canvas id="stars"></canvas>
   <div class="mouse-glow" id="mouseGlow"></div>
+  <div id="sparkleLayer"></div>
 
   <nav class="navbar">
     <a href="#home" class="brand">LumiSips</a>
@@ -105,15 +106,22 @@
 
   <section class="section reveal" id="battle">
     <p class="eyebrow">Battle Arena</p>
-    <h2>Choose The Future</h2>
-    <div class="grid" id="battleGrid"></div>
+    <h2>Flavor Clash Mode</h2>
+    <p class="section-copy">Pick your side. Every vote helps shape the future of LumiSips.</p>
+    <div class="battle-grid" id="battleGrid"></div>
+  </section>
+
+  <section class="section reveal" id="communityIdeas">
+    <p class="eyebrow">Community Flavor Ideas</p>
+    <h2>Ideas Already In The Lab</h2>
+    <div class="grid" id="suggestionGrid"></div>
   </section>
 
   <section class="section reveal" id="community">
     <p class="eyebrow">Community</p>
     <h2>Shape LumiSips</h2>
 
-    <form class="form ajax-form" action="https://formspree.io/f/xkoeaqkg" method="POST" data-success="Thank you for helping shape the future of LumiSips.">
+    <form class="form ajax-form suggestion-form" action="https://formspree.io/f/xkoeaqkg" method="POST" data-success="Thank you for helping shape the future of LumiSips.">
       <input type="hidden" name="form_type" value="Community Suggestion">
       <input name="name" placeholder="Name" required>
       <input type="email" name="email" placeholder="Email" required>
@@ -172,12 +180,14 @@
       <input type="hidden" name="form_type" value="Waitlist Signup">
       <input name="name" placeholder="Name" required>
       <input type="email" name="email" placeholder="Email" required>
+
       <select name="favorite_zodiac" required>
         <option value="">Favorite Zodiac Sign</option>
         <option>Aries</option><option>Taurus</option><option>Gemini</option><option>Cancer</option>
         <option>Leo</option><option>Virgo</option><option>Libra</option><option>Scorpio</option>
         <option>Sagittarius</option><option>Capricorn</option><option>Aquarius</option><option>Pisces</option>
       </select>
+
       <select name="preferred_line" required>
         <option value="">Preferred Product Line</option>
         <option>Still Hydration</option>
@@ -185,6 +195,7 @@
         <option>Energy</option>
         <option>Sparkling Energy</option>
       </select>
+
       <button class="btn primary" type="submit">Join Waitlist</button>
       <p class="form-status"></p>
     </form>
