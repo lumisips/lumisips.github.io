@@ -21,11 +21,18 @@ function applyRandomTheme(){
 applyRandomTheme();
 
 const zodiacSigns = [
-  ["Aries","♈","Coming Soon"],["Taurus","♉","Coming Soon"],["Gemini","♊","Coming Soon"],
-  ["Cancer","♋","Blue Raspberry • Dragon Fruit • Hibiscus"],["Leo","♌","Coming Soon"],
-  ["Virgo","♍","Coming Soon"],["Libra","♎","Coming Soon"],["Scorpio","♏","Coming Soon"],
-  ["Sagittarius","♐","Coming Soon"],["Capricorn","♑","Coming Soon"],
-  ["Aquarius","♒","Coming Soon"],["Pisces","♓","Coming Soon"]
+  ["Aries","♈","Coming Soon","soon"],
+  ["Taurus","♉","Lemon • Orange • Citrus","active"],
+  ["Gemini","♊","Coming Soon","soon"],
+  ["Cancer","♋","Blue Raspberry • Dragon Fruit • Hibiscus","flagship"],
+  ["Leo","♌","Coming Soon","soon"],
+  ["Virgo","♍","Coming Soon","soon"],
+  ["Libra","♎","Coming Soon","soon"],
+  ["Scorpio","♏","Coming Soon","soon"],
+  ["Sagittarius","♐","Coming Soon","soon"],
+  ["Capricorn","♑","Coming Soon","soon"],
+  ["Aquarius","♒","Coming Soon","soon"],
+  ["Pisces","♓","Coming Soon","soon"]
 ];
 
 const defaultVotes = {
@@ -34,6 +41,7 @@ const defaultVotes = {
 };
 
 const flavorSuggestions = [
+  { zodiac: "Taurus ♉", flavor: "Lemon Orange Citrus", note: "Bright, refreshing citrus hydration with a clean finish." },
   { zodiac: "Capricorn ♑", flavor: "Sour Watermelon Strawberry", note: "A bold sour candy-inspired hydration flavor." },
   { zodiac: "Leo ♌", flavor: "Pineapple Passion Fruit", note: "Tropical, bright, loud, and summer-focused." },
   { zodiac: "Gemini ♊", flavor: "Lemon Lime Blueberry", note: "Dual citrus energy with a smooth berry finish." },
@@ -59,7 +67,8 @@ const defaultBattleVotes = {
 const timelineItems = [
   "Idea Created","LLC Approved","EIN Received","Business Bank Account Opened",
   "Seller’s Permit Obtained","D-U-N-S Number Approved","Cancer Formula Advanced",
-  "Bulk Batch Development Started","Website Community Launched","Pre-Launch Development Phase","Official Launch"
+  "Bulk Batch Development Started","Taurus Citrus Development Added","Website Community Launched",
+  "Pre-Launch Development Phase","Official Launch"
 ];
 
 const navLinks = document.getElementById("navLinks");
@@ -76,18 +85,25 @@ function initializeStorage(){
   if(!localStorage.getItem("lumisipsVotes")) setJSON("lumisipsVotes", defaultVotes);
   if(!localStorage.getItem("lumisipsBattles")) setJSON("lumisipsBattles", defaultBattleVotes);
   if(!localStorage.getItem("lumisipsSuggestions")) setJSON("lumisipsSuggestions", flavorSuggestions);
+  if(!localStorage.getItem("lumisipsMembers")) localStorage.setItem("lumisipsMembers", "1");
 }
 
 function renderZodiac(){
   const grid = document.getElementById("zodiacGrid");
   grid.innerHTML = "";
-  zodiacSigns.forEach(([name,symbol,flavor])=>{
-    const locked = name === "Cancer";
+  zodiacSigns.forEach(([name,symbol,flavor,status])=>{
+    const flagship = status === "flagship";
+    const active = status === "active";
+
     grid.innerHTML += `
-      <div class="card ${locked ? "flagship" : ""}">
+      <div class="card ${flagship ? "flagship" : ""} ${active ? "active-development" : ""}">
         <h3>${symbol} ${name}</h3>
         <p>${flavor}</p>
-        <span class="badge">${locked ? "Flagship Locked" : "Coming Soon"}</span>
+        <span class="badge">${
+          flagship ? "Flagship Locked" :
+          active ? "Early Development" :
+          "Coming Soon"
+        }</span>
       </div>`;
   });
 }
@@ -109,7 +125,11 @@ function renderVotes(){
         </button>
       </div>`;
   });
-  if(hasVoted) document.getElementById("voteMessage").textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
+
+  if(hasVoted) {
+    document.getElementById("voteMessage").textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
+  }
+
   setJSON("lumisipsVotes", votes);
 }
 
@@ -118,10 +138,12 @@ function vote(name){
     document.getElementById("voteMessage").textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
     return;
   }
+
   const votes = getJSON("lumisipsVotes", defaultVotes);
   votes[name] = (votes[name] || 0) + 1;
   setJSON("lumisipsVotes", votes);
   localStorage.setItem("lumisipsHasVotedZodiac","true");
+
   document.getElementById("voteMessage").textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
   sparkleBurst(window.innerWidth / 2, window.innerHeight / 2);
   renderVotes();
@@ -130,13 +152,18 @@ function vote(name){
 
 function renderLeaderboard(){
   const votes = getJSON("lumisipsVotes", defaultVotes);
-  const ranked = zodiacSigns.map(([name,symbol])=>({
-    name, symbol, votes:name==="Cancer" ? "Flagship Locked" : votes[name] || 0, locked:name==="Cancer"
+
+  const ranked = zodiacSigns.map(([name,symbol,flavor,status])=>({
+    name,
+    symbol,
+    votes:name==="Cancer" ? "Flagship Locked" : votes[name] || 0,
+    locked:name==="Cancer"
   })).sort((a,b)=>{
     if(a.locked) return -1;
     if(b.locked) return 1;
     return b.votes - a.votes;
   });
+
   document.getElementById("leaderboardList").innerHTML = ranked.map((x,i)=>`
     <div class="leaderboard-row ${x.locked ? "flagship" : ""}">
       <span>${i+1}. ${x.symbol} ${x.name}</span>
@@ -146,6 +173,7 @@ function renderLeaderboard(){
 
 function renderSuggestions(){
   const suggestions = getJSON("lumisipsSuggestions", flavorSuggestions);
+
   document.getElementById("suggestionGrid").innerHTML = suggestions.map(item => `
     <div class="card">
       <span>${item.zodiac || "Community Idea"}</span>
@@ -162,6 +190,7 @@ function renderBattles(){
 
   battles.forEach(battle=>{
     if(!data[battle.key]) data[battle.key] = { [battle.left]:0, [battle.right]:0 };
+
     const leftVotes = data[battle.key][battle.left] || 0;
     const rightVotes = data[battle.key][battle.right] || 0;
     const total = leftVotes + rightVotes || 1;
@@ -169,6 +198,7 @@ function renderBattles(){
     const rightPercent = Math.round((rightVotes / total) * 100);
     const votedChoice = localStorage.getItem(`lumisipsVotedBattle_${battle.key}`);
     const locked = Boolean(votedChoice);
+
     let winner = "Tie";
     if(leftVotes > rightVotes) winner = battle.left;
     if(rightVotes > leftVotes) winner = battle.right;
@@ -201,11 +231,13 @@ function renderBattles(){
         </div>
       </div>`;
   });
+
   setJSON("lumisipsBattles", data);
 }
 
 function battleVote(key, choice, event){
   if(localStorage.getItem(`lumisipsVotedBattle_${key}`)) return;
+
   const data = getJSON("lumisipsBattles", defaultBattleVotes);
   data[key][choice] = (data[key][choice] || 0) + 1;
   setJSON("lumisipsBattles", data);
@@ -216,6 +248,7 @@ function battleVote(key, choice, event){
     const rect = event.currentTarget.getBoundingClientRect();
     sparkleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
   }
+
   setTimeout(renderBattles, 350);
 }
 
@@ -228,6 +261,7 @@ function renderTimeline(){
 function sparkleBurst(x,y){
   const layer = document.getElementById("sparkleLayer");
   const sparkles = ["✨","💫","⭐","🫧","💥"];
+
   for(let i=0;i<16;i++){
     const sparkle = document.createElement("div");
     sparkle.className = "sparkle";
@@ -248,17 +282,35 @@ function animateProgress(){
 function animateCounters(){
   document.querySelectorAll("[data-count]").forEach(counter=>{
     if(counter.dataset.done) return;
+
     counter.dataset.done = "true";
+
     const target = Number(counter.dataset.count);
+    const suffix = counter.dataset.suffix || "";
     let current = 0;
+
     const step = Math.max(1, Math.ceil(target / 45));
+
     const timer = setInterval(()=>{
       current += step;
-      if(current >= target){ current = target; clearInterval(timer); }
-      counter.textContent = current + (target === 11 ? "" : "+");
+
+      if(current >= target){
+        current = target;
+        clearInterval(timer);
+      }
+
+      counter.textContent = current + suffix;
     }, 28);
   });
 }
+
+document.querySelectorAll(".true-stat-card").forEach(card => {
+  card.addEventListener("click", () => {
+    card.classList.remove("pulse");
+    void card.offsetWidth;
+    card.classList.add("pulse");
+  });
+});
 
 const observer = new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
@@ -269,52 +321,64 @@ const observer = new IntersectionObserver(entries=>{
     }
   });
 },{threshold:.18});
+
 document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
 
 document.querySelectorAll(".ajax-form").forEach(form=>{
   form.addEventListener("submit",async e=>{
     e.preventDefault();
+
     const status = form.querySelector(".form-status");
     status.textContent = "Sending...";
     const formData = new FormData(form);
 
     try{
-      const res = await fetch(form.action,{ method:"POST", body:formData, headers:{Accept:"application/json"} });
+      const res = await fetch(form.action,{
+        method:"POST",
+        body:formData,
+        headers:{Accept:"application/json"}
+      });
+
       if(res.ok){
         status.textContent = form.dataset.success;
+
         if(form.classList.contains("waitlist-form")){
-          let count = Number(localStorage.getItem("lumisipsMembers") || 128) + 1;
-          localStorage.setItem("lumisipsMembers", count);
-          document.getElementById("memberCount").textContent = count;
+          localStorage.setItem("lumisipsMembers", "1");
+          document.getElementById("memberCount").textContent = "1";
         }
+
         if(form.classList.contains("suggestion-form")){
           const suggestions = getJSON("lumisipsSuggestions", flavorSuggestions);
+
           suggestions.unshift({
             zodiac: formData.get("zodiac") || "Community Idea",
             flavor: formData.get("flavor") || "New Flavor Idea",
             note: formData.get("message") || formData.get("ingredient") || "Submitted by the LumiSips community."
           });
+
           setJSON("lumisipsSuggestions", suggestions);
           renderSuggestions();
         }
+
         sparkleBurst(window.innerWidth / 2, window.innerHeight / 2);
         form.reset();
+
       } else {
         status.textContent = "Something went wrong. Please try again.";
       }
+
     }catch{
       status.textContent = "Connection error. Please try again.";
     }
   });
 });
 
-document.getElementById("memberCount").textContent = localStorage.getItem("lumisipsMembers") || 128;
-
 window.addEventListener("scroll",()=>{
   const scrolled = (window.scrollY / (document.body.scrollHeight - innerHeight)) * 100;
   document.getElementById("scrollProgress").style.width = scrolled + "%";
   document.getElementById("backTop").style.display = window.scrollY > 600 ? "grid" : "none";
 });
+
 document.getElementById("backTop").onclick = () => scrollTo({top:0,behavior:"smooth"});
 
 document.addEventListener("mousemove",e=>{
@@ -326,6 +390,7 @@ document.addEventListener("mousemove",e=>{
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 let stars = [];
+
 function resize(){
   canvas.width = innerWidth;
   canvas.height = innerHeight;
@@ -336,25 +401,31 @@ function resize(){
     s:Math.random()*.6+.2
   }));
 }
+
 resize();
 addEventListener("resize",resize);
 
 function drawStars(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.fillStyle = "white";
+
   stars.forEach(star=>{
     ctx.globalAlpha = Math.random();
     ctx.beginPath();
     ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
     ctx.fill();
+
     star.y += star.s;
     if(star.y > canvas.height) star.y = 0;
   });
+
   requestAnimationFrame(drawStars);
 }
+
 drawStars();
 
 initializeStorage();
+document.getElementById("memberCount").textContent = "1";
 renderZodiac();
 renderVotes();
 renderLeaderboard();
