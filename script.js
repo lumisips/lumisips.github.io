@@ -1,268 +1,218 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-  getDatabase,
-  ref,
-  push,
-  onValue,
-  runTransaction
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDW_HC9OVcpkLc4TFY6MR8brufTPniwXEg",
-  authDomain: "lumisips-b280f.firebaseapp.com",
-  databaseURL: "https://lumisips-b280f-default-rtdb.firebaseio.com",
-  projectId: "lumisips-b280f",
-  storageBucket: "lumisips-b280f.firebasestorage.app",
-  messagingSenderId: "980927514380",
-  appId: "1:980927514380:web:5e92f1aeb27ba46a9eeb29",
-  measurementId: "G-D307MPGWL1"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-let latestVotes = {};
-
-const zodiacFlavors = [
-  { sign: "Aries", label: "♈ ARIES", flavor: "Blood Orange Mango Heat", color1: "#ff2a00", color2: "#ffb000" },
-  { sign: "Taurus", label: "♉ TAURUS", flavor: "Lemon Orange Citrus", color1: "#ffb000", color2: "#ff6a00" },
-  { sign: "Gemini", label: "♊ GEMINI", flavor: "Lemon Lime Blueberry", color1: "#00eaff", color2: "#ff4dff" },
-  { sign: "Cancer", label: "♋ CANCER", flavor: "Blue Raspberry Dragon Fruit Hibiscus", color1: "#00aaff", color2: "#ff3cff" },
-  { sign: "Leo", label: "♌ LEO", flavor: "Pineapple Passion Fruit", color1: "#ffcc00", color2: "#ff3b00" },
-  { sign: "Virgo", label: "♍ VIRGO", flavor: "Cucumber Green Apple Mint", color1: "#7cff6b", color2: "#00d084" },
-  { sign: "Libra", label: "♎ LIBRA", flavor: "Strawberry Rose Lemonade", color1: "#ff9ff3", color2: "#74b9ff" },
-  { sign: "Scorpio", label: "♏ SCORPIO", flavor: "Black Cherry Pomegranate", color1: "#8e00ff", color2: "#ff004c" },
-  { sign: "Sagittarius", label: "♐ SAGITTARIUS", flavor: "Kiwi Black Cherry", color1: "#9b5cff", color2: "#d000ff" },
-  { sign: "Capricorn", label: "♑ CAPRICORN", flavor: "Strawberry Sour Watermelon", color1: "#ff2fa3", color2: "#7cff00" },
-  { sign: "Aquarius", label: "♒ AQUARIUS", flavor: "Blueberry Lavender Citrus", color1: "#00f5ff", color2: "#0066ff" },
-  { sign: "Pisces", label: "♓ PISCES", flavor: "Peach Dragon Fruit Lychee", color1: "#5d5cff", color2: "#00ffd5" }
+const zodiacSigns = [
+  { sign: "Aries", symbol: "♈", flavor: "TBD" },
+  { sign: "Taurus", symbol: "♉", flavor: "TBD" },
+  { sign: "Gemini", symbol: "♊", flavor: "TBD" },
+  { sign: "Cancer", symbol: "♋", flavor: "Blue Raspberry • Dragon Fruit • Hibiscus", locked: true },
+  { sign: "Leo", symbol: "♌", flavor: "TBD" },
+  { sign: "Virgo", symbol: "♍", flavor: "TBD" },
+  { sign: "Libra", symbol: "♎", flavor: "TBD" },
+  { sign: "Scorpio", symbol: "♏", flavor: "TBD" },
+  { sign: "Sagittarius", symbol: "♐", flavor: "TBD" },
+  { sign: "Capricorn", symbol: "♑", flavor: "TBD" },
+  { sign: "Aquarius", symbol: "♒", flavor: "TBD" },
+  { sign: "Pisces", symbol: "♓", flavor: "TBD" }
 ];
 
-function applyRandomZodiacTheme() {
-  const theme = zodiacFlavors[Math.floor(Math.random() * zodiacFlavors.length)];
+const battles = [
+  ["Glass Bottles", "Aluminum Cans"],
+  ["Still Hydration", "Sparkling Hydration"],
+  ["Energy", "Sparkling Energy"],
+  ["Blue Raspberry", "Watermelon"],
+  ["Dragon Fruit", "Passion Fruit"]
+];
 
-  document.documentElement.style.setProperty("--theme-one", theme.color1);
-  document.documentElement.style.setProperty("--theme-two", theme.color2);
-  document.body.setAttribute("data-zodiac", theme.sign);
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
 
-  const hero = document.querySelector(".hero");
+menuToggle.addEventListener("click", () => {
+  navLinks.classList.toggle("show");
+});
 
-  if (hero && !document.querySelector(".zodiac-login-theme")) {
-    hero.innerHTML += `
-      <div class="zodiac-login-theme">
-        <span>${theme.label.split(" ")[0]}</span>
-        <p>Today's LumiSips Energy: <strong>${theme.sign}</strong></p>
-        <p>${theme.flavor}</p>
-      </div>
-    `;
-  }
-}
-
-function getDeviceVote() {
-  return localStorage.getItem("lumisips_vote");
-}
-
-function setDeviceVote(sign) {
-  localStorage.setItem("lumisips_vote", sign);
-}
-
-function renderCollection() {
-  const grid = document.getElementById("collectionGrid");
-  if (!grid) return;
-
-  grid.innerHTML = "";
-
-  zodiacFlavors.forEach(item => {
-    grid.innerHTML += `
-      <div class="zodiac-card" style="--card-one:${item.color1}; --card-two:${item.color2};">
-        <div class="symbol">${item.label}</div>
-        <h3>${item.sign}</h3>
-        <p>${item.flavor}</p>
-        <p><strong>Coming Soon</strong></p>
-      </div>
-    `;
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    navLinks.classList.remove("show");
   });
+});
+
+function getVotes() {
+  return JSON.parse(localStorage.getItem("lumisipsVotes")) || {};
 }
 
-function renderZodiacs(votes = {}) {
+function saveVotes(votes) {
+  localStorage.setItem("lumisipsVotes", JSON.stringify(votes));
+}
+
+function getBattleVotes() {
+  return JSON.parse(localStorage.getItem("lumisipsBattleVotes")) || {};
+}
+
+function saveBattleVotes(votes) {
+  localStorage.setItem("lumisipsBattleVotes", JSON.stringify(votes));
+}
+
+function renderZodiacGrid() {
   const grid = document.getElementById("zodiacGrid");
-  if (!grid) return;
-
-  const currentVote = getDeviceVote();
   grid.innerHTML = "";
 
-  zodiacFlavors.forEach(item => {
-    const count = votes[item.sign] || 0;
-    const hasVoted = currentVote !== null;
+  zodiacSigns.forEach(item => {
+    const card = document.createElement("div");
+    card.className = item.locked ? "zodiac-card flagship" : "zodiac-card";
 
-    let buttonText = "Vote For " + item.sign;
-    if (currentVote === item.sign) buttonText = "Your Vote";
-    else if (hasVoted) buttonText = "Vote Locked";
-
-    grid.innerHTML += `
-      <div class="zodiac-card" style="--card-one:${item.color1}; --card-two:${item.color2};">
-        <div class="symbol">${item.label}</div>
-        <h3>${item.sign}</h3>
-        <p>${item.flavor}</p>
-        <button class="vote-btn" onclick="vote('${item.sign}')" ${hasVoted ? "disabled" : ""}>
-          ${buttonText}
-        </button>
-        <div class="vote-count">${count} Votes</div>
-      </div>
+    card.innerHTML = `
+      <h3>${item.symbol} ${item.sign}</h3>
+      <p>${item.flavor}</p>
+      ${item.locked ? "<span class='badge'>Flagship Locked</span>" : "<span class='badge'>Coming Soon</span>"}
     `;
+
+    grid.appendChild(card);
   });
 }
 
-window.vote = async function (sign) {
-  const currentVote = getDeviceVote();
+function renderVoteGrid() {
+  const grid = document.getElementById("voteGrid");
+  const votes = getVotes();
+  grid.innerHTML = "";
 
-  if (currentVote) {
-    alert("You already voted for " + currentVote + ".");
-    return;
-  }
+  zodiacSigns
+    .filter(item => !item.locked)
+    .forEach(item => {
+      if (!votes[item.sign]) votes[item.sign] = 0;
 
-  const voteRef = ref(db, "votes/" + sign);
+      const card = document.createElement("div");
+      card.className = "vote-card";
 
-  await runTransaction(voteRef, current => {
-    return (current || 0) + 1;
-  });
+      card.innerHTML = `
+        <h3>${item.symbol} ${item.sign}</h3>
+        <p>Votes: <strong>${votes[item.sign]}</strong></p>
+        <button class="btn primary" onclick="voteForZodiac('${item.sign}')">Vote ${item.symbol}</button>
+      `;
 
-  setDeviceVote(sign);
-  renderZodiacs(latestVotes);
+      grid.appendChild(card);
+    });
 
-  alert("Vote submitted for " + sign + "!");
-};
+  saveVotes(votes);
+}
 
-window.addComment = async function () {
-  const name = document.getElementById("nameInput")?.value.trim();
-  const zodiac = document.getElementById("zodiacInput")?.value;
-  const flavor = document.getElementById("flavorInput")?.value.trim();
-  const comment = document.getElementById("commentInput")?.value.trim();
+function voteForZodiac(sign) {
+  const votes = getVotes();
+  votes[sign] = (votes[sign] || 0) + 1;
+  saveVotes(votes);
 
-  if (!name || !zodiac || !flavor || !comment) {
-    alert("Please complete all fields.");
-    return;
-  }
+  document.getElementById("voteMessage").textContent = `Your vote for ${sign} has been counted.`;
+  renderVoteGrid();
+  renderLeaderboard();
+}
 
-  await push(ref(db, "flavorSuggestions"), {
-    name,
-    zodiac,
-    flavor_idea: flavor,
-    comment,
-    date: new Date().toLocaleString()
-  });
+function renderLeaderboard() {
+  const container = document.getElementById("leaderboardList");
+  const votes = getVotes();
 
-  document.getElementById("nameInput").value = "";
-  document.getElementById("zodiacInput").value = "";
-  document.getElementById("flavorInput").value = "";
-  document.getElementById("commentInput").value = "";
+  const ranked = zodiacSigns
+    .map(item => ({
+      ...item,
+      votes: item.locked ? "Flagship Locked" : votes[item.sign] || 0
+    }))
+    .sort((a, b) => {
+      if (a.locked) return -1;
+      if (b.locked) return 1;
+      return b.votes - a.votes;
+    });
 
-  alert("Flavor idea submitted!");
-};
+  container.innerHTML = "";
 
-window.joinList = async function () {
-  const name = document.getElementById("joinName")?.value.trim();
-  const email = document.getElementById("joinEmail")?.value.trim();
-  const zodiac = document.getElementById("joinZodiac")?.value;
+  ranked.forEach((item, index) => {
+    const row = document.createElement("div");
+    row.className = item.locked ? "leaderboard-row flagship" : "leaderboard-row";
 
-  if (!name || !email || !zodiac) {
-    alert("Please fill all fields.");
-    return;
-  }
-
-  await push(ref(db, "lumiList"), {
-    name,
-    email,
-    zodiac,
-    date: new Date().toLocaleString()
-  });
-
-  document.getElementById("joinName").value = "";
-  document.getElementById("joinEmail").value = "";
-  document.getElementById("joinZodiac").value = "";
-
-  const message = document.getElementById("joinMessage");
-  if (message) message.textContent = "Welcome to the LumiList!";
-};
-
-function renderLeaderboard(votes) {
-  const board = document.getElementById("leaderboardList");
-  if (!board) return;
-
-  const sorted = Object.entries(votes).sort((a, b) => Number(b[1]) - Number(a[1]));
-
-  if (sorted.length === 0) {
-    board.innerHTML = `<p>No votes yet. Be the first to vote.</p>`;
-    return;
-  }
-
-  board.innerHTML = "";
-
-  sorted.forEach(([sign, count], index) => {
-    board.innerHTML += `
-      <div class="comment">
-        <h3>#${index + 1} ${sign}</h3>
-        <p>${count} votes</p>
-      </div>
+    row.innerHTML = `
+      <span>${index + 1}. ${item.symbol} ${item.sign}</span>
+      <strong>${item.votes}</strong>
     `;
+
+    container.appendChild(row);
   });
 }
 
-onValue(ref(db, "votes"), snapshot => {
-  const votes = snapshot.val() || {};
-  latestVotes = votes;
+function renderBattles() {
+  const grid = document.getElementById("battleGrid");
+  const battleVotes = getBattleVotes();
+  grid.innerHTML = "";
 
-  renderZodiacs(votes);
-  renderLeaderboard(votes);
+  battles.forEach((battle, index) => {
+    const [optionA, optionB] = battle;
+    const key = `battle-${index}`;
 
-  const totalVotes = Object.values(votes).reduce((sum, value) => {
-    return sum + Number(value || 0);
-  }, 0);
+    if (!battleVotes[key]) {
+      battleVotes[key] = {
+        [optionA]: 0,
+        [optionB]: 0
+      };
+    }
 
-  const voteTotal = document.getElementById("voteTotal");
-  if (voteTotal) voteTotal.textContent = totalVotes;
-});
+    const aVotes = battleVotes[key][optionA];
+    const bVotes = battleVotes[key][optionB];
 
-onValue(ref(db, "flavorSuggestions"), snapshot => {
-  const data = snapshot.val() || {};
-  const list = Object.values(data).reverse();
+    let winner = "Tie";
+    if (aVotes > bVotes) winner = optionA;
+    if (bVotes > aVotes) winner = optionB;
 
-  const flavorTotal = document.getElementById("flavorTotal");
-  if (flavorTotal) flavorTotal.textContent = list.length;
+    const card = document.createElement("div");
+    card.className = "battle-card";
 
-  const comments = document.getElementById("comments");
-  if (!comments) return;
-
-  comments.innerHTML = "";
-
-  list.slice(0, 10).forEach(item => {
-    comments.innerHTML += `
-      <div class="comment">
-        <p><strong>${item.name || "Anonymous"}</strong> suggested a flavor for <strong>${item.zodiac || "Unknown"}</strong></p>
-        <p><strong>Flavor:</strong> ${item.flavor_idea || ""}</p>
-        <p>${item.comment || ""}</p>
-        <p style="opacity:.6;">${item.date || ""}</p>
-      </div>
+    card.innerHTML = `
+      <h3>${optionA} vs ${optionB}</h3>
+      <p>${optionA}: <strong>${aVotes}</strong></p>
+      <p>${optionB}: <strong>${bVotes}</strong></p>
+      <p>Winner: <strong>${winner}</strong></p>
+      <button class="btn secondary" onclick="voteBattle('${key}', '${optionA}')">${optionA}</button>
+      <button class="btn primary" onclick="voteBattle('${key}', '${optionB}')">${optionB}</button>
     `;
+
+    grid.appendChild(card);
   });
-});
 
-onValue(ref(db, "lumiList"), snapshot => {
-  const data = snapshot.val() || {};
-  const memberTotal = document.getElementById("memberTotal");
-  if (memberTotal) memberTotal.textContent = Object.keys(data).length;
-});
-
-const authBox = document.getElementById("authBox");
-if (authBox) {
-  authBox.innerHTML = `
-    <p>No Google sign-in needed.</p>
-    <p>Pick one flavor below. One vote per device.</p>
-  `;
+  saveBattleVotes(battleVotes);
 }
 
-applyRandomZodiacTheme();
-renderCollection();
-renderZodiacs();
-renderLeaderboard({});
+function voteBattle(key, option) {
+  const battleVotes = getBattleVotes();
+
+  if (!battleVotes[key]) {
+    battleVotes[key] = {};
+  }
+
+  battleVotes[key][option] = (battleVotes[key][option] || 0) + 1;
+  saveBattleVotes(battleVotes);
+  renderBattles();
+}
+
+function animateProgressBars() {
+  const items = document.querySelectorAll(".progress-item");
+
+  items.forEach(item => {
+    const progress = item.getAttribute("data-progress");
+    const bar = item.querySelector(".progress-bar div");
+
+    setTimeout(() => {
+      bar.style.width = `${progress}%`;
+    }, 300);
+  });
+}
+
+function initFoundingMembers() {
+  const countElement = document.getElementById("memberCount");
+  const savedCount = localStorage.getItem("lumisipsFoundingMembers");
+
+  if (savedCount) {
+    countElement.textContent = savedCount;
+  } else {
+    localStorage.setItem("lumisipsFoundingMembers", "128");
+  }
+}
+
+renderZodiacGrid();
+renderVoteGrid();
+renderLeaderboard();
+renderBattles();
+animateProgressBars();
+initFoundingMembers();
