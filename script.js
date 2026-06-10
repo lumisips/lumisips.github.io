@@ -1,226 +1,215 @@
+window.addEventListener("load", () => {
+  setTimeout(() => document.getElementById("loader").style.display = "none", 900);
+});
+
 const zodiacSigns = [
-  { sign: "Aries", symbol: "♈", flavor: "TBD" },
-  { sign: "Taurus", symbol: "♉", flavor: "TBD" },
-  { sign: "Gemini", symbol: "♊", flavor: "TBD" },
-  { sign: "Cancer", symbol: "♋", flavor: "Blue Raspberry • Dragon Fruit • Hibiscus", locked: true },
-  { sign: "Leo", symbol: "♌", flavor: "TBD" },
-  { sign: "Virgo", symbol: "♍", flavor: "TBD" },
-  { sign: "Libra", symbol: "♎", flavor: "TBD" },
-  { sign: "Scorpio", symbol: "♏", flavor: "TBD" },
-  { sign: "Sagittarius", symbol: "♐", flavor: "TBD" },
-  { sign: "Capricorn", symbol: "♑", flavor: "TBD" },
-  { sign: "Aquarius", symbol: "♒", flavor: "TBD" },
-  { sign: "Pisces", symbol: "♓", flavor: "TBD" }
+  ["Aries","♈","Coming Soon"],["Taurus","♉","Coming Soon"],["Gemini","♊","Coming Soon"],
+  ["Cancer","♋","Blue Raspberry • Dragon Fruit • Hibiscus"],["Leo","♌","Coming Soon"],
+  ["Virgo","♍","Coming Soon"],["Libra","♎","Coming Soon"],["Scorpio","♏","Coming Soon"],
+  ["Sagittarius","♐","Coming Soon"],["Capricorn","♑","Coming Soon"],
+  ["Aquarius","♒","Coming Soon"],["Pisces","♓","Coming Soon"]
 ];
 
 const battles = [
-  ["Glass Bottles", "Aluminum Cans"],
-  ["Still Hydration", "Sparkling Hydration"],
-  ["Energy", "Sparkling Energy"],
-  ["Blue Raspberry", "Watermelon"],
-  ["Dragon Fruit", "Passion Fruit"]
+  ["Glass Bottles","Aluminum Cans"],
+  ["Still Hydration","Sparkling Hydration"],
+  ["Energy","Sparkling Energy"],
+  ["Blue Raspberry","Watermelon"],
+  ["Dragon Fruit","Passion Fruit"]
 ];
 
-const menuToggle = document.getElementById("menuToggle");
 const navLinks = document.getElementById("navLinks");
+document.getElementById("menuToggle").onclick = () => navLinks.classList.toggle("show");
+document.querySelectorAll(".nav-links a").forEach(a => a.onclick = () => navLinks.classList.remove("show"));
 
-menuToggle.addEventListener("click", () => {
-  navLinks.classList.toggle("show");
-});
+const get = key => JSON.parse(localStorage.getItem(key)) || {};
+const set = (key,val) => localStorage.setItem(key, JSON.stringify(val));
 
-document.querySelectorAll(".nav-links a").forEach(link => {
-  link.addEventListener("click", () => navLinks.classList.remove("show"));
-});
-
-function getVotes() {
-  return JSON.parse(localStorage.getItem("lumisipsVotes")) || {};
-}
-
-function saveVotes(votes) {
-  localStorage.setItem("lumisipsVotes", JSON.stringify(votes));
-}
-
-function getBattleVotes() {
-  return JSON.parse(localStorage.getItem("lumisipsBattleVotes")) || {};
-}
-
-function saveBattleVotes(votes) {
-  localStorage.setItem("lumisipsBattleVotes", JSON.stringify(votes));
-}
-
-function renderZodiacGrid() {
+function renderZodiac(){
   const grid = document.getElementById("zodiacGrid");
   grid.innerHTML = "";
-
-  zodiacSigns.forEach(item => {
-    const card = document.createElement("div");
-    card.className = item.locked ? "zodiac-card flagship" : "zodiac-card";
-    card.innerHTML = `
-      <h3>${item.symbol} ${item.sign}</h3>
-      <p>${item.flavor}</p>
-      ${item.locked ? "<span class='badge'>Flagship Locked</span>" : "<span class='badge'>Coming Soon</span>"}
-    `;
-    grid.appendChild(card);
+  zodiacSigns.forEach(([name,symbol,flavor])=>{
+    const locked = name === "Cancer";
+    grid.innerHTML += `
+      <div class="card ${locked ? "flagship" : ""}">
+        <h3>${symbol} ${name}</h3>
+        <p>${flavor}</p>
+        <span class="badge">${locked ? "Flagship Locked" : "Coming Soon"}</span>
+      </div>`;
   });
 }
 
-function renderVoteGrid() {
+function renderVotes(){
+  const votes = get("lumisipsVotes");
   const grid = document.getElementById("voteGrid");
-  const votes = getVotes();
   grid.innerHTML = "";
-
-  zodiacSigns.filter(item => !item.locked).forEach(item => {
-    votes[item.sign] = votes[item.sign] || 0;
-
-    const card = document.createElement("div");
-    card.className = "vote-card";
-    card.innerHTML = `
-      <h3>${item.symbol} ${item.sign}</h3>
-      <p>Votes: <strong>${votes[item.sign]}</strong></p>
-      <button class="btn primary" onclick="voteForZodiac('${item.sign}')">Vote ${item.symbol}</button>
-    `;
-    grid.appendChild(card);
+  zodiacSigns.filter(z=>z[0]!=="Cancer").forEach(([name,symbol])=>{
+    votes[name] ??= 0;
+    grid.innerHTML += `
+      <div class="card">
+        <h3>${symbol} ${name}</h3>
+        <p>Votes: <b>${votes[name]}</b></p>
+        <button class="btn primary" onclick="vote('${name}')">Vote ${symbol}</button>
+      </div>`;
   });
-
-  saveVotes(votes);
+  set("lumisipsVotes",votes);
 }
 
-function voteForZodiac(sign) {
-  const votes = getVotes();
-  votes[sign] = (votes[sign] || 0) + 1;
-  saveVotes(votes);
-
-  document.getElementById("voteMessage").textContent = `Your vote for ${sign} has been counted.`;
-  renderVoteGrid();
+function vote(name){
+  const votes = get("lumisipsVotes");
+  votes[name] = (votes[name] || 0) + 1;
+  set("lumisipsVotes",votes);
+  document.getElementById("voteMessage").textContent = `Your vote for ${name} has been counted.`;
+  renderVotes();
   renderLeaderboard();
 }
 
-function renderLeaderboard() {
-  const container = document.getElementById("leaderboardList");
-  const votes = getVotes();
-
-  const ranked = zodiacSigns
-    .map(item => ({
-      ...item,
-      votes: item.locked ? "Flagship Locked" : votes[item.sign] || 0
-    }))
-    .sort((a, b) => {
-      if (a.locked) return -1;
-      if (b.locked) return 1;
-      return b.votes - a.votes;
-    });
-
-  container.innerHTML = "";
-
-  ranked.forEach((item, index) => {
-    const row = document.createElement("div");
-    row.className = item.locked ? "leaderboard-row flagship" : "leaderboard-row";
-    row.innerHTML = `<span>${index + 1}. ${item.symbol} ${item.sign}</span><strong>${item.votes}</strong>`;
-    container.appendChild(row);
+function renderLeaderboard(){
+  const votes = get("lumisipsVotes");
+  const ranked = zodiacSigns.map(([name,symbol])=>({
+    name,symbol,votes:name==="Cancer" ? "Flagship Locked" : votes[name] || 0,
+    locked:name==="Cancer"
+  })).sort((a,b)=>{
+    if(a.locked) return -1;
+    if(b.locked) return 1;
+    return b.votes - a.votes;
   });
+
+  document.getElementById("leaderboardList").innerHTML = ranked.map((x,i)=>`
+    <div class="leaderboard-row ${x.locked ? "flagship" : ""}">
+      <span>${i+1}. ${x.symbol} ${x.name}</span>
+      <b>${x.votes}</b>
+    </div>`).join("");
 }
 
-function renderBattles() {
+function renderBattles(){
+  const data = get("lumisipsBattles");
   const grid = document.getElementById("battleGrid");
-  const battleVotes = getBattleVotes();
   grid.innerHTML = "";
 
-  battles.forEach((battle, index) => {
-    const [optionA, optionB] = battle;
-    const key = `battle-${index}`;
+  battles.forEach(([a,b],i)=>{
+    const key = `battle${i}`;
+    data[key] ??= {[a]:0,[b]:0};
+    const av = data[key][a] || 0;
+    const bv = data[key][b] || 0;
+    const winner = av === bv ? "Tie" : av > bv ? a : b;
 
-    if (!battleVotes[key]) {
-      battleVotes[key] = { [optionA]: 0, [optionB]: 0 };
-    }
-
-    const aVotes = battleVotes[key][optionA] || 0;
-    const bVotes = battleVotes[key][optionB] || 0;
-
-    let winner = "Tie";
-    if (aVotes > bVotes) winner = optionA;
-    if (bVotes > aVotes) winner = optionB;
-
-    const card = document.createElement("div");
-    card.className = "battle-card";
-    card.innerHTML = `
-      <h3>${optionA} vs ${optionB}</h3>
-      <p>${optionA}: <strong>${aVotes}</strong></p>
-      <p>${optionB}: <strong>${bVotes}</strong></p>
-      <p>Winner: <strong>${winner}</strong></p>
-      <button class="btn secondary" onclick="voteBattle('${key}', '${optionA}')">${optionA}</button>
-      <button class="btn primary" onclick="voteBattle('${key}', '${optionB}')">${optionB}</button>
-    `;
-    grid.appendChild(card);
+    grid.innerHTML += `
+      <div class="card">
+        <h3>${a} vs ${b}</h3>
+        <p>${a}: <b>${av}</b></p>
+        <p>${b}: <b>${bv}</b></p>
+        <p>Winner: <b>${winner}</b></p>
+        <button class="btn secondary" onclick="battleVote('${key}','${a}')">${a}</button>
+        <button class="btn primary" onclick="battleVote('${key}','${b}')">${b}</button>
+      </div>`;
   });
-
-  saveBattleVotes(battleVotes);
+  set("lumisipsBattles",data);
 }
 
-function voteBattle(key, option) {
-  const battleVotes = getBattleVotes();
-  battleVotes[key][option] = (battleVotes[key][option] || 0) + 1;
-  saveBattleVotes(battleVotes);
+function battleVote(key,choice){
+  const data = get("lumisipsBattles");
+  data[key][choice]++;
+  set("lumisipsBattles",data);
   renderBattles();
 }
 
-function animateProgressBars() {
-  document.querySelectorAll(".progress-item").forEach(item => {
-    const progress = item.getAttribute("data-progress");
-    const bar = item.querySelector(".progress-bar div");
-
-    setTimeout(() => {
-      bar.style.width = `${progress}%`;
-    }, 300);
+function animateProgress(){
+  document.querySelectorAll(".progress-item").forEach(item=>{
+    const width = item.dataset.progress;
+    item.querySelector("i").style.width = width + "%";
   });
 }
 
-function initFoundingMembers() {
-  const countElement = document.getElementById("memberCount");
-  const savedCount = localStorage.getItem("lumisipsFoundingMembers");
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+      if(entry.target.id === "lab") animateProgress();
+    }
+  });
+},{threshold:.18});
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
 
-  if (savedCount) {
-    countElement.textContent = savedCount;
-  } else {
-    localStorage.setItem("lumisipsFoundingMembers", "128");
-  }
-}
-
-document.querySelectorAll(".ajax-form").forEach(form => {
-  form.addEventListener("submit", async event => {
-    event.preventDefault();
-
+document.querySelectorAll(".ajax-form").forEach(form=>{
+  form.addEventListener("submit",async e=>{
+    e.preventDefault();
     const status = form.querySelector(".form-status");
     status.textContent = "Sending...";
 
-    try {
-      const response = await fetch(form.action, {
-        method: "POST",
-        body: new FormData(form),
-        headers: { "Accept": "application/json" }
+    try{
+      const res = await fetch(form.action,{
+        method:"POST",
+        body:new FormData(form),
+        headers:{Accept:"application/json"}
       });
 
-      if (response.ok) {
-        status.textContent = form.dataset.success || "Submitted successfully.";
-        form.reset();
-
-        if (form.querySelector("[name='form_type']")?.value === "Waitlist Signup") {
-          let count = Number(localStorage.getItem("lumisipsFoundingMembers") || 128);
-          count += 1;
-          localStorage.setItem("lumisipsFoundingMembers", count);
+      if(res.ok){
+        status.textContent = form.dataset.success;
+        if(form.classList.contains("waitlist-form")){
+          let count = Number(localStorage.getItem("lumisipsMembers") || 128) + 1;
+          localStorage.setItem("lumisipsMembers",count);
           document.getElementById("memberCount").textContent = count;
         }
+        form.reset();
       } else {
         status.textContent = "Something went wrong. Please try again.";
       }
-    } catch (error) {
+    }catch{
       status.textContent = "Connection error. Please try again.";
     }
   });
 });
 
-renderZodiacGrid();
-renderVoteGrid();
+const members = localStorage.getItem("lumisipsMembers") || 128;
+document.getElementById("memberCount").textContent = members;
+
+window.addEventListener("scroll",()=>{
+  const scrolled = (window.scrollY / (document.body.scrollHeight - innerHeight)) * 100;
+  document.getElementById("scrollProgress").style.width = scrolled + "%";
+  document.getElementById("backTop").style.display = window.scrollY > 600 ? "block" : "none";
+});
+document.getElementById("backTop").onclick = () => scrollTo({top:0,behavior:"smooth"});
+
+document.addEventListener("mousemove",e=>{
+  const glow = document.getElementById("mouseGlow");
+  glow.style.left = e.clientX + "px";
+  glow.style.top = e.clientY + "px";
+});
+
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+let stars = [];
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  stars = Array.from({length:120},()=>({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*1.6,
+    s:Math.random()*.6+.2
+  }));
+}
+resize();
+addEventListener("resize",resize);
+
+function drawStars(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "white";
+  stars.forEach(star=>{
+    ctx.globalAlpha = Math.random();
+    ctx.beginPath();
+    ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
+    ctx.fill();
+    star.y += star.s;
+    if(star.y > canvas.height) star.y = 0;
+  });
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+
+renderZodiac();
+renderVotes();
 renderLeaderboard();
 renderBattles();
-animateProgressBars();
-initFoundingMembers();
