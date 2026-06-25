@@ -325,4 +325,31 @@ footer{text-align:center;padding:3rem 5%;border-top:1px solid var(--border)}
   .battle-matchup{grid-template-columns:1fr}
   .vs-orb{margin:auto;width:78px;height:78px}
   .floating-socials{right:12px;bottom:80px}
+}.battle-option{
+  appearance:none;
+  -webkit-appearance:none;
+  border:none;
+  color:white;
+  font-family:inherit;
+  touch-action:manipulation;
+  pointer-events:auto;
+}
+
+.battle-option *{
+  pointer-events:none;
+}
+
+.battle-option:not(:disabled){
+  cursor:pointer;
+}
+
+.battle-option:active{
+  transform:scale(.96);
+  box-shadow:0 0 55px var(--accent);
+}
+
+.battle-option.locked,
+.battle-option:disabled{
+  opacity:.75;
+  cursor:not-allowed;
 }
