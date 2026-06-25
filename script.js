@@ -1,5 +1,8 @@
 window.addEventListener("load", () => {
-  setTimeout(() => document.getElementById("loader").style.display = "none", 900);
+  setTimeout(() => {
+    const loader = document.getElementById("loader");
+    if (loader) loader.style.display = "none";
+  }, 900);
 });
 
 const themes = [
@@ -40,7 +43,7 @@ const defaultVotes = {
   Scorpio: 18, Sagittarius: 9, Capricorn: 24, Aquarius: 11, Pisces: 14
 };
 
-const flavorSuggestions = [
+const starterSuggestions = [
   { zodiac: "Taurus ♉", flavor: "Lemon Orange Citrus", note: "Bright, refreshing citrus hydration with a clean finish." },
   { zodiac: "Capricorn ♑", flavor: "Sour Watermelon Strawberry", note: "A bold sour candy-inspired hydration flavor." },
   { zodiac: "Leo ♌", flavor: "Pineapple Passion Fruit", note: "Tropical, bright, loud, and summer-focused." },
@@ -71,124 +74,136 @@ const timelineItems = [
   "Pre-Launch Development Phase","Official Launch"
 ];
 
-const navLinks = document.getElementById("navLinks");
-document.getElementById("menuToggle").onclick = () => navLinks.classList.toggle("show");
-document.querySelectorAll(".nav-links a").forEach(a => a.onclick = () => navLinks.classList.remove("show"));
-
 function getJSON(key, fallback){
-  const stored = localStorage.getItem(key);
-  return stored ? JSON.parse(stored) : fallback;
+  try {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : fallback;
+  } catch {
+    return fallback;
+  }
 }
-function setJSON(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+
+function setJSON(key, value){
+  localStorage.setItem(key, JSON.stringify(value));
+}
 
 function initializeStorage(){
   if(!localStorage.getItem("lumisipsVotes")) setJSON("lumisipsVotes", defaultVotes);
   if(!localStorage.getItem("lumisipsBattles")) setJSON("lumisipsBattles", defaultBattleVotes);
-  if(!localStorage.getItem("lumisipsSuggestions")) setJSON("lumisipsSuggestions", flavorSuggestions);
+  if(!localStorage.getItem("lumisipsSuggestions")) setJSON("lumisipsSuggestions", starterSuggestions);
   if(!localStorage.getItem("lumisipsMembers")) localStorage.setItem("lumisipsMembers", "1");
 }
 
 function renderZodiac(){
   const grid = document.getElementById("zodiacGrid");
-  grid.innerHTML = "";
-  zodiacSigns.forEach(([name,symbol,flavor,status])=>{
-    const flagship = status === "flagship";
-    const active = status === "active";
+  if(!grid) return;
 
-    grid.innerHTML += `
-      <div class="card ${flagship ? "flagship" : ""} ${active ? "active-development" : ""}">
-        <h3>${symbol} ${name}</h3>
-        <p>${flavor}</p>
-        <span class="badge">${
-          flagship ? "Flagship Locked" :
-          active ? "Early Development" :
-          "Coming Soon"
-        }</span>
-      </div>`;
-  });
+  grid.innerHTML = zodiacSigns.map(([name,symbol,flavor,status]) => `
+    <div class="card ${status === "flagship" ? "flagship" : ""} ${status === "active" ? "active-development" : ""}">
+      <h3>${symbol} ${name}</h3>
+      <p>${flavor}</p>
+      <span class="badge">${
+        status === "flagship" ? "Flagship Locked" :
+        status === "active" ? "Early Development" :
+        "Coming Soon"
+      }</span>
+    </div>
+  `).join("");
 }
 
 function renderVotes(){
   const votes = getJSON("lumisipsVotes", defaultVotes);
   const hasVoted = localStorage.getItem("lumisipsHasVotedZodiac") === "true";
   const grid = document.getElementById("voteGrid");
-  grid.innerHTML = "";
+  const message = document.getElementById("voteMessage");
+  if(!grid) return;
 
-  zodiacSigns.filter(z=>z[0]!=="Cancer").forEach(([name,symbol])=>{
-    votes[name] ??= 0;
-    grid.innerHTML += `
-      <div class="card">
-        <h3>${symbol} ${name}</h3>
-        <p>Votes: <b>${votes[name]}</b></p>
-        <button class="btn primary" onclick="vote('${name}')" ${hasVoted ? "disabled" : ""}>
-          ${hasVoted ? "Vote Locked" : `Vote ${symbol}`}
-        </button>
-      </div>`;
-  });
+  grid.innerHTML = zodiacSigns.filter(z => z[0] !== "Cancer").map(([name,symbol]) => `
+    <div class="card">
+      <h3>${symbol} ${name}</h3>
+      <p>Votes: <b>${votes[name] || 0}</b></p>
+      <button class="btn primary zodiac-vote-btn" data-sign="${name}" ${hasVoted ? "disabled" : ""}>
+        ${hasVoted ? "Vote Locked" : `Vote ${symbol}`}
+      </button>
+    </div>
+  `).join("");
 
-  if(hasVoted) {
-    document.getElementById("voteMessage").textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
+  if(hasVoted && message){
+    message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
   }
 
   setJSON("lumisipsVotes", votes);
 }
 
 function vote(name){
+  const message = document.getElementById("voteMessage");
+
   if(localStorage.getItem("lumisipsHasVotedZodiac") === "true"){
-    document.getElementById("voteMessage").textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
+    if(message) message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
     return;
   }
 
   const votes = getJSON("lumisipsVotes", defaultVotes);
   votes[name] = (votes[name] || 0) + 1;
+
   setJSON("lumisipsVotes", votes);
   localStorage.setItem("lumisipsHasVotedZodiac","true");
 
-  document.getElementById("voteMessage").textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
+  if(message) message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
+
   sparkleBurst(window.innerWidth / 2, window.innerHeight / 2);
   renderVotes();
   renderLeaderboard();
 }
 
 function renderLeaderboard(){
+  const box = document.getElementById("leaderboardList");
+  if(!box) return;
+
   const votes = getJSON("lumisipsVotes", defaultVotes);
 
-  const ranked = zodiacSigns.map(([name,symbol,flavor,status])=>({
+  const ranked = zodiacSigns.map(([name,symbol]) => ({
     name,
     symbol,
-    votes:name==="Cancer" ? "Flagship Locked" : votes[name] || 0,
-    locked:name==="Cancer"
-  })).sort((a,b)=>{
+    votes: name === "Cancer" ? "Flagship Locked" : votes[name] || 0,
+    locked: name === "Cancer"
+  })).sort((a,b) => {
     if(a.locked) return -1;
     if(b.locked) return 1;
     return b.votes - a.votes;
   });
 
-  document.getElementById("leaderboardList").innerHTML = ranked.map((x,i)=>`
+  box.innerHTML = ranked.map((x,i) => `
     <div class="leaderboard-row ${x.locked ? "flagship" : ""}">
       <span>${i+1}. ${x.symbol} ${x.name}</span>
       <b>${x.votes}</b>
-    </div>`).join("");
+    </div>
+  `).join("");
 }
 
 function renderSuggestions(){
-  const suggestions = getJSON("lumisipsSuggestions", flavorSuggestions);
+  const grid = document.getElementById("suggestionGrid");
+  if(!grid) return;
 
-  document.getElementById("suggestionGrid").innerHTML = suggestions.map(item => `
+  const suggestions = getJSON("lumisipsSuggestions", starterSuggestions);
+
+  grid.innerHTML = suggestions.map(item => `
     <div class="card">
       <span>${item.zodiac || "Community Idea"}</span>
       <h3>${item.flavor || "Flavor Idea"}</h3>
-      <p>${item.note || "Submitted by the LumiSips community."}</p>
+      <p>${item.note || item.message || "Submitted by the LumiSips community."}</p>
     </div>
   `).join("");
 }
 
 function renderBattles(){
-  const data = getJSON("lumisipsBattles", defaultBattleVotes);
   const grid = document.getElementById("battleGrid");
+  if(!grid) return;
+
+  const data = getJSON("lumisipsBattles", defaultBattleVotes);
   grid.innerHTML = "";
 
-  battles.forEach(battle=>{
+  battles.forEach(battle => {
     if(!data[battle.key]) data[battle.key] = { [battle.left]:0, [battle.right]:0 };
 
     const leftVotes = data[battle.key][battle.left] || 0;
@@ -211,25 +226,26 @@ function renderBattles(){
         </div>
 
         <div class="battle-matchup">
-          <div class="battle-option ${locked ? "locked" : ""}" onclick="battleVote('${battle.key}','${battle.left}', event)">
+          <button class="battle-option ${locked ? "locked" : ""}" data-battle="${battle.key}" data-choice="${battle.left}" ${locked ? "disabled" : ""}>
             <div class="option-emoji">${battle.leftIcon}</div>
             <div class="option-name">${battle.left}</div>
             <div class="option-votes">${leftVotes} votes • ${leftPercent}%</div>
             <div class="health-bar"><span style="width:${leftPercent}%"></span></div>
             <div class="pick-locked">${votedChoice === battle.left ? "Your pick is locked." : ""}</div>
-          </div>
+          </button>
 
           <div class="vs-orb">VS</div>
 
-          <div class="battle-option ${locked ? "locked" : ""}" onclick="battleVote('${battle.key}','${battle.right}', event)">
+          <button class="battle-option ${locked ? "locked" : ""}" data-battle="${battle.key}" data-choice="${battle.right}" ${locked ? "disabled" : ""}>
             <div class="option-emoji">${battle.rightIcon}</div>
             <div class="option-name">${battle.right}</div>
             <div class="option-votes">${rightVotes} votes • ${rightPercent}%</div>
             <div class="health-bar"><span style="width:${rightPercent}%"></span></div>
             <div class="pick-locked">${votedChoice === battle.right ? "Your pick is locked." : ""}</div>
-          </div>
+          </button>
         </div>
-      </div>`;
+      </div>
+    `;
   });
 
   setJSON("lumisipsBattles", data);
@@ -239,27 +255,35 @@ function battleVote(key, choice, event){
   if(localStorage.getItem(`lumisipsVotedBattle_${key}`)) return;
 
   const data = getJSON("lumisipsBattles", defaultBattleVotes);
+
+  if(!data[key]) data[key] = {};
   data[key][choice] = (data[key][choice] || 0) + 1;
+
   setJSON("lumisipsBattles", data);
   localStorage.setItem(`lumisipsVotedBattle_${key}`, choice);
 
-  if(event && event.currentTarget){
+  if(event?.currentTarget){
     event.currentTarget.classList.add("selected");
     const rect = event.currentTarget.getBoundingClientRect();
     sparkleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
   }
 
-  setTimeout(renderBattles, 350);
+  setTimeout(renderBattles, 250);
 }
 
 function renderTimeline(){
-  document.getElementById("timeline").innerHTML = timelineItems.map(item=>`
+  const box = document.getElementById("timeline");
+  if(!box) return;
+
+  box.innerHTML = timelineItems.map(item => `
     <div class="timeline-item"><h3>${item}</h3></div>
   `).join("");
 }
 
 function sparkleBurst(x,y){
   const layer = document.getElementById("sparkleLayer");
+  if(!layer) return;
+
   const sparkles = ["✨","💫","⭐","🫧","💥"];
 
   for(let i=0;i<16;i++){
@@ -269,167 +293,202 @@ function sparkleBurst(x,y){
     sparkle.style.left = `${x + (Math.random()*130 - 65)}px`;
     sparkle.style.top = `${y + (Math.random()*90 - 45)}px`;
     layer.appendChild(sparkle);
-    setTimeout(()=>sparkle.remove(),900);
+    setTimeout(() => sparkle.remove(), 900);
   }
 }
 
-function animateProgress(){
-  document.querySelectorAll(".progress-item").forEach(item=>{
-    item.querySelector("i").style.width = item.dataset.progress + "%";
-  });
-}
+function setupClicks(){
+  document.addEventListener("click", e => {
+    const zodiacBtn = e.target.closest(".zodiac-vote-btn");
+    if(zodiacBtn){
+      vote(zodiacBtn.dataset.sign);
+      return;
+    }
 
-function animateCounters(){
-  document.querySelectorAll("[data-count]").forEach(counter=>{
-    if(counter.dataset.done) return;
-
-    counter.dataset.done = "true";
-
-    const target = Number(counter.dataset.count);
-    const suffix = counter.dataset.suffix || "";
-    let current = 0;
-
-    const step = Math.max(1, Math.ceil(target / 45));
-
-    const timer = setInterval(()=>{
-      current += step;
-
-      if(current >= target){
-        current = target;
-        clearInterval(timer);
-      }
-
-      counter.textContent = current + suffix;
-    }, 28);
-  });
-}
-
-document.querySelectorAll(".true-stat-card").forEach(card => {
-  card.addEventListener("click", () => {
-    card.classList.remove("pulse");
-    void card.offsetWidth;
-    card.classList.add("pulse");
-  });
-});
-
-const observer = new IntersectionObserver(entries=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.classList.add("show");
-      if(entry.target.id === "lab") animateProgress();
-      if(entry.target.classList.contains("counters-section")) animateCounters();
+    const battleBtn = e.target.closest(".battle-option");
+    if(battleBtn && !battleBtn.disabled){
+      battleVote(battleBtn.dataset.battle, battleBtn.dataset.choice, e);
     }
   });
-},{threshold:.18});
+}
 
-document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+function setupForms(){
+  document.querySelectorAll(".ajax-form").forEach(form => {
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
 
-document.querySelectorAll(".ajax-form").forEach(form=>{
-  form.addEventListener("submit",async e=>{
-    e.preventDefault();
+      const status = form.querySelector(".form-status");
+      if(status) status.textContent = "Sending...";
 
-    const status = form.querySelector(".form-status");
-    status.textContent = "Sending...";
-    const formData = new FormData(form);
+      const formData = new FormData(form);
 
-    try{
-      const res = await fetch(form.action,{
-        method:"POST",
-        body:formData,
-        headers:{Accept:"application/json"}
-      });
+      try{
+        const res = await fetch(form.action,{
+          method:"POST",
+          body:formData,
+          headers:{Accept:"application/json"}
+        });
 
-      if(res.ok){
-        status.textContent = form.dataset.success;
+        if(res.ok){
+          if(status) status.textContent = form.dataset.success || "Submitted.";
 
-        if(form.classList.contains("waitlist-form")){
-          localStorage.setItem("lumisipsMembers", "1");
-          document.getElementById("memberCount").textContent = "1";
+          if(form.classList.contains("waitlist-form")){
+            localStorage.setItem("lumisipsMembers", "1");
+            const memberCount = document.getElementById("memberCount");
+            if(memberCount) memberCount.textContent = "1";
+          }
+
+          if(form.classList.contains("suggestion-form")){
+            const suggestions = getJSON("lumisipsSuggestions", starterSuggestions);
+            suggestions.unshift({
+              zodiac: formData.get("zodiac") || "Community Idea",
+              flavor: formData.get("flavor") || "New Flavor Idea",
+              note: formData.get("message") || formData.get("ingredient") || "Submitted by the LumiSips community."
+            });
+            setJSON("lumisipsSuggestions", suggestions);
+            renderSuggestions();
+          }
+
+          sparkleBurst(window.innerWidth / 2, window.innerHeight / 2);
+          form.reset();
+        } else {
+          if(status) status.textContent = "Something went wrong. Please try again.";
         }
+      }catch{
+        if(status) status.textContent = "Connection error. Please try again.";
+      }
+    });
+  });
+}
 
-        if(form.classList.contains("suggestion-form")){
-          const suggestions = getJSON("lumisipsSuggestions", flavorSuggestions);
+function setupUI(){
+  const navLinks = document.getElementById("navLinks");
+  const menuToggle = document.getElementById("menuToggle");
 
-          suggestions.unshift({
-            zodiac: formData.get("zodiac") || "Community Idea",
-            flavor: formData.get("flavor") || "New Flavor Idea",
-            note: formData.get("message") || formData.get("ingredient") || "Submitted by the LumiSips community."
+  if(menuToggle && navLinks){
+    menuToggle.onclick = () => navLinks.classList.toggle("show");
+  }
+
+  document.querySelectorAll(".nav-links a").forEach(a => {
+    a.onclick = () => navLinks?.classList.remove("show");
+  });
+
+  const backTop = document.getElementById("backTop");
+  if(backTop){
+    backTop.onclick = () => scrollTo({top:0,behavior:"smooth"});
+  }
+
+  window.addEventListener("scroll", () => {
+    const progress = document.getElementById("scrollProgress");
+    if(progress){
+      const scrolled = (window.scrollY / (document.body.scrollHeight - innerHeight)) * 100;
+      progress.style.width = scrolled + "%";
+    }
+
+    if(backTop) backTop.style.display = window.scrollY > 600 ? "grid" : "none";
+  });
+
+  document.addEventListener("mousemove", e => {
+    const glow = document.getElementById("mouseGlow");
+    if(glow){
+      glow.style.left = e.clientX + "px";
+      glow.style.top = e.clientY + "px";
+    }
+  });
+}
+
+function setupRevealAnimations(){
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add("show");
+
+        if(entry.target.id === "lab"){
+          document.querySelectorAll(".progress-item").forEach(item => {
+            const bar = item.querySelector("i");
+            if(bar) bar.style.width = item.dataset.progress + "%";
           });
-
-          setJSON("lumisipsSuggestions", suggestions);
-          renderSuggestions();
         }
 
-        sparkleBurst(window.innerWidth / 2, window.innerHeight / 2);
-        form.reset();
+        if(entry.target.classList.contains("counters-section")){
+          document.querySelectorAll("[data-count]").forEach(counter => {
+            if(counter.dataset.done) return;
+            counter.dataset.done = "true";
 
-      } else {
-        status.textContent = "Something went wrong. Please try again.";
+            const target = Number(counter.dataset.count);
+            const suffix = counter.dataset.suffix || "";
+            let current = 0;
+            const step = Math.max(1, Math.ceil(target / 45));
+
+            const timer = setInterval(() => {
+              current += step;
+              if(current >= target){
+                current = target;
+                clearInterval(timer);
+              }
+              counter.textContent = current + suffix;
+            }, 28);
+          });
+        }
       }
+    });
+  },{threshold:.18});
 
-    }catch{
-      status.textContent = "Connection error. Please try again.";
-    }
-  });
-});
-
-window.addEventListener("scroll",()=>{
-  const scrolled = (window.scrollY / (document.body.scrollHeight - innerHeight)) * 100;
-  document.getElementById("scrollProgress").style.width = scrolled + "%";
-  document.getElementById("backTop").style.display = window.scrollY > 600 ? "grid" : "none";
-});
-
-document.getElementById("backTop").onclick = () => scrollTo({top:0,behavior:"smooth"});
-
-document.addEventListener("mousemove",e=>{
-  const glow = document.getElementById("mouseGlow");
-  glow.style.left = e.clientX + "px";
-  glow.style.top = e.clientY + "px";
-});
-
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d");
-let stars = [];
-
-function resize(){
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-  stars = Array.from({length:130},()=>({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*1.6,
-    s:Math.random()*.6+.2
-  }));
+  document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 }
 
-resize();
-addEventListener("resize",resize);
+function setupStars(){
+  const canvas = document.getElementById("stars");
+  if(!canvas) return;
 
-function drawStars(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = "white";
+  const ctx = canvas.getContext("2d");
+  let stars = [];
 
-  stars.forEach(star=>{
-    ctx.globalAlpha = Math.random();
-    ctx.beginPath();
-    ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
-    ctx.fill();
+  function resize(){
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    stars = Array.from({length:130}, () => ({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      r:Math.random()*1.6,
+      s:Math.random()*.6+.2
+    }));
+  }
 
-    star.y += star.s;
-    if(star.y > canvas.height) star.y = 0;
-  });
+  function drawStars(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = "white";
 
-  requestAnimationFrame(drawStars);
+    stars.forEach(star => {
+      ctx.globalAlpha = Math.random();
+      ctx.beginPath();
+      ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
+      ctx.fill();
+
+      star.y += star.s;
+      if(star.y > canvas.height) star.y = 0;
+    });
+
+    requestAnimationFrame(drawStars);
+  }
+
+  resize();
+  addEventListener("resize",resize);
+  drawStars();
 }
-
-drawStars();
 
 initializeStorage();
-document.getElementById("memberCount").textContent = "1";
 renderZodiac();
 renderVotes();
 renderLeaderboard();
 renderBattles();
 renderSuggestions();
 renderTimeline();
+setupClicks();
+setupForms();
+setupUI();
+setupRevealAnimations();
+setupStars();
 
+const memberCount = document.getElementById("memberCount");
+if(memberCount) memberCount.textContent = localStorage.getItem("lumisipsMembers") || "1";
