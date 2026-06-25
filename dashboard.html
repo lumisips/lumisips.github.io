@@ -4,50 +4,72 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>LumiSips Founder Dashboard</title>
-<link rel="stylesheet" href="dashboard.css?v=1001">
+<link rel="stylesheet" href="dashboard.css?v=2000">
 </head>
 
 <body>
-<header>LumiSips Founder Dashboard</header>
+<header class="topbar">
+  <div>
+    <h1>LumiSips Founder Dashboard</h1>
+    <p>Live brand command center</p>
+  </div>
+</header>
 
 <main class="container">
 
-  <section class="grid">
-    <div class="card">
-      <h2>Members</h2>
-      <div id="members" class="stat">0</div>
-      <button class="export-btn" onclick="exportWaitlistCSV()">Export Waitlist CSV</button>
-    </div>
+<section class="stats-grid">
+  <div class="stat-card">
+    <span>Members</span>
+    <strong id="members">0</strong>
+  </div>
 
-    <div class="card">
-      <h2>Votes</h2>
-      <div id="votes">Loading...</div>
-    </div>
-  </section>
+  <div class="stat-card">
+    <span>Total Votes</span>
+    <strong id="totalVotes">0</strong>
+  </div>
 
-  <section class="card">
-    <h2>Flavor Suggestions</h2>
-    <div id="suggestions">Loading...</div>
-  </section>
+  <div class="stat-card">
+    <span>Leading Zodiac</span>
+    <strong id="topZodiac">—</strong>
+  </div>
 
-  <section class="card">
-    <h2>Waitlist</h2>
-    <div id="waitlist">Loading...</div>
-  </section>
+  <div class="stat-card">
+    <span>Latest Signup</span>
+    <strong id="latestSignup">—</strong>
+  </div>
+</section>
 
-  <section class="card">
-    <h2>Messages</h2>
-    <div id="messages">Loading...</div>
-  </section>
+<section class="card">
+  <div class="card-head">
+    <h2>Waitlist CRM</h2>
+    <button onclick="exportWaitlistCSV()">Export CSV</button>
+  </div>
+  <input id="searchInput" class="search" placeholder="Search name or email...">
+  <div id="waitlist">Loading...</div>
+</section>
 
-  <section class="card">
-    <h2>Notifications</h2>
-    <div id="notifications">Loading...</div>
-  </section>
+<section class="card">
+  <h2>Vote Analytics</h2>
+  <div id="votes">Loading...</div>
+</section>
+
+<section class="card">
+  <h2>Flavor Suggestions</h2>
+  <div id="suggestions">Loading...</div>
+</section>
+
+<section class="card">
+  <h2>Messages</h2>
+  <div id="messages">Loading...</div>
+</section>
+
+<section class="card">
+  <h2>Notifications</h2>
+  <div id="notifications">Loading...</div>
+</section>
 
 </main>
 
-<script type="module" src="dashboard.js?v=1001"></script>
-<script type="module" src="export.js?v=1"></script>
+<script type="module" src="dashboard.js?v=2000"></script>
 </body>
 </html>
