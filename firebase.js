@@ -6,7 +6,8 @@ import {
   set,
   onValue,
   update,
-  increment
+  increment,
+  get
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
@@ -24,8 +25,17 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const defaultVotes = {
-  Aries: 12, Taurus: 8, Gemini: 15, Leo: 21, Virgo: 7, Libra: 10,
-  Scorpio: 18, Sagittarius: 9, Capricorn: 24, Aquarius: 11, Pisces: 14
+  Aries: 12,
+  Taurus: 8,
+  Gemini: 15,
+  Leo: 21,
+  Virgo: 7,
+  Libra: 10,
+  Scorpio: 18,
+  Sagittarius: 9,
+  Capricorn: 24,
+  Aquarius: 11,
+  Pisces: 14
 };
 
 const zodiacSigns = [
@@ -59,44 +69,61 @@ const defaultBattleVotes = {
   battle4: { "Dragon Fruit": 24, "Passion Fruit": 21 }
 };
 
-const flavorSuggestions = [
-  { zodiac: "Taurus ♉", flavor: "Lemon Orange Citrus", note: "Bright, refreshing citrus hydration with a clean finish." },
-  { zodiac: "Capricorn ♑", flavor: "Sour Watermelon Strawberry", note: "A bold sour candy-inspired hydration flavor." },
-  { zodiac: "Leo ♌", flavor: "Pineapple Passion Fruit", note: "Tropical, bright, loud, and summer-focused." },
-  { zodiac: "Gemini ♊", flavor: "Lemon Lime Blueberry", note: "Dual citrus energy with a smooth berry finish." },
-  { zodiac: "Pisces ♓", flavor: "Mango Coconut", note: "Dreamy tropical hydration concept." }
+const starterSuggestions = [
+  { zodiac: "Taurus ♉", flavor: "Lemon Orange Citrus", message: "Bright, refreshing citrus hydration with a clean finish." },
+  { zodiac: "Capricorn ♑", flavor: "Sour Watermelon Strawberry", message: "A bold sour candy-inspired hydration flavor." },
+  { zodiac: "Leo ♌", flavor: "Pineapple Passion Fruit", message: "Tropical, bright, loud, and summer-focused." },
+  { zodiac: "Gemini ♊", flavor: "Lemon Lime Blueberry", message: "Dual citrus energy with a smooth berry finish." },
+  { zodiac: "Pisces ♓", flavor: "Mango Coconut", message: "Dreamy tropical hydration concept." }
 ];
 
 const timelineItems = [
-  "Idea Created","LLC Approved","EIN Received","Business Bank Account Opened",
-  "Seller’s Permit Obtained","D-U-N-S Number Approved","Cancer Formula Advanced",
-  "Bulk Batch Development Started","Taurus Citrus Development Added","Website Community Launched",
-  "Pre-Launch Development Phase","Official Launch"
+  "Idea Created",
+  "LLC Approved",
+  "EIN Received",
+  "Business Bank Account Opened",
+  "Seller’s Permit Obtained",
+  "D-U-N-S Number Approved",
+  "Cancer Formula Advanced",
+  "Bulk Batch Development Started",
+  "Taurus Citrus Development Added",
+  "Website Community Launched",
+  "Pre-Launch Development Phase",
+  "Official Launch"
 ];
 
 let liveVotes = { ...defaultVotes };
-let liveBattles = { ...defaultBattleVotes };
-let liveSuggestions = [...flavorSuggestions];
+let liveBattleVotes = { ...defaultBattleVotes };
+let liveSuggestions = [...starterSuggestions];
 
-function seedDefaults() {
-  Object.entries(defaultVotes).forEach(([sign, count]) => {
-    set(ref(db, `votes/${sign}`), { count });
-  });
-
-  Object.entries(defaultBattleVotes).forEach(([key, value]) => {
-    update(ref(db, `battles/${key}`), value);
-  });
-
-  set(ref(db, "stats/members"), { count: 1 });
+function $(id) {
+  return document.getElementById(id);
 }
 
-function renderZodiac(){
-  const grid = document.getElementById("zodiacGrid");
+async function seedDatabaseOnce() {
+  const seededSnap = await get(ref(db, "system/seeded"));
+
+  if (seededSnap.exists()) return;
+
+  for (const [sign, count] of Object.entries(defaultVotes)) {
+    await set(ref(db, `votes/${sign}`), count);
+  }
+
+  for (const [key, value] of Object.entries(defaultBattleVotes)) {
+    await set(ref(db, `battleVotes/${key}`), value);
+  }
+
+  await set(ref(db, "stats/members"), 1);
+  await set(ref(db, "system/seeded"), true);
+}
+
+function renderZodiac() {
+  const grid = $("zodiacGrid");
   if (!grid) return;
 
   grid.innerHTML = "";
 
-  zodiacSigns.forEach(([name,symbol,flavor,status])=>{
+  zodiacSigns.forEach(([name, symbol, flavor, status]) => {
     grid.innerHTML += `
       <div class="card ${status === "flagship" ? "flagship" : ""} ${status === "active" ? "active-development" : ""}">
         <h3>${symbol} ${name}</h3>
@@ -106,19 +133,21 @@ function renderZodiac(){
           status === "active" ? "Early Development" :
           "Coming Soon"
         }</span>
-      </div>`;
+      </div>
+    `;
   });
 }
 
-function renderVotes(){
-  const grid = document.getElementById("voteGrid");
-  const voteMessage = document.getElementById("voteMessage");
+function renderVotes() {
+  const grid = $("voteGrid");
+  const message = $("voteMessage");
   if (!grid) return;
 
   const hasVoted = localStorage.getItem("lumisipsHasVotedZodiac") === "true";
+
   grid.innerHTML = "";
 
-  zodiacSigns.filter(z => z[0] !== "Cancer").forEach(([name,symbol])=>{
+  zodiacSigns.filter(z => z[0] !== "Cancer").forEach(([name, symbol]) => {
     grid.innerHTML += `
       <div class="card">
         <h3>${symbol} ${name}</h3>
@@ -126,42 +155,42 @@ function renderVotes(){
         <button class="btn primary" onclick="vote('${name}')" ${hasVoted ? "disabled" : ""}>
           ${hasVoted ? "Vote Locked" : `Vote ${symbol}`}
         </button>
-      </div>`;
+      </div>
+    `;
   });
 
-  if (hasVoted && voteMessage) {
-    voteMessage.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
+  if (hasVoted && message) {
+    message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
   }
 }
 
-function renderLeaderboard(){
-  const box = document.getElementById("leaderboardList");
+function renderLeaderboard() {
+  const box = $("leaderboardList");
   if (!box) return;
 
-  const ranked = zodiacSigns.map(([name,symbol]) => ({
+  const ranked = zodiacSigns.map(([name, symbol]) => ({
     name,
     symbol,
     locked: name === "Cancer",
     votes: name === "Cancer" ? "Flagship Locked" : liveVotes[name] || 0
-  })).sort((a,b)=>{
-    if(a.locked) return -1;
-    if(b.locked) return 1;
+  })).sort((a, b) => {
+    if (a.locked) return -1;
+    if (b.locked) return 1;
     return b.votes - a.votes;
   });
 
-  box.innerHTML = ranked.map((x,i)=>`
+  box.innerHTML = ranked.map((x, i) => `
     <div class="leaderboard-row ${x.locked ? "flagship" : ""}">
-      <span>${i+1}. ${x.symbol} ${x.name}</span>
+      <span>${i + 1}. ${x.symbol} ${x.name}</span>
       <b>${x.votes}</b>
-    </div>`).join("");
+    </div>
+  `).join("");
 }
 
-async function vote(name){
-  if(localStorage.getItem("lumisipsHasVotedZodiac") === "true") return;
+async function vote(name) {
+  if (localStorage.getItem("lumisipsHasVotedZodiac") === "true") return;
 
-  await update(ref(db, `votes/${name}`), {
-    count: increment(1)
-  });
+  await set(ref(db, `votes/${name}`), increment(1));
 
   await push(ref(db, "notifications"), {
     type: "Zodiac Vote",
@@ -170,30 +199,37 @@ async function vote(name){
     createdAt: Date.now()
   });
 
-  localStorage.setItem("lumisipsHasVotedZodiac","true");
+  localStorage.setItem("lumisipsHasVotedZodiac", "true");
+
+  const message = $("voteMessage");
+  if (message) message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
+
   sparkleBurst(window.innerWidth / 2, window.innerHeight / 2);
 }
+
 window.vote = vote;
 
-function renderBattles(){
-  const grid = document.getElementById("battleGrid");
+function renderBattles() {
+  const grid = $("battleGrid");
   if (!grid) return;
 
   grid.innerHTML = "";
 
-  battles.forEach(battle=>{
-    const data = liveBattles[battle.key] || {};
+  battles.forEach(battle => {
+    const data = liveBattleVotes[battle.key] || {};
     const leftVotes = data[battle.left] || 0;
     const rightVotes = data[battle.right] || 0;
     const total = leftVotes + rightVotes || 1;
+
     const leftPercent = Math.round((leftVotes / total) * 100);
     const rightPercent = Math.round((rightVotes / total) * 100);
+
     const votedChoice = localStorage.getItem(`lumisipsVotedBattle_${battle.key}`);
     const locked = Boolean(votedChoice);
 
     let winner = "Tie";
-    if(leftVotes > rightVotes) winner = battle.left;
-    if(rightVotes > leftVotes) winner = battle.right;
+    if (leftVotes > rightVotes) winner = battle.left;
+    if (rightVotes > leftVotes) winner = battle.right;
 
     grid.innerHTML += `
       <div class="battle-card">
@@ -221,14 +257,15 @@ function renderBattles(){
             <div class="pick-locked">${votedChoice === battle.right ? "Your pick is locked." : ""}</div>
           </div>
         </div>
-      </div>`;
+      </div>
+    `;
   });
 }
 
-async function battleVote(key, choice, event){
-  if(localStorage.getItem(`lumisipsVotedBattle_${key}`)) return;
+async function battleVote(key, choice, event) {
+  if (localStorage.getItem(`lumisipsVotedBattle_${key}`)) return;
 
-  await update(ref(db, `battles/${key}`), {
+  await update(ref(db, `battleVotes/${key}`), {
     [choice]: increment(1)
   });
 
@@ -242,79 +279,87 @@ async function battleVote(key, choice, event){
 
   localStorage.setItem(`lumisipsVotedBattle_${key}`, choice);
 
-  if(event?.currentTarget){
+  if (event?.currentTarget) {
     event.currentTarget.classList.add("selected");
     const rect = event.currentTarget.getBoundingClientRect();
     sparkleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
   }
 }
+
 window.battleVote = battleVote;
 
-function renderSuggestions(){
-  const grid = document.getElementById("suggestionGrid");
+function renderSuggestions() {
+  const grid = $("suggestionGrid");
   if (!grid) return;
 
   grid.innerHTML = liveSuggestions.map(item => `
     <div class="card">
       <span>${item.zodiac || "Community Idea"}</span>
       <h3>${item.flavor || "Flavor Idea"}</h3>
-      <p>${item.note || item.message || "Submitted by the LumiSips community."}</p>
+      <p>${item.message || item.note || "Submitted by the LumiSips community."}</p>
     </div>
   `).join("");
 }
 
-function renderTimeline(){
-  const timeline = document.getElementById("timeline");
+function renderTimeline() {
+  const timeline = $("timeline");
   if (!timeline) return;
 
-  timeline.innerHTML = timelineItems.map(item=>`
+  timeline.innerHTML = timelineItems.map(item => `
     <div class="timeline-item"><h3>${item}</h3></div>
   `).join("");
 }
 
-function setupLiveListeners(){
+function setupLiveListeners() {
   onValue(ref(db, "votes"), snapshot => {
     const data = snapshot.val();
+
     if (data) {
-      liveVotes = {};
-      Object.keys(data).forEach(sign => {
-        liveVotes[sign] = data[sign].count || 0;
+      liveVotes = { ...defaultVotes };
+
+      Object.entries(data).forEach(([sign, value]) => {
+        if (typeof value === "number") {
+          liveVotes[sign] = value;
+        } else if (value?.count) {
+          liveVotes[sign] = value.count;
+        }
       });
-      renderVotes();
-      renderLeaderboard();
     }
+
+    renderVotes();
+    renderLeaderboard();
   });
 
-  onValue(ref(db, "battles"), snapshot => {
-    liveBattles = snapshot.val() || defaultBattleVotes;
+  onValue(ref(db, "battleVotes"), snapshot => {
+    liveBattleVotes = snapshot.val() || defaultBattleVotes;
     renderBattles();
   });
 
-  onValue(ref(db, "suggestions"), snapshot => {
+  onValue(ref(db, "flavorSuggestions"), snapshot => {
     const data = snapshot.val();
 
     if (!data) {
-      liveSuggestions = flavorSuggestions;
+      liveSuggestions = starterSuggestions;
     } else {
-      liveSuggestions = Object.values(data)
-        .sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+      liveSuggestions = Object.values(data).sort((a, b) => {
+        return (b.createdAt || 0) - (a.createdAt || 0);
+      });
     }
 
     renderSuggestions();
   });
 
   onValue(ref(db, "stats/members"), snapshot => {
-    const memberCount = document.getElementById("memberCount");
+    const memberCount = $("memberCount");
     if (!memberCount) return;
 
-    const data = snapshot.val();
-    memberCount.textContent = data?.count || 1;
+    memberCount.textContent = snapshot.val() || 1;
   });
 }
 
-function setupForms(){
-  document.querySelectorAll(".ajax-form").forEach(form=>{
-    form.addEventListener("submit", async e=>{
+function setupForms() {
+  document.querySelectorAll(".ajax-form").forEach(form => {
+    form.addEventListener("submit", async e => {
       e.preventDefault();
 
       const status = form.querySelector(".form-status");
@@ -323,16 +368,14 @@ function setupForms(){
       if (status) status.textContent = "Sending...";
 
       try {
-        const response = await fetch(form.action, {
+        await fetch(form.action, {
           method: "POST",
           body: formData,
           headers: { Accept: "application/json" }
         });
 
-        if (!response.ok) throw new Error("Formspree failed");
-
         if (form.classList.contains("waitlist-form")) {
-          await push(ref(db, "waitlist"), {
+          await push(ref(db, "lumiList"), {
             name: formData.get("name") || "",
             email: formData.get("email") || "",
             favorite_zodiac: formData.get("favorite_zodiac") || "",
@@ -340,9 +383,7 @@ function setupForms(){
             createdAt: Date.now()
           });
 
-          await update(ref(db, "stats/members"), {
-            count: increment(1)
-          });
+          await set(ref(db, "stats/members"), increment(1));
 
           await push(ref(db, "notifications"), {
             type: "Waitlist Signup",
@@ -352,13 +393,13 @@ function setupForms(){
         }
 
         if (form.classList.contains("suggestion-form")) {
-          await push(ref(db, "suggestions"), {
+          await push(ref(db, "flavorSuggestions"), {
             name: formData.get("name") || "",
             email: formData.get("email") || "",
             zodiac: formData.get("zodiac") || "Community Idea",
             flavor: formData.get("flavor") || "New Flavor Idea",
             ingredient: formData.get("ingredient") || "",
-            note: formData.get("message") || formData.get("ingredient") || "Submitted by the LumiSips community.",
+            message: formData.get("message") || formData.get("ingredient") || "Submitted by the LumiSips community.",
             createdAt: Date.now()
           });
 
@@ -397,135 +438,122 @@ function setupForms(){
   });
 }
 
-function sparkleBurst(x,y){
-  const layer = document.getElementById("sparkleLayer");
-  if (!layer) return;
+function setupUI() {
+  const navLinks = $("navLinks");
+  const menuToggle = $("menuToggle");
 
-  const sparkles = ["✨","💫","⭐","🫧","💥"];
-
-  for(let i=0;i<16;i++){
-    const sparkle = document.createElement("div");
-    sparkle.className = "sparkle";
-    sparkle.textContent = sparkles[Math.floor(Math.random()*sparkles.length)];
-    sparkle.style.left = `${x + (Math.random()*130 - 65)}px`;
-    sparkle.style.top = `${y + (Math.random()*90 - 45)}px`;
-    layer.appendChild(sparkle);
-    setTimeout(()=>sparkle.remove(),900);
-  }
-}
-
-function setupUI(){
-  const navLinks = document.getElementById("navLinks");
-  const menuToggle = document.getElementById("menuToggle");
-
-  if(menuToggle && navLinks){
+  if (menuToggle && navLinks) {
     menuToggle.onclick = () => navLinks.classList.toggle("show");
   }
 
-  document.querySelectorAll(".nav-links a").forEach(a=>{
+  document.querySelectorAll(".nav-links a").forEach(a => {
     a.onclick = () => navLinks?.classList.remove("show");
   });
 
-  const backTop = document.getElementById("backTop");
+  const backTop = $("backTop");
 
-  window.addEventListener("scroll",()=>{
-    const progress = document.getElementById("scrollProgress");
+  window.addEventListener("scroll", () => {
+    const progress = $("scrollProgress");
     const scrolled = (window.scrollY / (document.body.scrollHeight - innerHeight)) * 100;
 
-    if(progress) progress.style.width = scrolled + "%";
-    if(backTop) backTop.style.display = window.scrollY > 600 ? "grid" : "none";
+    if (progress) progress.style.width = scrolled + "%";
+    if (backTop) backTop.style.display = window.scrollY > 600 ? "grid" : "none";
   });
 
-  if(backTop){
-    backTop.onclick = () => scrollTo({top:0,behavior:"smooth"});
+  if (backTop) {
+    backTop.onclick = () => scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  document.addEventListener("mousemove",e=>{
-    const glow = document.getElementById("mouseGlow");
-    if(!glow) return;
+  document.addEventListener("mousemove", e => {
+    const glow = $("mouseGlow");
+    if (!glow) return;
+
     glow.style.left = e.clientX + "px";
     glow.style.top = e.clientY + "px";
   });
 
-  setTimeout(()=>{
-    const loader = document.getElementById("loader");
-    if(loader) loader.style.display = "none";
-  },900);
+  setTimeout(() => {
+    const loader = $("loader");
+    if (loader) loader.style.display = "none";
+  }, 900);
 }
 
-function setupRevealAnimations(){
-  const observer = new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.classList.add("show");
+function setupRevealAnimations() {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
 
-        if(entry.target.id === "lab"){
-          document.querySelectorAll(".progress-item").forEach(item=>{
-            const bar = item.querySelector("i");
-            if(bar) bar.style.width = item.dataset.progress + "%";
-          });
-        }
+      entry.target.classList.add("show");
 
-        if(entry.target.classList.contains("counters-section")){
-          document.querySelectorAll("[data-count]").forEach(counter=>{
-            if(counter.dataset.done) return;
+      if (entry.target.id === "lab") {
+        document.querySelectorAll(".progress-item").forEach(item => {
+          const bar = item.querySelector("i");
+          if (bar) bar.style.width = item.dataset.progress + "%";
+        });
+      }
 
-            counter.dataset.done = "true";
-            const target = Number(counter.dataset.count);
-            const suffix = counter.dataset.suffix || "";
-            let current = 0;
-            const step = Math.max(1, Math.ceil(target / 45));
+      if (entry.target.classList.contains("counters-section")) {
+        document.querySelectorAll("[data-count]").forEach(counter => {
+          if (counter.dataset.done) return;
 
-            const timer = setInterval(()=>{
-              current += step;
-              if(current >= target){
-                current = target;
-                clearInterval(timer);
-              }
-              counter.textContent = current + suffix;
-            },28);
-          });
-        }
+          counter.dataset.done = "true";
+          const target = Number(counter.dataset.count);
+          const suffix = counter.dataset.suffix || "";
+          let current = 0;
+          const step = Math.max(1, Math.ceil(target / 45));
+
+          const timer = setInterval(() => {
+            current += step;
+
+            if (current >= target) {
+              current = target;
+              clearInterval(timer);
+            }
+
+            counter.textContent = current + suffix;
+          }, 28);
+        });
       }
     });
-  },{threshold:.18});
+  }, { threshold: 0.18 });
 
-  document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+  document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 }
 
-function setupStars(){
-  const canvas = document.getElementById("stars");
-  if(!canvas) return;
+function setupStars() {
+  const canvas = $("stars");
+  if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
   let stars = [];
 
-  function resize(){
+  function resize() {
     canvas.width = innerWidth;
     canvas.height = innerHeight;
-    stars = Array.from({length:130},()=>({
-      x:Math.random()*canvas.width,
-      y:Math.random()*canvas.height,
-      r:Math.random()*1.6,
-      s:Math.random()*.6+.2
+
+    stars = Array.from({ length: 130 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.6,
+      s: Math.random() * 0.6 + 0.2
     }));
   }
 
   resize();
-  addEventListener("resize",resize);
+  addEventListener("resize", resize);
 
-  function drawStars(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
 
-    stars.forEach(star=>{
+    stars.forEach(star => {
       ctx.globalAlpha = Math.random();
       ctx.beginPath();
-      ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
+      ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
       ctx.fill();
 
       star.y += star.s;
-      if(star.y > canvas.height) star.y = 0;
+      if (star.y > canvas.height) star.y = 0;
     });
 
     requestAnimationFrame(drawStars);
@@ -534,7 +562,26 @@ function setupStars(){
   drawStars();
 }
 
-function start(){
+function sparkleBurst(x, y) {
+  const layer = $("sparkleLayer");
+  if (!layer) return;
+
+  const sparkles = ["✨", "💫", "⭐", "🫧", "💥"];
+
+  for (let i = 0; i < 16; i++) {
+    const sparkle = document.createElement("div");
+    sparkle.className = "sparkle";
+    sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+    sparkle.style.left = `${x + (Math.random() * 130 - 65)}px`;
+    sparkle.style.top = `${y + (Math.random() * 90 - 45)}px`;
+    layer.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 900);
+  }
+}
+
+async function startLumiSips() {
+  await seedDatabaseOnce();
+
   renderZodiac();
   renderVotes();
   renderLeaderboard();
@@ -547,12 +594,6 @@ function start(){
   setupLiveListeners();
   setupRevealAnimations();
   setupStars();
-
-  const seeded = localStorage.getItem("lumisipsSeededDefaults");
-  if(!seeded){
-    seedDefaults();
-    localStorage.setItem("lumisipsSeededDefaults","true");
-  }
 }
 
-start();
+startLumiSips();
