@@ -1,9 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  onValue
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDW_HC9OVcpkLc4TFY6MR8brufTPniwXEg",
@@ -19,69 +15,120 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-function renderList(id, data) {
-  const container = document.getElementById(id);
+function safe(value) {
+  return value || "Not provided";
+}
 
-  if (!container) return;
+function renderEmpty(id, text = "No data yet") {
+  const box = document.getElementById(id);
+  if (box) box.innerHTML = `<div class="item">${text}</div>`;
+}
 
-  if (!data) {
-    container.innerHTML = "<div class='item'>No data yet</div>";
+onValue(ref(db, "lumiList"), snapshot => {
+  const data = snapshot.val() || {};
+  const users = Object.values(data).reverse();
+
+  const members = document.getElementById("members");
+  if (members) members.textContent = users.length;
+
+  const waitlist = document.getElementById("waitlist");
+  if (!waitlist) return;
+
+  if (!users.length) {
+    renderEmpty("waitlist");
     return;
   }
 
-  container.innerHTML = Object.entries(data)
-    .reverse()
-    .slice(0, 25)
-    .map(([key, value]) => {
-      return `
-      <div class="item">
-        <pre>${JSON.stringify(value, null, 2)}</pre>
-      </div>
-      `;
-    })
-    .join("");
-}
-
-onValue(ref(db, "stats/members"), snap => {
-  document.getElementById("members").textContent =
-    snap.val() || 0;
+  waitlist.innerHTML = users.map(user => `
+    <div class="wait-card">
+      <h3>${safe(user.name)}</h3>
+      <p><strong>Email:</strong> ${safe(user.email)}</p>
+      <p><strong>Zodiac:</strong> ${safe(user.zodiac || user.favorite_zodiac)}</p>
+      <small>${safe(user.date || user.createdAt)}</small>
+    </div>
+  `).join("");
 });
 
-onValue(ref(db, "votes"), snap => {
-  const data = snap.val();
+onValue(ref(db, "votes"), snapshot => {
+  const data = snapshot.val() || {};
+  const votesBox = document.getElementById("votes");
+  if (!votesBox) return;
 
-  let html = "";
+  const votes = Object.entries(data).map(([sign, value]) => {
+    const count = typeof value === "number" ? value : value?.count || 0;
+    return { sign, count };
+  }).sort((a, b) => b.count - a.count);
 
-  Object.entries(data || {}).forEach(([sign, value]) => {
-    const count =
-      typeof value === "number"
-        ? value
-        : value?.count || 0;
+  if (!votes.length) {
+    renderEmpty("votes");
+    return;
+  }
 
-    html += `
-      <div class="item">
-        ${sign}: <strong>${count}</strong>
-      </div>
-    `;
-  });
-
-  document.getElementById("votes").innerHTML = html;
+  votesBox.innerHTML = votes.map(v => `
+    <div class="vote-row">
+      <span>${v.sign}</span>
+      <strong>${v.count}</strong>
+    </div>
+  `).join("");
 });
 
-onValue(ref(db, "flavorSuggestions"), snap => {
-  renderList("suggestions", snap.val());
+onValue(ref(db, "flavorSuggestions"), snapshot => {
+  const data = snapshot.val() || {};
+  const suggestions = Object.values(data).reverse();
+  const box = document.getElementById("suggestions");
+  if (!box) return;
+
+  if (!suggestions.length) {
+    renderEmpty("suggestions");
+    return;
+  }
+
+  box.innerHTML = suggestions.map(item => `
+    <div class="wait-card">
+      <h3>${safe(item.flavor)}</h3>
+      <p><strong>Zodiac:</strong> ${safe(item.zodiac)}</p>
+      <p><strong>Ingredient:</strong> ${safe(item.ingredient)}</p>
+      <p>${safe(item.message)}</p>
+      <small>${safe(item.name)} • ${safe(item.email)}</small>
+    </div>
+  `).join("");
 });
 
-onValue(ref(db, "lumiList"), snap => {
-  renderList("waitlist", snap.val());
+onValue(ref(db, "messages"), snapshot => {
+  const data = snapshot.val() || {};
+  const messages = Object.values(data).reverse();
+  const box = document.getElementById("messages");
+  if (!box) return;
+
+  if (!messages.length) {
+    renderEmpty("messages");
+    return;
+  }
+
+  box.innerHTML = messages.map(msg => `
+    <div class="wait-card">
+      <h3>${safe(msg.subject)}</h3>
+      <p>${safe(msg.message)}</p>
+      <small>${safe(msg.name)} • ${safe(msg.email)}</small>
+    </div>
+  `).join("");
 });
 
-onValue(ref(db, "messages"), snap => {
-  renderList("messages", snap.val());
-});
+onValue(ref(db, "notifications"), snapshot => {
+  const data = snapshot.val() || {};
+  const notes = Object.values(data).reverse();
+  const box = document.getElementById("notifications");
+  if (!box) return;
 
-onValue(ref(db, "notifications"), snap => {
-  renderList("notifications", snap.val());
-});
+  if (!notes.length) {
+    renderEmpty("notifications");
+    return;
+  }
 
-console.log("LumiSips Founder Dashboard Connected");
+  box.innerHTML = notes.map(note => `
+    <div class="item">
+      <strong>${safe(note.type)}</strong><br>
+      ${safe(note.message)}
+    </div>
+  `).join("");
+});
