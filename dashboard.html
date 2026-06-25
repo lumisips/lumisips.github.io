@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LumiSips Founder Dashboard</title>
+
+<link rel="stylesheet" href="dashboard.css">
+
+<style>
+body{
+background:#090711;
+color:white;
+font-family:Arial,sans-serif;
+margin:0;
+padding:30px;
+}
+
+h1{
+font-size:3rem;
+margin-bottom:20px;
+background:linear-gradient(90deg,#00d9ff,#ff44d6);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
+}
+
+.card{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.1);
+border-radius:20px;
+padding:20px;
+backdrop-filter:blur(20px);
+}
+
+.card h2{
+margin-top:0;
+}
+
+.number{
+font-size:3rem;
+font-weight:700;
+color:#00d9ff;
+}
+
+.item{
+padding:10px 0;
+border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.item:last-child{
+border:none;
+}
+</style>
+</head>
+
+<body>
+
+<h1>LumiSips Founder Dashboard</h1>
+
+<div class="grid">
+
+<div class="card">
+<h2>Total Members</h2>
+<div id="members" class="number">0</div>
+</div>
+
+<div class="card">
+<h2>Zodiac Votes</h2>
+<div id="votes"></div>
+</div>
+
+<div class="card">
+<h2>Flavor Suggestions</h2>
+<div id="suggestions"></div>
+</div>
+
+<div class="card">
+<h2>Waitlist Signups</h2>
+<div id="waitlist"></div>
+</div>
+
+<div class="card">
+<h2>Contact Messages</h2>
+<div id="messages"></div>
+</div>
+
+<div class="card">
+<h2>Notifications Feed</h2>
+<div id="notifications"></div>
+</div>
+
+</div>
+
+<script type="module" src="dashboard.js"></script>
+
+</body>
+</html>
