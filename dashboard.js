@@ -17,52 +17,71 @@ const db = getDatabase(app);
 
 const clean = value => value || "Not provided";
 
-function empty(id) {
-  document.getElementById(id).innerHTML = `<div class="item">No data yet</div>`;
+function setHTML(id, html) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+
+function empty(id, text) {
+  setHTML(id, `<div class="item">${text}</div>`);
 }
 
 onValue(ref(db, "lumiList"), snap => {
   const data = snap.val() || {};
-  const users = Object.values(data);
+  const users = Object.values(data).reverse();
 
-  document.getElementById("members").textContent = users.length;
+  const members = document.getElementById("members");
+  if (members) members.textContent = users.length;
 
-  if (!users.length) return empty("waitlist");
+  if (!users.length) {
+    empty("waitlist", "No waitlist signups yet");
+    return;
+  }
 
-  document.getElementById("waitlist").innerHTML = users.reverse().map(user => `
+  setHTML("waitlist", users.map(user => `
     <div class="wait-card">
       <h3>${clean(user.name)}</h3>
       <p><strong>Email:</strong> ${clean(user.email)}</p>
       <p><strong>Zodiac:</strong> ${clean(user.zodiac || user.favorite_zodiac)}</p>
       <small>${clean(user.date || user.createdAt)}</small>
     </div>
-  `).join("");
+  `).join(""));
 });
 
 onValue(ref(db, "votes"), snap => {
   const data = snap.val() || {};
-  const votes = Object.entries(data).map(([sign, value]) => ({
-    sign,
-    count: typeof value === "number" ? value : value?.count || 0
-  })).sort((a,b) => b.count - a.count);
 
-  if (!votes.length) return empty("votes");
+  const votes = Object.entries(data)
+    .map(([sign, value]) => ({
+      sign,
+      count: typeof value === "number" ? value : value?.count || 0
+    }))
+    .sort((a, b) => b.count - a.count);
 
-  document.getElementById("votes").innerHTML = votes.map(v => `
+  if (!votes.length) {
+    empty("votes", "No votes yet");
+    return;
+  }
+
+  setHTML("votes", votes.map(v => `
     <div class="vote-row">
       <span>${v.sign}</span>
       <strong>${v.count}</strong>
     </div>
-  `).join("");
+  `).join(""));
 });
 
 onValue(ref(db, "flavorSuggestions"), snap => {
-  const data = snap.val() || {};
+  const data = snap.val();
+
+  if (!data) {
+    empty("suggestions", "No flavor suggestions yet");
+    return;
+  }
+
   const suggestions = Object.values(data).reverse();
 
-  if (!suggestions.length) return empty("suggestions");
-
-  document.getElementById("suggestions").innerHTML = suggestions.map(item => `
+  setHTML("suggestions", suggestions.map(item => `
     <div class="wait-card">
       <h3>${clean(item.flavor)}</h3>
       <p><strong>Zodiac:</strong> ${clean(item.zodiac)}</p>
@@ -70,34 +89,42 @@ onValue(ref(db, "flavorSuggestions"), snap => {
       <p>${clean(item.message)}</p>
       <small>${clean(item.name)} • ${clean(item.email)}</small>
     </div>
-  `).join("");
+  `).join(""));
 });
 
 onValue(ref(db, "messages"), snap => {
-  const data = snap.val() || {};
+  const data = snap.val();
+
+  if (!data) {
+    empty("messages", "No messages yet");
+    return;
+  }
+
   const messages = Object.values(data).reverse();
 
-  if (!messages.length) return empty("messages");
-
-  document.getElementById("messages").innerHTML = messages.map(msg => `
+  setHTML("messages", messages.map(msg => `
     <div class="wait-card">
       <h3>${clean(msg.subject)}</h3>
       <p>${clean(msg.message)}</p>
       <small>${clean(msg.name)} • ${clean(msg.email)}</small>
     </div>
-  `).join("");
+  `).join(""));
 });
 
 onValue(ref(db, "notifications"), snap => {
-  const data = snap.val() || {};
+  const data = snap.val();
+
+  if (!data) {
+    empty("notifications", "No notifications yet");
+    return;
+  }
+
   const notes = Object.values(data).reverse();
 
-  if (!notes.length) return empty("notifications");
-
-  document.getElementById("notifications").innerHTML = notes.map(note => `
+  setHTML("notifications", notes.map(note => `
     <div class="item">
       <strong>${clean(note.type)}</strong><br>
       ${clean(note.message)}
     </div>
-  `).join("");
+  `).join(""));
 });
