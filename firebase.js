@@ -4,6 +4,7 @@ import {
   ref,
   push,
   set,
+  get,
   onValue,
   update,
   increment
@@ -22,13 +23,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    const loader = document.getElementById("loader");
-    if (loader) loader.style.display = "none";
-  }, 900);
-});
-
 const battles = [
   { key:"battle0", left:"Glass Bottles", right:"Aluminum Cans", leftIcon:"🧊", rightIcon:"🥤" },
   { key:"battle1", left:"Still Hydration", right:"Sparkling Hydration", leftIcon:"💧", rightIcon:"✨" },
@@ -36,6 +30,14 @@ const battles = [
   { key:"battle3", left:"Blue Raspberry", right:"Watermelon", leftIcon:"🫐", rightIcon:"🍉" },
   { key:"battle4", left:"Dragon Fruit", right:"Passion Fruit", leftIcon:"🐉", rightIcon:"🌺" }
 ];
+
+const defaultBattleVotes = {
+  battle0: { "Glass Bottles": 18, "Aluminum Cans": 12 },
+  battle1: { "Still Hydration": 10, "Sparkling Hydration": 22 },
+  battle2: { "Energy": 16, "Sparkling Energy": 26 },
+  battle3: { "Blue Raspberry": 30, "Watermelon": 19 },
+  battle4: { "Dragon Fruit": 24, "Passion Fruit": 21 }
+};
 
 const zodiacSigns = [
   ["Aries","♈","Coming Soon","soon"],
@@ -51,6 +53,20 @@ const zodiacSigns = [
   ["Aquarius","♒","Coming Soon","soon"],
   ["Pisces","♓","Coming Soon","soon"]
 ];
+
+const defaultVotes = {
+  Aries: 12,
+  Taurus: 8,
+  Gemini: 15,
+  Leo: 21,
+  Virgo: 7,
+  Libra: 10,
+  Scorpio: 18,
+  Sagittarius: 9,
+  Capricorn: 24,
+  Aquarius: 11,
+  Pisces: 14
+};
 
 function clean(value){
   return value || "Not provided";
@@ -70,6 +86,22 @@ function sparkleBurst(x, y){
     sparkle.style.top = `${y + (Math.random() * 90 - 45)}px`;
     layer.appendChild(sparkle);
     setTimeout(() => sparkle.remove(), 900);
+  }
+}
+
+async function seedDatabase(){
+  const battleSnap = await get(ref(db, "battleVotes"));
+  if (!battleSnap.exists()) {
+    await set(ref(db, "battleVotes"), defaultBattleVotes);
+  }
+
+  const voteSnap = await get(ref(db, "votes"));
+  if (!voteSnap.exists()) {
+    const formattedVotes = {};
+    Object.entries(defaultVotes).forEach(([sign, count]) => {
+      formattedVotes[sign] = { count };
+    });
+    await set(ref(db, "votes"), formattedVotes);
   }
 }
 
@@ -145,12 +177,14 @@ function renderLeaderboard(votes = {}){
   `).join("");
 }
 
-function renderBattles(data = {}){
+function renderBattles(data = defaultBattleVotes){
   const grid = document.getElementById("battleGrid");
   if (!grid) return;
 
+  const finalData = Object.keys(data || {}).length ? data : defaultBattleVotes;
+
   grid.innerHTML = battles.map(battle => {
-    const current = data[battle.key] || {};
+    const current = finalData[battle.key] || defaultBattleVotes[battle.key] || {};
     const leftVotes = current[battle.left] || 0;
     const rightVotes = current[battle.right] || 0;
     const total = leftVotes + rightVotes || 1;
@@ -285,7 +319,7 @@ function setupFirebaseListeners(){
   });
 
   onValue(ref(db, "battleVotes"), snap => {
-    const data = snap.val() || {};
+    const data = snap.val() || defaultBattleVotes;
     renderBattles(data);
   });
 
@@ -394,14 +428,6 @@ function setupUI(){
 
     if (backTop) backTop.style.display = window.scrollY > 600 ? "grid" : "none";
   });
-
-  document.addEventListener("mousemove", e => {
-    const glow = document.getElementById("mouseGlow");
-    if (glow) {
-      glow.style.left = e.clientX + "px";
-      glow.style.top = e.clientY + "px";
-    }
-  });
 }
 
 function setupRevealAnimations(){
@@ -487,12 +513,24 @@ function setupStars(){
   drawStars();
 }
 
-renderZodiac();
-renderTimeline();
-renderSuggestions();
-setupFirebaseListeners();
-setupClicks();
-setupForms();
-setupUI();
-setupRevealAnimations();
-setupStars();
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const loader = document.getElementById("loader");
+    if (loader) loader.style.display = "none";
+  }, 900);
+});
+
+async function start(){
+  await seedDatabase();
+  renderZodiac();
+  renderTimeline();
+  renderSuggestions();
+  setupFirebaseListeners();
+  setupClicks();
+  setupForms();
+  setupUI();
+  setupRevealAnimations();
+  setupStars();
+}
+
+start();
