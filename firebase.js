@@ -4,9 +4,26 @@ window.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("loader");
   if (loader) loader.remove();
 
+  document.querySelectorAll("[data-count]").forEach(counter => {
+    counter.textContent = counter.dataset.count + (counter.dataset.suffix || "");
+  });
+
+  document.querySelectorAll(".progress-item").forEach(item => {
+    const bar = item.querySelector("i");
+    if (bar) bar.style.width = item.dataset.progress + "%";
+  });
+
   const battleGrid = document.getElementById("battleGrid");
 
   if (battleGrid) {
+    const battles = [
+      ["Glass Bottles","Aluminum Cans","🧊","🥤",18,12],
+      ["Still Hydration","Sparkling Hydration","💧","✨",10,22],
+      ["Energy","Sparkling Energy","⚡","🔋",16,26],
+      ["Blue Raspberry","Watermelon","🫐","🍉",30,19],
+      ["Dragon Fruit","Passion Fruit","🐉","🌺",24,21]
+    ];
+
     battleGrid.innerHTML = `
       <div style="text-align:center;margin-bottom:25px;">
         <button class="btn secondary" onclick="localStorage.clear(); location.reload();">
@@ -14,13 +31,7 @@ window.addEventListener("DOMContentLoaded", () => {
         </button>
       </div>
 
-      ${[
-        ["Glass Bottles","Aluminum Cans","🧊","🥤",18,12],
-        ["Still Hydration","Sparkling Hydration","💧","✨",10,22],
-        ["Energy","Sparkling Energy","⚡","🔋",16,26],
-        ["Blue Raspberry","Watermelon","🫐","🍉",30,19],
-        ["Dragon Fruit","Passion Fruit","🐉","🌺",24,21]
-      ].map((b,i)=>{
+      ${battles.map((b,i)=>{
         const picked = localStorage.getItem("battle_" + i);
         const total = b[4] + b[5];
         const l = Math.round((b[4]/total)*100);
