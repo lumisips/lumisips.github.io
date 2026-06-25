@@ -1,5 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  get
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDW_HC9OVcpkLc4TFY6MR8brufTPniwXEg",
@@ -17,20 +22,20 @@ const db = getDatabase(app);
 let allUsers = [];
 
 const $ = id => document.getElementById(id);
-const clean = v => v || "Not provided";
+const clean = value => value || "Not provided";
 
-function setHTML(id, html){
+function setHTML(id, html) {
   const el = $(id);
-  if(el) el.innerHTML = html;
+  if (el) el.innerHTML = html;
 }
 
-function empty(id, text){
+function empty(id, text) {
   setHTML(id, `<div class="item">${text}</div>`);
 }
 
-function renderUsers(users){
-  if(!users.length){
-    empty("waitlist","No waitlist signups yet");
+function renderUsers(users) {
+  if (!users.length) {
+    empty("waitlist", "No waitlist signups yet");
     return;
   }
 
@@ -44,17 +49,17 @@ function renderUsers(users){
   `).join(""));
 }
 
-onValue(ref(db,"lumiList"), snap=>{
+onValue(ref(db, "lumiList"), snap => {
   const data = snap.val() || {};
   allUsers = Object.values(data).reverse();
 
-  $("members").textContent = allUsers.length;
-  $("latestSignup").textContent = allUsers[0]?.name || "—";
+  if ($("members")) $("members").textContent = allUsers.length;
+  if ($("latestSignup")) $("latestSignup").textContent = allUsers[0]?.name || "—";
 
   renderUsers(allUsers);
 });
 
-$("searchInput")?.addEventListener("input", e=>{
+$("searchInput")?.addEventListener("input", e => {
   const term = e.target.value.toLowerCase();
 
   const filtered = allUsers.filter(user =>
@@ -65,30 +70,32 @@ $("searchInput")?.addEventListener("input", e=>{
   renderUsers(filtered);
 });
 
-onValue(ref(db,"votes"), snap=>{
+onValue(ref(db, "votes"), snap => {
   const data = snap.val() || {};
 
-  const votes = Object.entries(data).map(([sign,value])=>({
+  const votes = Object.entries(data).map(([sign, value]) => ({
     sign,
     count: typeof value === "number" ? value : value?.count || 0
-  })).sort((a,b)=>b.count-a.count);
+  })).sort((a, b) => b.count - a.count);
 
-  const total = votes.reduce((sum,v)=>sum+v.count,0);
-  $("totalVotes").textContent = total;
-  $("topZodiac").textContent = votes[0]?.sign || "—";
+  const total = votes.reduce((sum, vote) => sum + vote.count, 0);
 
-  if(!votes.length){
-    empty("votes","No votes yet");
+  if ($("totalVotes")) $("totalVotes").textContent = total;
+  if ($("topZodiac")) $("topZodiac").textContent = votes[0]?.sign || "—";
+
+  if (!votes.length) {
+    empty("votes", "No votes yet");
     return;
   }
 
-  setHTML("votes", votes.map(v=>{
-    const percent = total ? Math.round((v.count / total) * 100) : 0;
+  setHTML("votes", votes.map(vote => {
+    const percent = total ? Math.round((vote.count / total) * 100) : 0;
+
     return `
       <div class="vote-row">
         <div class="vote-top">
-          <span>${v.sign}</span>
-          <strong>${v.count}</strong>
+          <span>${vote.sign}</span>
+          <strong>${vote.count}</strong>
         </div>
         <div class="bar"><span style="width:${percent}%"></span></div>
       </div>
@@ -96,17 +103,17 @@ onValue(ref(db,"votes"), snap=>{
   }).join(""));
 });
 
-onValue(ref(db,"flavorSuggestions"), snap=>{
+onValue(ref(db, "flavorSuggestions"), snap => {
   const data = snap.val();
 
-  if(!data){
-    empty("suggestions","No flavor suggestions yet");
+  if (!data) {
+    empty("suggestions", "No flavor suggestions yet");
     return;
   }
 
-  const items = Object.values(data).reverse();
+  const suggestions = Object.values(data).reverse();
 
-  setHTML("suggestions", items.map(item=>`
+  setHTML("suggestions", suggestions.map(item => `
     <div class="wait-card">
       <h3>${clean(item.flavor)}</h3>
       <p><strong>Zodiac:</strong> ${clean(item.zodiac)}</p>
@@ -117,17 +124,17 @@ onValue(ref(db,"flavorSuggestions"), snap=>{
   `).join(""));
 });
 
-onValue(ref(db,"messages"), snap=>{
+onValue(ref(db, "messages"), snap => {
   const data = snap.val();
 
-  if(!data){
-    empty("messages","No messages yet");
+  if (!data) {
+    empty("messages", "No messages yet");
     return;
   }
 
-  const items = Object.values(data).reverse();
+  const messages = Object.values(data).reverse();
 
-  setHTML("messages", items.map(msg=>`
+  setHTML("messages", messages.map(msg => `
     <div class="wait-card">
       <h3>${clean(msg.subject)}</h3>
       <p>${clean(msg.message)}</p>
@@ -136,17 +143,17 @@ onValue(ref(db,"messages"), snap=>{
   `).join(""));
 });
 
-onValue(ref(db,"notifications"), snap=>{
+onValue(ref(db, "notifications"), snap => {
   const data = snap.val();
 
-  if(!data){
-    empty("notifications","No notifications yet");
+  if (!data) {
+    empty("notifications", "No notifications yet");
     return;
   }
 
-  const items = Object.values(data).reverse();
+  const notifications = Object.values(data).reverse();
 
-  setHTML("notifications", items.map(note=>`
+  setHTML("notifications", notifications.map(note => `
     <div class="item">
       <strong>${clean(note.type)}</strong><br>
       ${clean(note.message)}
@@ -154,32 +161,8 @@ onValue(ref(db,"notifications"), snap=>{
   `).join(""));
 });
 
-window.exportWaitlistCSV = async function(){
-  const snap = await get(ref(db,"lumiList"));
+window.exportWaitlistCSV = async function () {
+  const snap = await get(ref(db, "lumiList"));
   const data = snap.val() || {};
 
-  const rows = [["Name","Email","Zodiac","Date"]];
-
-  Object.values(data).forEach(user=>{
-    rows.push([
-      user.name || "",
-      user.email || "",
-      user.zodiac || user.favorite_zodiac || "",
-      user.date || user.createdAt || ""
-    ]);
-  });
-
-  const csv = rows.map(row =>
-    row.map(v => `"${String(v).replaceAll('"','""')}"`).join(",")
-  ).join("\n");
-
-  const blob = new Blob([csv],{type:"text/csv"});
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "lumisips-waitlist.csv";
-  a.click();
-
-  URL.revokeObjectURL(url);
-};
+  const rows = [["Name", "Email", "Zodiac", "Date
