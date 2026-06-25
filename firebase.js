@@ -70,11 +70,11 @@ const defaultBattleVotes = {
 };
 
 const starterSuggestions = [
-  { zodiac: "Taurus ♉", flavor: "Lemon Orange Citrus", message: "Bright, refreshing citrus hydration with a clean finish." },
-  { zodiac: "Capricorn ♑", flavor: "Sour Watermelon Strawberry", message: "A bold sour candy-inspired hydration flavor." },
-  { zodiac: "Leo ♌", flavor: "Pineapple Passion Fruit", message: "Tropical, bright, loud, and summer-focused." },
-  { zodiac: "Gemini ♊", flavor: "Lemon Lime Blueberry", message: "Dual citrus energy with a smooth berry finish." },
-  { zodiac: "Pisces ♓", flavor: "Mango Coconut", message: "Dreamy tropical hydration concept." }
+  { zodiac:"Taurus ♉", flavor:"Lemon Orange Citrus", message:"Bright, refreshing citrus hydration with a clean finish." },
+  { zodiac:"Capricorn ♑", flavor:"Sour Watermelon Strawberry", message:"A bold sour candy-inspired hydration flavor." },
+  { zodiac:"Leo ♌", flavor:"Pineapple Passion Fruit", message:"Tropical, bright, loud, and summer-focused." },
+  { zodiac:"Gemini ♊", flavor:"Lemon Lime Blueberry", message:"Dual citrus energy with a smooth berry finish." },
+  { zodiac:"Pisces ♓", flavor:"Mango Coconut", message:"Dreamy tropical hydration concept." }
 ];
 
 const timelineItems = [
@@ -100,21 +100,31 @@ function $(id) {
   return document.getElementById(id);
 }
 
+function hideLoader() {
+  const loader = $("loader");
+  if (loader) loader.style.display = "none";
+}
+
 async function seedDatabaseOnce() {
-  const seededSnap = await get(ref(db, "system/seeded"));
+  try {
+    const seededSnap = await get(ref(db, "system/seeded"));
 
-  if (seededSnap.exists()) return;
+    if (seededSnap.exists()) return;
 
-  for (const [sign, count] of Object.entries(defaultVotes)) {
-    await set(ref(db, `votes/${sign}`), count);
+    for (const [sign, count] of Object.entries(defaultVotes)) {
+      await set(ref(db, `votes/${sign}`), { count });
+    }
+
+    for (const [key, value] of Object.entries(defaultBattleVotes)) {
+      await set(ref(db, `battleVotes/${key}`), value);
+    }
+
+    await set(ref(db, "stats/members"), 1);
+    await set(ref(db, "system/seeded"), true);
+
+  } catch (error) {
+    console.error("Seed error:", error);
   }
-
-  for (const [key, value] of Object.entries(defaultBattleVotes)) {
-    await set(ref(db, `battleVotes/${key}`), value);
-  }
-
-  await set(ref(db, "stats/members"), 1);
-  await set(ref(db, "system/seeded"), true);
 }
 
 function renderZodiac() {
@@ -190,7 +200,9 @@ function renderLeaderboard() {
 async function vote(name) {
   if (localStorage.getItem("lumisipsHasVotedZodiac") === "true") return;
 
-  await set(ref(db, `votes/${name}`), increment(1));
+  await update(ref(db, `votes/${name}`), {
+    count: increment(1)
+  });
 
   await push(ref(db, "notifications"), {
     type: "Zodiac Vote",
@@ -320,7 +332,7 @@ function setupLiveListeners() {
       Object.entries(data).forEach(([sign, value]) => {
         if (typeof value === "number") {
           liveVotes[sign] = value;
-        } else if (value?.count) {
+        } else if (value && typeof value.count === "number") {
           liveVotes[sign] = value.count;
         }
       });
@@ -383,7 +395,9 @@ function setupForms() {
             createdAt: Date.now()
           });
 
-          await set(ref(db, "stats/members"), increment(1));
+          await update(ref(db, "stats"), {
+            members: increment(1)
+          });
 
           await push(ref(db, "notifications"), {
             type: "Waitlist Signup",
@@ -431,7 +445,7 @@ function setupForms() {
         form.reset();
 
       } catch (error) {
-        console.error(error);
+        console.error("Form error:", error);
         if (status) status.textContent = "Connection error. Please try again.";
       }
     });
@@ -472,10 +486,7 @@ function setupUI() {
     glow.style.top = e.clientY + "px";
   });
 
-  setTimeout(() => {
-    const loader = $("loader");
-    if (loader) loader.style.display = "none";
-  }, 900);
+  setTimeout(hideLoader, 900);
 }
 
 function setupRevealAnimations() {
@@ -580,20 +591,26 @@ function sparkleBurst(x, y) {
 }
 
 async function startLumiSips() {
-  await seedDatabaseOnce();
+  try {
+    await seedDatabaseOnce();
 
-  renderZodiac();
-  renderVotes();
-  renderLeaderboard();
-  renderBattles();
-  renderSuggestions();
-  renderTimeline();
+    renderZodiac();
+    renderVotes();
+    renderLeaderboard();
+    renderBattles();
+    renderSuggestions();
+    renderTimeline();
 
-  setupUI();
-  setupForms();
-  setupLiveListeners();
-  setupRevealAnimations();
-  setupStars();
+    setupUI();
+    setupForms();
+    setupLiveListeners();
+    setupRevealAnimations();
+    setupStars();
+
+  } catch (error) {
+    console.error("Startup error:", error);
+    hideLoader();
+  }
 }
 
 startLumiSips();
