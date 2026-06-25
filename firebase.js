@@ -3,8 +3,8 @@ import {
   getDatabase,
   ref,
   push,
-  set,
   get,
+  set,
   onValue,
   update,
   increment
@@ -23,22 +23,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const battles = [
-  { key:"battle0", left:"Glass Bottles", right:"Aluminum Cans", leftIcon:"🧊", rightIcon:"🥤" },
-  { key:"battle1", left:"Still Hydration", right:"Sparkling Hydration", leftIcon:"💧", rightIcon:"✨" },
-  { key:"battle2", left:"Energy", right:"Sparkling Energy", leftIcon:"⚡", rightIcon:"🔋" },
-  { key:"battle3", left:"Blue Raspberry", right:"Watermelon", leftIcon:"🫐", rightIcon:"🍉" },
-  { key:"battle4", left:"Dragon Fruit", right:"Passion Fruit", leftIcon:"🐉", rightIcon:"🌺" }
-];
-
-const defaultBattleVotes = {
-  battle0: { "Glass Bottles": 18, "Aluminum Cans": 12 },
-  battle1: { "Still Hydration": 10, "Sparkling Hydration": 22 },
-  battle2: { "Energy": 16, "Sparkling Energy": 26 },
-  battle3: { "Blue Raspberry": 30, "Watermelon": 19 },
-  battle4: { "Dragon Fruit": 24, "Passion Fruit": 21 }
-};
-
 const zodiacSigns = [
   ["Aries","♈","Coming Soon","soon"],
   ["Taurus","♉","Lemon • Orange • Citrus","active"],
@@ -55,30 +39,46 @@ const zodiacSigns = [
 ];
 
 const defaultVotes = {
-  Aries: 12,
-  Taurus: 8,
-  Gemini: 15,
-  Leo: 21,
-  Virgo: 7,
-  Libra: 10,
-  Scorpio: 18,
-  Sagittarius: 9,
-  Capricorn: 24,
-  Aquarius: 11,
-  Pisces: 14
+  Aries: { count: 12 },
+  Taurus: { count: 8 },
+  Gemini: { count: 15 },
+  Leo: { count: 21 },
+  Virgo: { count: 12 },
+  Libra: { count: 10 },
+  Scorpio: { count: 18 },
+  Sagittarius: { count: 9 },
+  Capricorn: { count: 24 },
+  Aquarius: { count: 11 },
+  Pisces: { count: 14 }
 };
 
-function clean(value){
-  return value || "Not provided";
+const battles = [
+  { key:"battle0", left:"Glass Bottles", right:"Aluminum Cans", leftIcon:"🧊", rightIcon:"🥤" },
+  { key:"battle1", left:"Still Hydration", right:"Sparkling Hydration", leftIcon:"💧", rightIcon:"✨" },
+  { key:"battle2", left:"Energy", right:"Sparkling Energy", leftIcon:"⚡", rightIcon:"🔋" },
+  { key:"battle3", left:"Blue Raspberry", right:"Watermelon", leftIcon:"🫐", rightIcon:"🍉" },
+  { key:"battle4", left:"Dragon Fruit", right:"Passion Fruit", leftIcon:"🐉", rightIcon:"🌺" }
+];
+
+const defaultBattleVotes = {
+  battle0: { "Glass Bottles": 18, "Aluminum Cans": 12 },
+  battle1: { "Still Hydration": 10, "Sparkling Hydration": 22 },
+  battle2: { "Energy": 16, "Sparkling Energy": 26 },
+  battle3: { "Blue Raspberry": 30, "Watermelon": 19 },
+  battle4: { "Dragon Fruit": 24, "Passion Fruit": 21 }
+};
+
+function clean(v){
+  return v || "Not provided";
 }
 
-function sparkleBurst(x, y){
+function sparkleBurst(x,y){
   const layer = document.getElementById("sparkleLayer");
-  if (!layer) return;
+  if(!layer) return;
 
   const sparkles = ["✨","💫","⭐","🫧","💥"];
 
-  for (let i = 0; i < 16; i++){
+  for(let i = 0; i < 16; i++){
     const sparkle = document.createElement("div");
     sparkle.className = "sparkle";
     sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
@@ -89,27 +89,11 @@ function sparkleBurst(x, y){
   }
 }
 
-async function seedDatabase(){
-  const battleSnap = await get(ref(db, "battleVotes"));
-  if (!battleSnap.exists()) {
-    await set(ref(db, "battleVotes"), defaultBattleVotes);
-  }
-
-  const voteSnap = await get(ref(db, "votes"));
-  if (!voteSnap.exists()) {
-    const formattedVotes = {};
-    Object.entries(defaultVotes).forEach(([sign, count]) => {
-      formattedVotes[sign] = { count };
-    });
-    await set(ref(db, "votes"), formattedVotes);
-  }
-}
-
 function renderZodiac(){
   const grid = document.getElementById("zodiacGrid");
-  if (!grid) return;
+  if(!grid) return;
 
-  grid.innerHTML = zodiacSigns.map(([name, symbol, flavor, status]) => `
+  grid.innerHTML = zodiacSigns.map(([name,symbol,flavor,status]) => `
     <div class="card ${status === "flagship" ? "flagship" : ""} ${status === "active" ? "active-development" : ""}">
       <h3>${symbol} ${name}</h3>
       <p>${flavor}</p>
@@ -122,16 +106,16 @@ function renderZodiac(){
   `).join("");
 }
 
-function renderVoteCards(votes = {}){
+function renderVoteCards(votes = defaultVotes){
   const grid = document.getElementById("voteGrid");
   const message = document.getElementById("voteMessage");
-  if (!grid) return;
+  if(!grid) return;
 
   const hasVoted = localStorage.getItem("lumisipsHasVotedZodiac") === "true";
 
   grid.innerHTML = zodiacSigns
     .filter(sign => sign[0] !== "Cancer")
-    .map(([name, symbol]) => {
+    .map(([name,symbol]) => {
       const value = typeof votes[name] === "number" ? votes[name] : votes[name]?.count || 0;
 
       return `
@@ -145,16 +129,16 @@ function renderVoteCards(votes = {}){
       `;
     }).join("");
 
-  if (hasVoted && message) {
+  if(hasVoted && message){
     message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
   }
 }
 
-function renderLeaderboard(votes = {}){
+function renderLeaderboard(votes = defaultVotes){
   const box = document.getElementById("leaderboardList");
-  if (!box) return;
+  if(!box) return;
 
-  const ranked = zodiacSigns.map(([name, symbol]) => {
+  const ranked = zodiacSigns.map(([name,symbol]) => {
     const value = typeof votes[name] === "number" ? votes[name] : votes[name]?.count || 0;
 
     return {
@@ -164,8 +148,8 @@ function renderLeaderboard(votes = {}){
       locked: name === "Cancer"
     };
   }).sort((a,b) => {
-    if (a.locked) return -1;
-    if (b.locked) return 1;
+    if(a.locked) return -1;
+    if(b.locked) return 1;
     return b.votes - a.votes;
   });
 
@@ -179,9 +163,9 @@ function renderLeaderboard(votes = {}){
 
 function renderBattles(data = defaultBattleVotes){
   const grid = document.getElementById("battleGrid");
-  if (!grid) return;
+  if(!grid) return;
 
-  const finalData = Object.keys(data || {}).length ? data : defaultBattleVotes;
+  const finalData = data && Object.keys(data).length ? data : defaultBattleVotes;
 
   grid.innerHTML = battles.map(battle => {
     const current = finalData[battle.key] || defaultBattleVotes[battle.key] || {};
@@ -196,8 +180,8 @@ function renderBattles(data = defaultBattleVotes){
     const locked = Boolean(votedChoice);
 
     let winner = "Tie";
-    if (leftVotes > rightVotes) winner = battle.left;
-    if (rightVotes > leftVotes) winner = battle.right;
+    if(leftVotes > rightVotes) winner = battle.left;
+    if(rightVotes > leftVotes) winner = battle.right;
 
     return `
       <div class="battle-card">
@@ -233,8 +217,8 @@ function renderBattles(data = defaultBattleVotes){
 function voteZodiac(sign){
   const message = document.getElementById("voteMessage");
 
-  if (localStorage.getItem("lumisipsHasVotedZodiac") === "true") {
-    if (message) message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
+  if(localStorage.getItem("lumisipsHasVotedZodiac") === "true"){
+    if(message) message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
     return;
   }
 
@@ -244,13 +228,13 @@ function voteZodiac(sign){
 
   localStorage.setItem("lumisipsHasVotedZodiac", "true");
 
-  if (message) message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
+  if(message) message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
 
   sparkleBurst(window.innerWidth / 2, window.innerHeight / 2);
 }
 
 function voteBattle(key, choice, event){
-  if (localStorage.getItem(`lumisipsVotedBattle_${key}`)) return;
+  if(localStorage.getItem(`lumisipsVotedBattle_${key}`)) return;
 
   update(ref(db, `battleVotes/${key}`), {
     [choice]: increment(1)
@@ -258,7 +242,7 @@ function voteBattle(key, choice, event){
 
   localStorage.setItem(`lumisipsVotedBattle_${key}`, choice);
 
-  if (event?.currentTarget) {
+  if(event?.currentTarget){
     event.currentTarget.classList.add("selected");
     const rect = event.currentTarget.getBoundingClientRect();
     sparkleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
@@ -267,12 +251,12 @@ function voteBattle(key, choice, event){
 
 function renderSuggestions(){
   const grid = document.getElementById("suggestionGrid");
-  if (!grid) return;
+  if(!grid) return;
 
   onValue(ref(db, "flavorSuggestions"), snap => {
     const data = snap.val();
 
-    if (!data) {
+    if(!data){
       grid.innerHTML = `
         <div class="card">
           <span>Community Idea</span>
@@ -297,7 +281,7 @@ function renderSuggestions(){
 
 function renderTimeline(){
   const box = document.getElementById("timeline");
-  if (!box) return;
+  if(!box) return;
 
   const items = [
     "Idea Created","LLC Approved","EIN Received","Business Bank Account Opened",
@@ -311,36 +295,61 @@ function renderTimeline(){
   `).join("");
 }
 
+async function seedDatabaseSafely(){
+  try{
+    const battleSnap = await get(ref(db, "battleVotes"));
+    if(!battleSnap.exists()){
+      await set(ref(db, "battleVotes"), defaultBattleVotes);
+    }
+  }catch(error){
+    console.log("Battle seed skipped:", error);
+  }
+
+  try{
+    const voteSnap = await get(ref(db, "votes"));
+    if(!voteSnap.exists()){
+      await set(ref(db, "votes"), defaultVotes);
+    }
+  }catch(error){
+    console.log("Vote seed skipped:", error);
+  }
+}
+
 function setupFirebaseListeners(){
   onValue(ref(db, "votes"), snap => {
-    const votes = snap.val() || {};
+    const votes = snap.val() || defaultVotes;
     renderVoteCards(votes);
     renderLeaderboard(votes);
+  }, () => {
+    renderVoteCards(defaultVotes);
+    renderLeaderboard(defaultVotes);
   });
 
   onValue(ref(db, "battleVotes"), snap => {
     const data = snap.val() || defaultBattleVotes;
     renderBattles(data);
+  }, () => {
+    renderBattles(defaultBattleVotes);
   });
 
   onValue(ref(db, "lumiList"), snap => {
     const data = snap.val() || {};
     const count = Object.keys(data).length;
     const memberCount = document.getElementById("memberCount");
-    if (memberCount) memberCount.textContent = count || 1;
+    if(memberCount) memberCount.textContent = count || 1;
   });
 }
 
 function setupClicks(){
   document.addEventListener("click", event => {
     const zodiacBtn = event.target.closest(".zodiac-vote-btn");
-    if (zodiacBtn) {
+    if(zodiacBtn){
       voteZodiac(zodiacBtn.dataset.sign);
       return;
     }
 
     const battleBtn = event.target.closest(".battle-option");
-    if (battleBtn && !battleBtn.disabled) {
+    if(battleBtn && !battleBtn.disabled){
       voteBattle(battleBtn.dataset.battle, battleBtn.dataset.choice, event);
     }
   });
@@ -352,13 +361,13 @@ function setupForms(){
       e.preventDefault();
 
       const status = form.querySelector(".form-status");
-      if (status) status.textContent = "Sending...";
+      if(status) status.textContent = "Sending...";
 
       const formData = new FormData(form);
       const formType = formData.get("form_type");
 
-      try {
-        if (form.classList.contains("waitlist-form")) {
+      try{
+        if(form.classList.contains("waitlist-form")){
           await push(ref(db, "lumiList"), {
             name: formData.get("name"),
             email: formData.get("email"),
@@ -368,7 +377,7 @@ function setupForms(){
           });
         }
 
-        if (form.classList.contains("suggestion-form")) {
+        if(form.classList.contains("suggestion-form")){
           await push(ref(db, "flavorSuggestions"), {
             name: formData.get("name"),
             email: formData.get("email"),
@@ -380,7 +389,7 @@ function setupForms(){
           });
         }
 
-        if (formType === "Contact Form") {
+        if(formType === "Contact Form"){
           await push(ref(db, "messages"), {
             name: formData.get("name"),
             email: formData.get("email"),
@@ -390,12 +399,12 @@ function setupForms(){
           });
         }
 
-        if (status) status.textContent = form.dataset.success || "Submitted.";
+        if(status) status.textContent = form.dataset.success || "Submitted.";
         sparkleBurst(window.innerWidth / 2, window.innerHeight / 2);
         form.reset();
 
-      } catch (error) {
-        if (status) status.textContent = "Connection error. Please try again.";
+      }catch(error){
+        if(status) status.textContent = "Connection error. Please try again.";
       }
     });
   });
@@ -405,7 +414,7 @@ function setupUI(){
   const navLinks = document.getElementById("navLinks");
   const menuToggle = document.getElementById("menuToggle");
 
-  if (menuToggle && navLinks) {
+  if(menuToggle && navLinks){
     menuToggle.onclick = () => navLinks.classList.toggle("show");
   }
 
@@ -414,38 +423,39 @@ function setupUI(){
   });
 
   const backTop = document.getElementById("backTop");
-  if (backTop) {
+
+  if(backTop){
     backTop.onclick = () => scrollTo({top:0, behavior:"smooth"});
   }
 
   window.addEventListener("scroll", () => {
     const progress = document.getElementById("scrollProgress");
 
-    if (progress) {
+    if(progress){
       const scrolled = (window.scrollY / (document.body.scrollHeight - innerHeight)) * 100;
       progress.style.width = scrolled + "%";
     }
 
-    if (backTop) backTop.style.display = window.scrollY > 600 ? "grid" : "none";
+    if(backTop) backTop.style.display = window.scrollY > 600 ? "grid" : "none";
   });
 }
 
 function setupRevealAnimations(){
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
+      if(entry.isIntersecting){
         entry.target.classList.add("show");
 
-        if (entry.target.id === "lab") {
+        if(entry.target.id === "lab"){
           document.querySelectorAll(".progress-item").forEach(item => {
             const bar = item.querySelector("i");
-            if (bar) bar.style.width = item.dataset.progress + "%";
+            if(bar) bar.style.width = item.dataset.progress + "%";
           });
         }
 
-        if (entry.target.classList.contains("counters-section")) {
+        if(entry.target.classList.contains("counters-section")){
           document.querySelectorAll("[data-count]").forEach(counter => {
-            if (counter.dataset.done) return;
+            if(counter.dataset.done) return;
             counter.dataset.done = "true";
 
             const target = Number(counter.dataset.count);
@@ -456,7 +466,7 @@ function setupRevealAnimations(){
             const timer = setInterval(() => {
               current += step;
 
-              if (current >= target) {
+              if(current >= target){
                 current = target;
                 clearInterval(timer);
               }
@@ -474,7 +484,7 @@ function setupRevealAnimations(){
 
 function setupStars(){
   const canvas = document.getElementById("stars");
-  if (!canvas) return;
+  if(!canvas) return;
 
   const ctx = canvas.getContext("2d");
   let stars = [];
@@ -502,7 +512,7 @@ function setupStars(){
       ctx.fill();
 
       star.y += star.s;
-      if (star.y > canvas.height) star.y = 0;
+      if(star.y > canvas.height) star.y = 0;
     });
 
     requestAnimationFrame(drawStars);
@@ -516,21 +526,27 @@ function setupStars(){
 window.addEventListener("load", () => {
   setTimeout(() => {
     const loader = document.getElementById("loader");
-    if (loader) loader.style.display = "none";
+    if(loader) loader.style.display = "none";
   }, 900);
 });
 
-async function start(){
-  await seedDatabase();
+function start(){
   renderZodiac();
   renderTimeline();
   renderSuggestions();
+
+  renderVoteCards(defaultVotes);
+  renderLeaderboard(defaultVotes);
+  renderBattles(defaultBattleVotes);
+
   setupFirebaseListeners();
   setupClicks();
   setupForms();
   setupUI();
   setupRevealAnimations();
   setupStars();
+
+  seedDatabaseSafely();
 }
 
 start();
