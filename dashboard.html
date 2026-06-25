@@ -1,61 +1,49 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>LumiSips Founder Dashboard</title>
-
-<link rel="stylesheet" href="dashboard.css">
-
+<link rel="stylesheet" href="dashboard.css?v=3">
 </head>
 
 <body>
+<header>LumiSips Founder Dashboard</header>
 
-<header>
-LumiSips Founder Dashboard
-</header>
+<main class="container">
+  <section class="grid">
+    <div class="card">
+      <h2>Members</h2>
+      <div id="members" class="stat">0</div>
+    </div>
 
-<div class="container">
+    <div class="card">
+      <h2>Votes</h2>
+      <div id="votes">Loading...</div>
+    </div>
+  </section>
 
-<div class="grid">
+  <section class="card">
+    <h2>Flavor Suggestions</h2>
+    <div id="suggestions">Loading...</div>
+  </section>
 
-<div class="card">
-<h2>Members</h2>
-<div id="members" class="stat">0</div>
-</div>
+  <section class="card">
+    <h2>Waitlist</h2>
+    <div id="waitlist">Loading...</div>
+  </section>
 
-<div class="card">
-<h2>Votes</h2>
-<div id="votes"></div>
-</div>
+  <section class="card">
+    <h2>Messages</h2>
+    <div id="messages">Loading...</div>
+  </section>
 
-</div>
+  <section class="card">
+    <h2>Notifications</h2>
+    <div id="notifications">Loading...</div>
+  </section>
+</main>
 
-<div class="card">
-<h2>Flavor Suggestions</h2>
-<div id="suggestions"></div>
-</div>
-
-<div class="card">
-<h2>Waitlist</h2>
-<div id="waitlist"></div>
-</div>
-
-<div class="card">
-<h2>Messages</h2>
-<div id="messages"></div>
-</div>
-
-<div class="card">
-<h2>Notifications</h2>
-<div id="notifications"></div>
-</div>
-
-</div>
-
-<script type="module" src="dashboard.js"></script>
-
+<script type="module" src="dashboard.js?v=3"></script>
 </body>
 </html>
