@@ -52,3 +52,34 @@ display:grid;
 grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
 gap:20px;
 }
+.wait-card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  padding:15px;
+  border-radius:15px;
+  margin-bottom:12px;
+}
+
+.wait-card h3{
+  margin:0 0 8px;
+  color:#00d9ff;
+}
+
+.wait-card p{
+  margin:5px 0;
+}
+
+.wait-card small{
+  opacity:.7;
+}
+
+.vote-row{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.vote-row strong{
+  color:#00d9ff;
+}
