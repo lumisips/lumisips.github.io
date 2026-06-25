@@ -4,17 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>LumiSips Founder Dashboard</title>
-<link rel="stylesheet" href="dashboard.css?v=999">
+<link rel="stylesheet" href="dashboard.css?v=1000">
 </head>
 
 <body>
 <header>LumiSips Founder Dashboard</header>
 
 <main class="container">
+
   <section class="grid">
     <div class="card">
       <h2>Members</h2>
       <div id="members" class="stat">0</div>
+      <button class="export-btn" onclick="exportWaitlistCSV()">Export Waitlist CSV</button>
     </div>
 
     <div class="card">
@@ -42,8 +44,10 @@
     <h2>Notifications</h2>
     <div id="notifications">Loading...</div>
   </section>
+
 </main>
 
-<script type="module" src="dashboard.js?v=999"></script>
+<script type="module" src="dashboard.js?v=1000"></script>
+<script type="module" src="export.js?v=1"></script>
 </body>
 </html>
