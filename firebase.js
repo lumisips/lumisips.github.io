@@ -1,7 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getDatabase, ref, push, get, set, onValue, update, increment
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDW_HC9OVcpkLc4TFY6MR8brufTPniwXEg",
@@ -32,39 +30,26 @@ const defaultBattleVotes = {
   battle4:{ "Dragon Fruit":24, "Passion Fruit":21 }
 };
 
-function sparkleBurst(x,y){
-  const layer = document.getElementById("sparkleLayer");
-  if(!layer) return;
-  ["✨","💫","⭐","🫧","💥"].forEach((s,i)=>{
-    const el=document.createElement("div");
-    el.className="sparkle";
-    el.textContent=s;
-    el.style.left=`${x+(Math.random()*130-65)}px`;
-    el.style.top=`${y+(Math.random()*90-45)}px`;
-    layer.appendChild(el);
-    setTimeout(()=>el.remove(),900);
-  });
-}
+let latestBattleData = defaultBattleVotes;
 
 function renderBattles(data = defaultBattleVotes){
   const grid = document.getElementById("battleGrid");
   if(!grid) return;
 
-  const finalData = data && Object.keys(data).length ? data : defaultBattleVotes;
+  latestBattleData = data;
 
   grid.innerHTML = `
     <div style="text-align:center;margin-bottom:22px;">
-      <button id="resetArenaBtn" class="btn secondary" type="button">
-        Reset My Arena Picks
-      </button>
+      <button id="resetArenaBtn" class="btn secondary" type="button">Reset My Arena Picks</button>
     </div>
   `;
 
   battles.forEach(battle=>{
-    const current = finalData[battle.key] || defaultBattleVotes[battle.key];
+    const current = data[battle.key] || defaultBattleVotes[battle.key];
     const leftVotes = current[battle.left] || 0;
     const rightVotes = current[battle.right] || 0;
     const total = leftVotes + rightVotes || 1;
+
     const leftPercent = Math.round((leftVotes / total) * 100);
     const rightPercent = Math.round((rightVotes / total) * 100);
     const picked = localStorage.getItem(`lumisipsVotedBattle_${battle.key}`);
@@ -81,70 +66,66 @@ function renderBattles(data = defaultBattleVotes){
         </div>
 
         <div class="battle-matchup">
-          <div class="battle-option ${picked===battle.left ? "selected" : ""}" data-battle="${battle.key}" data-choice="${battle.left}">
+          <div class="battle-option" data-battle="${battle.key}" data-choice="${battle.left}">
             <div class="option-emoji">${battle.leftIcon}</div>
             <div class="option-name">${battle.left}</div>
             <div class="option-votes">${leftVotes} votes • ${leftPercent}%</div>
             <div class="health-bar"><span style="width:${leftPercent}%"></span></div>
-            <div class="pick-locked">${picked===battle.left ? "Your pick is locked." : "Tap to choose"}</div>
+            <div class="pick-locked">${picked === battle.left ? "Your pick is locked." : "Tap to choose"}</div>
           </div>
 
           <div class="vs-orb">VS</div>
 
-          <div class="battle-option ${picked===battle.right ? "selected" : ""}" data-battle="${battle.key}" data-choice="${battle.right}">
+          <div class="battle-option" data-battle="${battle.key}" data-choice="${battle.right}">
             <div class="option-emoji">${battle.rightIcon}</div>
             <div class="option-name">${battle.right}</div>
             <div class="option-votes">${rightVotes} votes • ${rightPercent}%</div>
             <div class="health-bar"><span style="width:${rightPercent}%"></span></div>
-            <div class="pick-locked">${picked===battle.right ? "Your pick is locked." : "Tap to choose"}</div>
+            <div class="pick-locked">${picked === battle.right ? "Your pick is locked." : "Tap to choose"}</div>
           </div>
         </div>
       </div>
     `;
   });
 
-  document.getElementById("resetArenaBtn")?.addEventListener("click",()=>{
+  document.getElementById("resetArenaBtn").onclick = () => {
     battles.forEach(b=>localStorage.removeItem(`lumisipsVotedBattle_${b.key}`));
-    renderBattles(finalData);
-  });
+    renderBattles(latestBattleData);
+  };
 
   document.querySelectorAll(".battle-option").forEach(option=>{
-    option.style.pointerEvents = "auto";
-    option.style.cursor = "pointer";
-
-    option.addEventListener("click",()=>{
+    option.onclick = async () => {
       const key = option.dataset.battle;
       const choice = option.dataset.choice;
 
       if(localStorage.getItem(`lumisipsVotedBattle_${key}`)) return;
 
+      const snap = await get(ref(db, `battleVotes/${key}/${choice}`));
+      const current = snap.val() || 0;
+      const newValue = current + 1;
+
+      await set(ref(db, `battleVotes/${key}/${choice}`), newValue);
+
       localStorage.setItem(`lumisipsVotedBattle_${key}`, choice);
 
-      update(ref(db, `battleVotes/${key}`), {
-        [choice]: increment(1)
-      });
-
-      option.classList.add("selected");
-      const rect = option.getBoundingClientRect();
-      sparkleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    });
+      latestBattleData[key][choice] = newValue;
+      renderBattles(latestBattleData);
+    };
   });
 }
 
-async function seedBattleVotes(){
+async function start(){
   const snap = await get(ref(db,"battleVotes"));
+
   if(!snap.exists()){
     await set(ref(db,"battleVotes"), defaultBattleVotes);
+    latestBattleData = defaultBattleVotes;
   }
-}
-
-async function startArena(){
-  renderBattles(defaultBattleVotes);
-  await seedBattleVotes();
 
   onValue(ref(db,"battleVotes"), snap=>{
-    renderBattles(snap.val() || defaultBattleVotes);
+    latestBattleData = snap.val() || defaultBattleVotes;
+    renderBattles(latestBattleData);
   });
 }
 
-startArena();
+start();
