@@ -15,56 +15,40 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-function safe(value) {
-  return value || "Not provided";
+const clean = value => value || "Not provided";
+
+function empty(id) {
+  document.getElementById(id).innerHTML = `<div class="item">No data yet</div>`;
 }
 
-function renderEmpty(id, text = "No data yet") {
-  const box = document.getElementById(id);
-  if (box) box.innerHTML = `<div class="item">${text}</div>`;
-}
+onValue(ref(db, "lumiList"), snap => {
+  const data = snap.val() || {};
+  const users = Object.values(data);
 
-onValue(ref(db, "lumiList"), snapshot => {
-  const data = snapshot.val() || {};
-  const users = Object.values(data).reverse();
+  document.getElementById("members").textContent = users.length;
 
-  const members = document.getElementById("members");
-  if (members) members.textContent = users.length;
+  if (!users.length) return empty("waitlist");
 
-  const waitlist = document.getElementById("waitlist");
-  if (!waitlist) return;
-
-  if (!users.length) {
-    renderEmpty("waitlist");
-    return;
-  }
-
-  waitlist.innerHTML = users.map(user => `
+  document.getElementById("waitlist").innerHTML = users.reverse().map(user => `
     <div class="wait-card">
-      <h3>${safe(user.name)}</h3>
-      <p><strong>Email:</strong> ${safe(user.email)}</p>
-      <p><strong>Zodiac:</strong> ${safe(user.zodiac || user.favorite_zodiac)}</p>
-      <small>${safe(user.date || user.createdAt)}</small>
+      <h3>${clean(user.name)}</h3>
+      <p><strong>Email:</strong> ${clean(user.email)}</p>
+      <p><strong>Zodiac:</strong> ${clean(user.zodiac || user.favorite_zodiac)}</p>
+      <small>${clean(user.date || user.createdAt)}</small>
     </div>
   `).join("");
 });
 
-onValue(ref(db, "votes"), snapshot => {
-  const data = snapshot.val() || {};
-  const votesBox = document.getElementById("votes");
-  if (!votesBox) return;
+onValue(ref(db, "votes"), snap => {
+  const data = snap.val() || {};
+  const votes = Object.entries(data).map(([sign, value]) => ({
+    sign,
+    count: typeof value === "number" ? value : value?.count || 0
+  })).sort((a,b) => b.count - a.count);
 
-  const votes = Object.entries(data).map(([sign, value]) => {
-    const count = typeof value === "number" ? value : value?.count || 0;
-    return { sign, count };
-  }).sort((a, b) => b.count - a.count);
+  if (!votes.length) return empty("votes");
 
-  if (!votes.length) {
-    renderEmpty("votes");
-    return;
-  }
-
-  votesBox.innerHTML = votes.map(v => `
+  document.getElementById("votes").innerHTML = votes.map(v => `
     <div class="vote-row">
       <span>${v.sign}</span>
       <strong>${v.count}</strong>
@@ -72,63 +56,48 @@ onValue(ref(db, "votes"), snapshot => {
   `).join("");
 });
 
-onValue(ref(db, "flavorSuggestions"), snapshot => {
-  const data = snapshot.val() || {};
+onValue(ref(db, "flavorSuggestions"), snap => {
+  const data = snap.val() || {};
   const suggestions = Object.values(data).reverse();
-  const box = document.getElementById("suggestions");
-  if (!box) return;
 
-  if (!suggestions.length) {
-    renderEmpty("suggestions");
-    return;
-  }
+  if (!suggestions.length) return empty("suggestions");
 
-  box.innerHTML = suggestions.map(item => `
+  document.getElementById("suggestions").innerHTML = suggestions.map(item => `
     <div class="wait-card">
-      <h3>${safe(item.flavor)}</h3>
-      <p><strong>Zodiac:</strong> ${safe(item.zodiac)}</p>
-      <p><strong>Ingredient:</strong> ${safe(item.ingredient)}</p>
-      <p>${safe(item.message)}</p>
-      <small>${safe(item.name)} • ${safe(item.email)}</small>
+      <h3>${clean(item.flavor)}</h3>
+      <p><strong>Zodiac:</strong> ${clean(item.zodiac)}</p>
+      <p><strong>Ingredient:</strong> ${clean(item.ingredient)}</p>
+      <p>${clean(item.message)}</p>
+      <small>${clean(item.name)} • ${clean(item.email)}</small>
     </div>
   `).join("");
 });
 
-onValue(ref(db, "messages"), snapshot => {
-  const data = snapshot.val() || {};
+onValue(ref(db, "messages"), snap => {
+  const data = snap.val() || {};
   const messages = Object.values(data).reverse();
-  const box = document.getElementById("messages");
-  if (!box) return;
 
-  if (!messages.length) {
-    renderEmpty("messages");
-    return;
-  }
+  if (!messages.length) return empty("messages");
 
-  box.innerHTML = messages.map(msg => `
+  document.getElementById("messages").innerHTML = messages.map(msg => `
     <div class="wait-card">
-      <h3>${safe(msg.subject)}</h3>
-      <p>${safe(msg.message)}</p>
-      <small>${safe(msg.name)} • ${safe(msg.email)}</small>
+      <h3>${clean(msg.subject)}</h3>
+      <p>${clean(msg.message)}</p>
+      <small>${clean(msg.name)} • ${clean(msg.email)}</small>
     </div>
   `).join("");
 });
 
-onValue(ref(db, "notifications"), snapshot => {
-  const data = snapshot.val() || {};
+onValue(ref(db, "notifications"), snap => {
+  const data = snap.val() || {};
   const notes = Object.values(data).reverse();
-  const box = document.getElementById("notifications");
-  if (!box) return;
 
-  if (!notes.length) {
-    renderEmpty("notifications");
-    return;
-  }
+  if (!notes.length) return empty("notifications");
 
-  box.innerHTML = notes.map(note => `
+  document.getElementById("notifications").innerHTML = notes.map(note => `
     <div class="item">
-      <strong>${safe(note.type)}</strong><br>
-      ${safe(note.message)}
+      <strong>${clean(note.type)}</strong><br>
+      ${clean(note.message)}
     </div>
   `).join("");
 });
