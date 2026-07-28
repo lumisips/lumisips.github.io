@@ -1,494 +1,159 @@
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    const loader = document.getElementById("loader");
-    if (loader) loader.style.display = "none";
-  }, 900);
-});
-
-const themes = [
-  ["#00eaff","#246bff","#ff4fd8"],
-  ["#0077ff","#00eaff","#7c3cff"],
-  ["#9b4dff","#00eaff","#ff4fd8"],
-  ["#ff4fd8","#9b4dff","#00eaff"],
-  ["#21b8ff","#006eff","#b45cff"],
-  ["#ff4fd8","#ff7bdc","#00eaff"],
-  ["#b45cff","#ff4fd8","#5be7ff"]
+const zodiacData = [
+  { sign: "Aries", symbol: "♈", flavor: "Coming Soon", gem: "Fire Opal", stage: "Community shaping", color: "#ff5f54" },
+  { sign: "Taurus", symbol: "♉", flavor: "Yuzu Orange Citrus", gem: "Golden Citrine", stage: "Early development", color: "#ffb63d" },
+  { sign: "Gemini", symbol: "♊", flavor: "Coming Soon", gem: "Alexandrite", stage: "Community shaping", color: "#8f7cff" },
+  { sign: "Cancer", symbol: "♋", flavor: "Blue Raspberry • Dragon Fruit • Hibiscus", gem: "Blue Sapphire", stage: "Flagship refinement", color: "#1b8fff" },
+  { sign: "Leo", symbol: "♌", flavor: "Coming Soon", gem: "Imperial Topaz", stage: "Community shaping", color: "#ff8a2a" },
+  { sign: "Virgo", symbol: "♍", flavor: "Pineapple • Watermelon • Coconut", gem: "Emerald", stage: "R&D active", color: "#24d17e" },
+  { sign: "Libra", symbol: "♎", flavor: "Coming Soon", gem: "Rose Quartz", stage: "Community shaping", color: "#ff83cb" },
+  { sign: "Scorpio", symbol: "♏", flavor: "Dragon Fruit concept in development", gem: "Amethyst", stage: "R&D active", color: "#8a55e8" },
+  { sign: "Sagittarius", symbol: "♐", flavor: "Kiwi • Mango • Passion Fruit", gem: "Pink Topaz", stage: "Color refinement", color: "#ff4fa8" },
+  { sign: "Capricorn", symbol: "♑", flavor: "Strawberry • Sour Watermelon", gem: "Ruby", stage: "R&D active", color: "#e21843" },
+  { sign: "Aquarius", symbol: "♒", flavor: "Coming Soon", gem: "Aquamarine", stage: "Community shaping", color: "#31d9e9" },
+  { sign: "Pisces", symbol: "♓", flavor: "Mango • Coconut • Matcha", gem: "Jade", stage: "Still hydration R&D", color: "#5fd49b" }
 ];
 
-function applyRandomTheme(){
-  const theme = themes[Math.floor(Math.random() * themes.length)];
-  document.documentElement.style.setProperty("--accent", theme[0]);
-  document.documentElement.style.setProperty("--accent2", theme[1]);
-  document.documentElement.style.setProperty("--accent3", theme[2]);
-}
-applyRandomTheme();
-
-const zodiacSigns = [
-  ["Aries","♈","Coming Soon","soon"],
-  ["Taurus","♉","Lemon • Orange • Citrus","active"],
-  ["Gemini","♊","Coming Soon","soon"],
-  ["Cancer","♋","Blue Raspberry • Dragon Fruit • Hibiscus","flagship"],
-  ["Leo","♌","Coming Soon","soon"],
-  ["Virgo","♍","Coming Soon","soon"],
-  ["Libra","♎","Coming Soon","soon"],
-  ["Scorpio","♏","Coming Soon","soon"],
-  ["Sagittarius","♐","Coming Soon","soon"],
-  ["Capricorn","♑","Coming Soon","soon"],
-  ["Aquarius","♒","Coming Soon","soon"],
-  ["Pisces","♓","Coming Soon","soon"]
+const battleData = [
+  { id: "scorpio-profile", title: "Scorpio flavor direction", subtitle: "Which profile feels most magnetic?", a: ["Black Cherry • Dragon Fruit • Lychee", "Deep, floral, exotic and seductive"], b: ["Black Cherry • Dragon Fruit • Pineapple", "Dark fruit lifted by bright tropical acidity"] },
+  { id: "packaging", title: "Launch packaging", subtitle: "Which format delivers the strongest premium experience?", a: ["16 oz Glass Bottle", "Luxury hand-feel and gemstone clarity"], b: ["16 oz Sleek Can", "Modern, portable and production-friendly"] },
+  { id: "hydration-line", title: "Hydration launch priority", subtitle: "What should reach the community first?", a: ["Still Hydration", "Smooth, clean and non-carbonated"], b: ["Sparkling Hydration", "Crisp, energetic and celebration-ready"] },
+  { id: "energy-line", title: "Energy format", subtitle: "Choose the next high-function experience.", a: ["Still Energy", "Fast, smooth and gym-friendly"], b: ["Sparkling Energy", "Bold carbonation with functional energy"] },
+  { id: "sweetness", title: "Sweetness personality", subtitle: "How should a premium LumiSips flavor finish?", a: ["Bright & Crisp", "Lighter sweetness with a clean finish"], b: ["Juicy & Luxurious", "Fuller flavor with a rich fruit impression"] },
+  { id: "wellness", title: "Wellness emphasis", subtitle: "Which benefit deserves more focus?", a: ["Hydration + Electrolytes", "Daily refreshment and performance support"], b: ["Focus + Calm Energy", "Functional clarity without a harsh edge"] },
+  { id: "limited-release", title: "First limited release", subtitle: "Which seasonal idea feels launch-worthy?", a: ["Summer Gem Collection", "Bright tropical profiles and vivid colors"], b: ["Midnight Zodiac Collection", "Dark fruits, deeper gemstones and mystery"] },
+  { id: "community-role", title: "Community access", subtitle: "What would make membership most valuable?", a: ["Early Taste Testing", "Help judge real development samples"], b: ["Members-Only Voting", "Shape flavors, colors and packaging first"] }
 ];
 
-const defaultVotes = {
-  Aries: 12, Taurus: 8, Gemini: 15, Leo: 21, Virgo: 7, Libra: 10,
-  Scorpio: 18, Sagittarius: 9, Capricorn: 24, Aquarius: 11, Pisces: 14
-};
-
-const starterSuggestions = [
-  { zodiac: "Taurus ♉", flavor: "Lemon Orange Citrus", note: "Bright, refreshing citrus hydration with a clean finish." },
-  { zodiac: "Capricorn ♑", flavor: "Sour Watermelon Strawberry", note: "A bold sour candy-inspired hydration flavor." },
-  { zodiac: "Leo ♌", flavor: "Pineapple Passion Fruit", note: "Tropical, bright, loud, and summer-focused." },
-  { zodiac: "Gemini ♊", flavor: "Lemon Lime Blueberry", note: "Dual citrus energy with a smooth berry finish." },
-  { zodiac: "Pisces ♓", flavor: "Mango Coconut", note: "Dreamy tropical hydration concept." }
+const gemstoneData = [
+  { id: "scorpio-purple", title: "Scorpio Amethyst", prompt: "Which purple has the strongest Scorpio energy?", a: ["Light Alexandrite", "Luminous, shifting and mysterious", "linear-gradient(145deg,#e8c9ff,#a85eea 45%,#5540b8)"], b: ["Deep Amethyst", "Dark, seductive and jewel-toned", "linear-gradient(145deg,#b66dff,#5d1e91 48%,#1c082f)"] },
+  { id: "sagittarius-pink", title: "Sagittarius Topaz", prompt: "Which pink feels more premium in a clear beverage?", a: ["Pink Topaz", "Bright, clear and playful", "linear-gradient(145deg,#ffd0e9,#ff6fb7 48%,#d72477)"], b: ["Imperial Rose Topaz", "Deeper, warmer and luxurious", "linear-gradient(145deg,#ffc0a6,#ee557d 50%,#8f1e56)"] },
+  { id: "virgo-green", title: "Virgo Emerald", prompt: "Which green best represents precision and wellness?", a: ["Bright Emerald", "Clean, vivid and refreshing", "linear-gradient(145deg,#a9ffd2,#1bd87e 50%,#08794a)"], b: ["Deep Forest Emerald", "Rich, mature and botanical", "linear-gradient(145deg,#66db9b,#0b7749 50%,#033425)"] },
+  { id: "cancer-blue", title: "Cancer Sapphire", prompt: "Which blue should lead the flagship visual identity?", a: ["Aquamarine Sapphire", "Bright, electric and highly refreshing", "linear-gradient(145deg,#c1ffff,#18c8ff 50%,#2469d8)"], b: ["Royal Blue Sapphire", "Deep, premium and emotionally powerful", "linear-gradient(145deg,#8cc8ff,#2466e8 48%,#111a78)"] },
+  { id: "capricorn-red", title: "Capricorn Ruby", prompt: "Which red feels strongest for strawberry sour watermelon?", a: ["Clear Ruby", "Bright red with gemstone clarity", "linear-gradient(145deg,#ffb3bd,#f13054 50%,#ad092b)"], b: ["Black Cherry Ruby", "Deep, serious and wine-dark", "linear-gradient(145deg,#e76584,#8e0e35 50%,#310418)"] },
+  { id: "pisces-jade", title: "Pisces Jade", prompt: "Which jade complements mango, coconut and matcha?", a: ["Sea Glass Jade", "Soft, dreamy and tropical", "linear-gradient(145deg,#dcffe9,#76dba5 52%,#3b9873)"], b: ["Polished Jade", "Deeper, botanical and wellness-forward", "linear-gradient(145deg,#a9e9bb,#3e9c61 52%,#165233)"] }
 ];
 
-const battles = [
-  { key:"battle0", left:"Glass Bottles", right:"Aluminum Cans", leftIcon:"🧊", rightIcon:"🥤" },
-  { key:"battle1", left:"Still Hydration", right:"Sparkling Hydration", leftIcon:"💧", rightIcon:"✨" },
-  { key:"battle2", left:"Energy", right:"Sparkling Energy", leftIcon:"⚡", rightIcon:"🔋" },
-  { key:"battle3", left:"Blue Raspberry", right:"Watermelon", leftIcon:"🫐", rightIcon:"🍉" },
-  { key:"battle4", left:"Dragon Fruit", right:"Passion Fruit", leftIcon:"🐉", rightIcon:"🌺" }
-];
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-const defaultBattleVotes = {
-  battle0: { "Glass Bottles": 18, "Aluminum Cans": 12 },
-  battle1: { "Still Hydration": 10, "Sparkling Hydration": 22 },
-  battle2: { "Energy": 16, "Sparkling Energy": 26 },
-  battle3: { "Blue Raspberry": 30, "Watermelon": 19 },
-  battle4: { "Dragon Fruit": 24, "Passion Fruit": 21 }
-};
-
-const timelineItems = [
-  "Idea Created","LLC Approved","EIN Received","Business Bank Account Opened",
-  "Seller’s Permit Obtained","D-U-N-S Number Approved","Cancer Formula Advanced",
-  "Bulk Batch Development Started","Taurus Citrus Development Added","Website Community Launched",
-  "Pre-Launch Development Phase","Official Launch"
-];
-
-function getJSON(key, fallback){
-  try {
-    const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : fallback;
-  } catch {
-    return fallback;
-  }
+function renderZodiac() {
+  const grid = $("#zodiacGrid");
+  if (!grid) return;
+  grid.innerHTML = zodiacData.map(item => `
+    <article class="zodiac-card reveal" style="--zodiac-color:${item.color}">
+      <div class="zodiac-top"><span class="zodiac-symbol">${item.symbol}</span><span class="zodiac-stage">${item.stage}</span></div>
+      <h3>${item.sign}</h3><p>${item.flavor}</p><small>${item.gem}</small>
+    </article>`).join("");
 }
 
-function setJSON(key, value){
-  localStorage.setItem(key, JSON.stringify(value));
+function voteButton(group, battleId, side, title, description, extraClass = "vote-option", swatch = "") {
+  const swatchHtml = swatch ? `<div class="gem-swatch" style="--gem-gradient:${swatch}"></div>` : "";
+  return `<button class="${extraClass}" type="button" data-vote-group="${group}" data-battle-id="${battleId}" data-choice="${title}">${swatchHtml}<strong>${title}</strong><span>${description}</span></button>`;
 }
 
-function initializeStorage(){
-  if(!localStorage.getItem("lumisipsVotes")) setJSON("lumisipsVotes", defaultVotes);
-  if(!localStorage.getItem("lumisipsBattles")) setJSON("lumisipsBattles", defaultBattleVotes);
-  if(!localStorage.getItem("lumisipsSuggestions")) setJSON("lumisipsSuggestions", starterSuggestions);
-  if(!localStorage.getItem("lumisipsMembers")) localStorage.setItem("lumisipsMembers", "1");
+function renderBattles() {
+  const grid = $("#battleGrid");
+  if (!grid) return;
+  grid.innerHTML = battleData.map(item => `
+    <article class="battle-card reveal"><h3>${item.title}</h3><p>${item.subtitle}</p><div class="battle-options">
+      ${voteButton("flavor", item.id, "a", item.a[0], item.a[1])}<div class="vs">VS</div>${voteButton("flavor", item.id, "b", item.b[0], item.b[1])}
+    </div></article>`).join("");
 }
 
-function renderZodiac(){
-  const grid = document.getElementById("zodiacGrid");
-  if(!grid) return;
-
-  grid.innerHTML = zodiacSigns.map(([name,symbol,flavor,status]) => `
-    <div class="card ${status === "flagship" ? "flagship" : ""} ${status === "active" ? "active-development" : ""}">
-      <h3>${symbol} ${name}</h3>
-      <p>${flavor}</p>
-      <span class="badge">${
-        status === "flagship" ? "Flagship Locked" :
-        status === "active" ? "Early Development" :
-        "Coming Soon"
-      }</span>
-    </div>
-  `).join("");
+function renderGemstones() {
+  const grid = $("#gemstoneGrid");
+  if (!grid) return;
+  grid.innerHTML = gemstoneData.map(item => `
+    <article class="gem-battle reveal"><h3>${item.title}</h3><p>${item.prompt}</p><div class="gem-options">
+      ${voteButton("gemstone", item.id, "a", item.a[0], item.a[1], "gem-option", item.a[2])}
+      ${voteButton("gemstone", item.id, "b", item.b[0], item.b[1], "gem-option", item.b[2])}
+    </div></article>`).join("");
 }
 
-function renderVotes(){
-  const votes = getJSON("lumisipsVotes", defaultVotes);
-  const hasVoted = localStorage.getItem("lumisipsHasVotedZodiac") === "true";
-  const grid = document.getElementById("voteGrid");
-  const message = document.getElementById("voteMessage");
-  if(!grid) return;
-
-  grid.innerHTML = zodiacSigns.filter(z => z[0] !== "Cancer").map(([name,symbol]) => `
-    <div class="card">
-      <h3>${symbol} ${name}</h3>
-      <p>Votes: <b>${votes[name] || 0}</b></p>
-      <button class="btn primary zodiac-vote-btn" data-sign="${name}" ${hasVoted ? "disabled" : ""}>
-        ${hasVoted ? "Vote Locked" : `Vote ${symbol}`}
-      </button>
-    </div>
-  `).join("");
-
-  if(hasVoted && message){
-    message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
-  }
-
-  setJSON("lumisipsVotes", votes);
+function restoreVotes() {
+  $$('[data-vote-group]').forEach(button => {
+    const key = `lumisipsVote:${button.dataset.voteGroup}:${button.dataset.battleId}`;
+    if (localStorage.getItem(key) === button.dataset.choice) button.classList.add("selected");
+  });
 }
 
-function vote(name){
-  const message = document.getElementById("voteMessage");
-
-  if(localStorage.getItem("lumisipsHasVotedZodiac") === "true"){
-    if(message) message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
-    return;
-  }
-
-  const votes = getJSON("lumisipsVotes", defaultVotes);
-  votes[name] = (votes[name] || 0) + 1;
-
-  setJSON("lumisipsVotes", votes);
-  localStorage.setItem("lumisipsHasVotedZodiac","true");
-
-  if(message) message.textContent = "Your zodiac vote is locked. Thank you for shaping LumiSips.";
-
-  sparkleBurst(window.innerWidth / 2, window.innerHeight / 2);
-  renderVotes();
-  renderLeaderboard();
+async function handleVote(button) {
+  const group = button.dataset.voteGroup;
+  const battleId = button.dataset.battleId;
+  const choice = button.dataset.choice;
+  const key = `lumisipsVote:${group}:${battleId}`;
+  const siblings = $$(`[data-vote-group="${group}"][data-battle-id="${battleId}"]`);
+  siblings.forEach(item => item.classList.remove("selected"));
+  button.classList.add("selected");
+  localStorage.setItem(key, choice);
+  const feedback = group === "gemstone" ? $("#gemstoneFeedback") : $("#battleFeedback");
+  if (feedback) feedback.textContent = `Vote saved: ${choice}`;
+  document.dispatchEvent(new CustomEvent("lumisips:vote", { detail: { group, battleId, choice } }));
 }
 
-function renderLeaderboard(){
-  const box = document.getElementById("leaderboardList");
-  if(!box) return;
-
-  const votes = getJSON("lumisipsVotes", defaultVotes);
-
-  const ranked = zodiacSigns.map(([name,symbol]) => ({
-    name,
-    symbol,
-    votes: name === "Cancer" ? "Flagship Locked" : votes[name] || 0,
-    locked: name === "Cancer"
-  })).sort((a,b) => {
-    if(a.locked) return -1;
-    if(b.locked) return 1;
-    return b.votes - a.votes;
+function setupInteractions() {
+  document.addEventListener("click", event => {
+    const vote = event.target.closest("[data-vote-group]");
+    if (vote) handleVote(vote);
   });
 
-  box.innerHTML = ranked.map((x,i) => `
-    <div class="leaderboard-row ${x.locked ? "flagship" : ""}">
-      <span>${i+1}. ${x.symbol} ${x.name}</span>
-      <b>${x.votes}</b>
-    </div>
-  `).join("");
-}
-
-function renderSuggestions(){
-  const grid = document.getElementById("suggestionGrid");
-  if(!grid) return;
-
-  const suggestions = getJSON("lumisipsSuggestions", starterSuggestions);
-
-  grid.innerHTML = suggestions.map(item => `
-    <div class="card">
-      <span>${item.zodiac || "Community Idea"}</span>
-      <h3>${item.flavor || "Flavor Idea"}</h3>
-      <p>${item.note || item.message || "Submitted by the LumiSips community."}</p>
-    </div>
-  `).join("");
-}
-
-function renderBattles(){
-  const grid = document.getElementById("battleGrid");
-  if(!grid) return;
-
-  const data = getJSON("lumisipsBattles", defaultBattleVotes);
-  grid.innerHTML = "";
-
-  battles.forEach(battle => {
-    if(!data[battle.key]) data[battle.key] = { [battle.left]:0, [battle.right]:0 };
-
-    const leftVotes = data[battle.key][battle.left] || 0;
-    const rightVotes = data[battle.key][battle.right] || 0;
-    const total = leftVotes + rightVotes || 1;
-    const leftPercent = Math.round((leftVotes / total) * 100);
-    const rightPercent = Math.round((rightVotes / total) * 100);
-    const votedChoice = localStorage.getItem(`lumisipsVotedBattle_${battle.key}`);
-    const locked = Boolean(votedChoice);
-
-    let winner = "Tie";
-    if(leftVotes > rightVotes) winner = battle.left;
-    if(rightVotes > leftVotes) winner = battle.right;
-
-    grid.innerHTML += `
-      <div class="battle-card">
-        <div class="battle-header">
-          <h3>${battle.left} vs ${battle.right}</h3>
-          <span class="winner-badge">👑 ${winner}</span>
-        </div>
-
-        <div class="battle-matchup">
-          <button class="battle-option ${locked ? "locked" : ""}" data-battle="${battle.key}" data-choice="${battle.left}" ${locked ? "disabled" : ""}>
-            <div class="option-emoji">${battle.leftIcon}</div>
-            <div class="option-name">${battle.left}</div>
-            <div class="option-votes">${leftVotes} votes • ${leftPercent}%</div>
-            <div class="health-bar"><span style="width:${leftPercent}%"></span></div>
-            <div class="pick-locked">${votedChoice === battle.left ? "Your pick is locked." : ""}</div>
-          </button>
-
-          <div class="vs-orb">VS</div>
-
-          <button class="battle-option ${locked ? "locked" : ""}" data-battle="${battle.key}" data-choice="${battle.right}" ${locked ? "disabled" : ""}>
-            <div class="option-emoji">${battle.rightIcon}</div>
-            <div class="option-name">${battle.right}</div>
-            <div class="option-votes">${rightVotes} votes • ${rightPercent}%</div>
-            <div class="health-bar"><span style="width:${rightPercent}%"></span></div>
-            <div class="pick-locked">${votedChoice === battle.right ? "Your pick is locked." : ""}</div>
-          </button>
-        </div>
-      </div>
-    `;
+  const toggle = $("#menuToggle");
+  const links = $("#navLinks");
+  toggle?.addEventListener("click", () => {
+    const open = links.classList.toggle("open");
+    document.body.classList.toggle("menu-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
   });
+  $$("#navLinks a").forEach(link => link.addEventListener("click", () => {
+    links?.classList.remove("open"); document.body.classList.remove("menu-open"); toggle?.setAttribute("aria-expanded", "false");
+  }));
 
-  setJSON("lumisipsBattles", data);
+  const backTop = $("#backTop");
+  backTop?.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+  addEventListener("scroll", () => {
+    const scrollable = document.documentElement.scrollHeight - innerHeight;
+    $("#scrollProgress").style.width = `${scrollable > 0 ? (scrollY / scrollable) * 100 : 0}%`;
+    backTop?.classList.toggle("visible", scrollY > 700);
+  }, { passive: true });
 }
 
-function battleVote(key, choice, event){
-  if(localStorage.getItem(`lumisipsVotedBattle_${key}`)) return;
+function setupObservers() {
+  const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add("visible"); revealObserver.unobserve(entry.target); }
+  }), { threshold: .12 });
+  $$(".reveal").forEach(item => revealObserver.observe(item));
 
-  const data = getJSON("lumisipsBattles", defaultBattleVotes);
-
-  if(!data[key]) data[key] = {};
-  data[key][choice] = (data[key][choice] || 0) + 1;
-
-  setJSON("lumisipsBattles", data);
-  localStorage.setItem(`lumisipsVotedBattle_${key}`, choice);
-
-  if(event?.currentTarget){
-    event.currentTarget.classList.add("selected");
-    const rect = event.currentTarget.getBoundingClientRect();
-    sparkleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
-  }
-
-  setTimeout(renderBattles, 250);
-}
-
-function renderTimeline(){
-  const box = document.getElementById("timeline");
-  if(!box) return;
-
-  box.innerHTML = timelineItems.map(item => `
-    <div class="timeline-item"><h3>${item}</h3></div>
-  `).join("");
-}
-
-function sparkleBurst(x,y){
-  const layer = document.getElementById("sparkleLayer");
-  if(!layer) return;
-
-  const sparkles = ["✨","💫","⭐","🫧","💥"];
-
-  for(let i=0;i<16;i++){
-    const sparkle = document.createElement("div");
-    sparkle.className = "sparkle";
-    sparkle.textContent = sparkles[Math.floor(Math.random()*sparkles.length)];
-    sparkle.style.left = `${x + (Math.random()*130 - 65)}px`;
-    sparkle.style.top = `${y + (Math.random()*90 - 45)}px`;
-    layer.appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 900);
-  }
-}
-
-function setupClicks(){
-  document.addEventListener("click", e => {
-    const zodiacBtn = e.target.closest(".zodiac-vote-btn");
-    if(zodiacBtn){
-      vote(zodiacBtn.dataset.sign);
-      return;
+  const progressObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const value = entry.target.dataset.progress;
+      $(".bar i", entry.target).style.width = `${value}%`;
+      progressObserver.unobserve(entry.target);
     }
+  }), { threshold: .4 });
+  $$(".progress-row").forEach(item => progressObserver.observe(item));
 
-    const battleBtn = e.target.closest(".battle-option");
-    if(battleBtn && !battleBtn.disabled){
-      battleVote(battleBtn.dataset.battle, battleBtn.dataset.choice, e);
-    }
-  });
+  const numberObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target, end = Number(el.dataset.count), suffix = el.dataset.suffix || "";
+    const start = performance.now();
+    const animate = now => { const p = Math.min((now - start) / 1100, 1); el.textContent = `${Math.floor(end * (1 - Math.pow(1-p,3)))}${suffix}`; if (p < 1) requestAnimationFrame(animate); };
+    requestAnimationFrame(animate); numberObserver.unobserve(el);
+  }), { threshold: .5 });
+  $$('[data-count]').forEach(item => numberObserver.observe(item));
 }
 
-function setupForms(){
-  document.querySelectorAll(".ajax-form").forEach(form => {
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
-
-      const status = form.querySelector(".form-status");
-      if(status) status.textContent = "Sending...";
-
-      const formData = new FormData(form);
-
-      try{
-        const res = await fetch(form.action,{
-          method:"POST",
-          body:formData,
-          headers:{Accept:"application/json"}
-        });
-
-        if(res.ok){
-          if(status) status.textContent = form.dataset.success || "Submitted.";
-
-          if(form.classList.contains("waitlist-form")){
-            localStorage.setItem("lumisipsMembers", "1");
-            const memberCount = document.getElementById("memberCount");
-            if(memberCount) memberCount.textContent = "1";
-          }
-
-          if(form.classList.contains("suggestion-form")){
-            const suggestions = getJSON("lumisipsSuggestions", starterSuggestions);
-            suggestions.unshift({
-              zodiac: formData.get("zodiac") || "Community Idea",
-              flavor: formData.get("flavor") || "New Flavor Idea",
-              note: formData.get("message") || formData.get("ingredient") || "Submitted by the LumiSips community."
-            });
-            setJSON("lumisipsSuggestions", suggestions);
-            renderSuggestions();
-          }
-
-          sparkleBurst(window.innerWidth / 2, window.innerHeight / 2);
-          form.reset();
-        } else {
-          if(status) status.textContent = "Something went wrong. Please try again.";
-        }
-      }catch{
-        if(status) status.textContent = "Connection error. Please try again.";
-      }
-    });
-  });
-}
-
-function setupUI(){
-  const navLinks = document.getElementById("navLinks");
-  const menuToggle = document.getElementById("menuToggle");
-
-  if(menuToggle && navLinks){
-    menuToggle.onclick = () => navLinks.classList.toggle("show");
-  }
-
-  document.querySelectorAll(".nav-links a").forEach(a => {
-    a.onclick = () => navLinks?.classList.remove("show");
-  });
-
-  const backTop = document.getElementById("backTop");
-  if(backTop){
-    backTop.onclick = () => scrollTo({top:0,behavior:"smooth"});
-  }
-
-  window.addEventListener("scroll", () => {
-    const progress = document.getElementById("scrollProgress");
-    if(progress){
-      const scrolled = (window.scrollY / (document.body.scrollHeight - innerHeight)) * 100;
-      progress.style.width = scrolled + "%";
-    }
-
-    if(backTop) backTop.style.display = window.scrollY > 600 ? "grid" : "none";
-  });
-
-  document.addEventListener("mousemove", e => {
-    const glow = document.getElementById("mouseGlow");
-    if(glow){
-      glow.style.left = e.clientX + "px";
-      glow.style.top = e.clientY + "px";
-    }
-  });
-}
-
-function setupRevealAnimations(){
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        entry.target.classList.add("show");
-
-        if(entry.target.id === "lab"){
-          document.querySelectorAll(".progress-item").forEach(item => {
-            const bar = item.querySelector("i");
-            if(bar) bar.style.width = item.dataset.progress + "%";
-          });
-        }
-
-        if(entry.target.classList.contains("counters-section")){
-          document.querySelectorAll("[data-count]").forEach(counter => {
-            if(counter.dataset.done) return;
-            counter.dataset.done = "true";
-
-            const target = Number(counter.dataset.count);
-            const suffix = counter.dataset.suffix || "";
-            let current = 0;
-            const step = Math.max(1, Math.ceil(target / 45));
-
-            const timer = setInterval(() => {
-              current += step;
-              if(current >= target){
-                current = target;
-                clearInterval(timer);
-              }
-              counter.textContent = current + suffix;
-            }, 28);
-          });
-        }
-      }
-    });
-  },{threshold:.18});
-
-  document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
-}
-
-function setupStars(){
-  const canvas = document.getElementById("stars");
-  if(!canvas) return;
-
-  const ctx = canvas.getContext("2d");
+function setupStars() {
+  const canvas = $("#starfield"), ctx = canvas?.getContext("2d");
+  if (!canvas || !ctx) return;
   let stars = [];
-
-  function resize(){
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-    stars = Array.from({length:130}, () => ({
-      x:Math.random()*canvas.width,
-      y:Math.random()*canvas.height,
-      r:Math.random()*1.6,
-      s:Math.random()*.6+.2
-    }));
-  }
-
-  function drawStars(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = "white";
-
-    stars.forEach(star => {
-      ctx.globalAlpha = Math.random();
-      ctx.beginPath();
-      ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
-      ctx.fill();
-
-      star.y += star.s;
-      if(star.y > canvas.height) star.y = 0;
-    });
-
-    requestAnimationFrame(drawStars);
-  }
-
-  resize();
-  addEventListener("resize",resize);
-  drawStars();
+  const resize = () => {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr; canvas.style.width = `${innerWidth}px`; canvas.style.height = `${innerHeight}px`; ctx.setTransform(dpr,0,0,dpr,0,0);
+    stars = Array.from({ length: Math.min(150, Math.floor(innerWidth / 8)) }, () => ({ x: Math.random()*innerWidth, y: Math.random()*innerHeight, r: Math.random()*1.2+.2, a: Math.random()*.65+.15, s: Math.random()*.12+.02 }));
+  };
+  const draw = () => { ctx.clearRect(0,0,innerWidth,innerHeight); for (const star of stars) { star.y += star.s; if (star.y > innerHeight) star.y = 0; ctx.globalAlpha = star.a; ctx.fillStyle = "#bfeaff"; ctx.beginPath(); ctx.arc(star.x,star.y,star.r,0,Math.PI*2); ctx.fill(); } requestAnimationFrame(draw); };
+  resize(); addEventListener("resize", resize); draw();
 }
 
-initializeStorage();
-renderZodiac();
-renderVotes();
-renderLeaderboard();
-renderBattles();
-renderSuggestions();
-renderTimeline();
-setupClicks();
-setupForms();
-setupUI();
-setupRevealAnimations();
-setupStars();
+renderZodiac(); renderBattles(); renderGemstones(); restoreVotes(); setupInteractions(); setupObservers(); setupStars();
 
-const memberCount = document.getElementById("memberCount");
-if(memberCount) memberCount.textContent = localStorage.getItem("lumisipsMembers") || "1";
