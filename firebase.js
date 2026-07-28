@@ -7,56 +7,67 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-// ================================
-// PASTE YOUR FIREBASE CONFIG HERE
-// ================================
+// ==========================================
+// LumiSips Firebase Configuration
+// ==========================================
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.firebasestorage.app",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDW_HC9OVcpkLc4TFY6MR8brufTPniwXEg",
+  authDomain: "lumisips-b280f.firebaseapp.com",
+  projectId: "lumisips-b280f",
+  storageBucket: "lumisips-b280f.firebasestorage.app",
+  messagingSenderId: "980927514380",
+  appId: "1:980927514380:web:5e92f1aeb27ba46a9eeb29",
+  measurementId: "G-D307MPGWL1"
 };
-
-// ================================
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// ==========================================
+// Form Submission
+// ==========================================
+
 document.querySelectorAll(".ajax-form").forEach((form) => {
 
-  form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", async (event) => {
 
-    e.preventDefault();
+    event.preventDefault();
 
-    const status = form.querySelector(".form-status");
     const button = form.querySelector("button");
+    const status = form.querySelector(".form-status");
+
+    const originalText = button.innerText;
 
     button.disabled = true;
     button.innerText = "Submitting...";
 
     status.innerText = "";
 
+    const formData = new FormData(form);
+
     const data = {};
 
-    new FormData(form).forEach((value, key) => {
+    formData.forEach((value, key) => {
       data[key] = value;
     });
 
     let collectionName = "waitlist";
 
-    if (data.form_type === "Community Suggestion") {
-      collectionName = "communityIdeas";
-    }
+    switch (data.form_type) {
 
-    if (data.form_type === "Contact Form") {
-      collectionName = "contactMessages";
-    }
+      case "Community Suggestion":
+        collectionName = "communityIdeas";
+        break;
 
-    if (data.form_type === "Waitlist Signup") {
-      collectionName = "waitlist";
+      case "Contact Form":
+        collectionName = "contactMessages";
+        break;
+
+      case "Waitlist Signup":
+        collectionName = "waitlist";
+        break;
+
     }
 
     try {
@@ -67,14 +78,15 @@ document.querySelectorAll(".ajax-form").forEach((form) => {
 
         submittedAt: serverTimestamp(),
 
-        website: "lumisips.com"
+        source: "lumisips.github.io"
 
       });
 
       status.style.color = "#64ffb4";
+
       status.innerText =
         form.dataset.success ||
-        "Submitted successfully.";
+        "Successfully submitted!";
 
       form.reset();
 
@@ -84,16 +96,15 @@ document.querySelectorAll(".ajax-form").forEach((form) => {
 
       console.error(error);
 
-      status.style.color = "#ff7070";
+      status.style.color = "#ff6b6b";
+
       status.innerText =
-        "Submission failed. Please try again.";
+        "Something went wrong. Please try again.";
 
     }
 
     button.disabled = false;
-    button.innerText =
-      button.dataset.original ||
-      "Submit";
+    button.innerText = originalText;
 
   });
 
