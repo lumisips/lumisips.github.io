@@ -1,95 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="LumiSips is a premium zodiac-inspired functional hydration and energy beverage brand built from the lab up."
+  >
+
   <title>LumiSips | Hydrate • Elevate • Glow</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=emergency2" />
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;600;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Keep using your existing CSS file -->
+  <link rel="stylesheet" href="style.css?v=development-update-1">
 </head>
 
 <body>
-  <div id="loader" style="display:none;"><div class="loader-logo">LumiSips</div></div>
+
+  <!-- =========================================================
+       LOADING AND VISUAL EFFECTS
+  ========================================================== -->
+
+  <div id="loader" style="display:none;">
+    <div class="loader-logo">LumiSips</div>
+  </div>
 
   <div id="scrollProgress"></div>
+
   <canvas id="stars"></canvas>
+
   <div class="mouse-glow" id="mouseGlow"></div>
+
   <div class="water-ripple"></div>
+
   <div id="sparkleLayer"></div>
 
+
+  <!-- =========================================================
+       NAVIGATION
+  ========================================================== -->
+
   <nav class="navbar">
-    <a href="#home" class="brand">LumiSips</a>
-    <button class="menu-toggle" id="menuToggle">☰</button>
+
+    <a href="#home" class="brand">
+      LumiSips
+    </a>
+
+    <button
+      class="menu-toggle"
+      id="menuToggle"
+      type="button"
+      aria-label="Open navigation menu"
+    >
+      ☰
+    </button>
 
     <div class="nav-links" id="navLinks">
       <a href="#home">Home</a>
-      <a href="#phase">Phase</a>
+      <a href="#phase">Progress</a>
       <a href="#lab">Lab</a>
+      <a href="#zodiac">Flavors</a>
       <a href="#vote">Vote</a>
       <a href="#leaderboard">Leaderboard</a>
       <a href="#battle">Arena</a>
-      <a href="#ideas">Ideas</a>
+      <a href="#community">Ideas</a>
       <a href="#social">Social</a>
-      <a href="#join">Join</a>
+      <a href="#join">Waitlist</a>
     </div>
+
   </nav>
 
+
+  <!-- =========================================================
+       HERO
+  ========================================================== -->
+
   <header class="hero" id="home">
+
     <div class="aurora"></div>
+
     <div class="hero-content reveal">
-      <p class="eyebrow">Luxury Hydration • Functional Energy • Zodiac Culture</p>
-      <h1 class="logo-xl">LumiSips</h1>
-      <p class="slogan">Hydrate • Elevate • Glow</p>
-      <h2>Premium zodiac-inspired hydration, sparkling hydration, and energy drinks built from the lab up.</h2>
+
+      <p class="eyebrow">
+        Luxury Hydration • Functional Wellness • Zodiac Culture
+      </p>
+
+      <h1 class="logo-xl">
+        LumiSips
+      </h1>
+
+      <p class="slogan">
+        Hydrate • Elevate • Glow
+      </p>
+
+      <h2>
+        Premium zodiac-inspired hydration and functional energy
+        beverages developed through real formulation, testing,
+        refinement, and community feedback.
+      </h2>
 
       <div class="feature-card">
-        <span class="badge">Coming Soon</span>
-        <h3>Cancer ♋ Flagship</h3>
-        <p>Blue Raspberry • Dragon Fruit • Hibiscus</p>
-        <small>Bulk Batch Development Started</small>
+
+        <span class="badge">
+          Flagship In Development
+        </span>
+
+        <h3>
+          Cancer ♋ Blue Dragon Flower
+        </h3>
+
+        <p>
+          Blue Raspberry • Dragon Fruit • Hibiscus
+        </p>
+
+        <small>
+          Advanced Formula Refinement • Bulk-Batch Validation •
+          Commercial Readiness Development
+        </small>
+
       </div>
 
       <div class="hero-buttons">
-        <a href="#join" class="btn primary">Join Waitlist</a>
-        <a href="#battle" class="btn secondary">Enter Flavor Clash</a>
-        <a href="#phase" class="btn ghost">View Progress</a>
+
+        <a href="#join" class="btn primary">
+          Join The Founding Community
+        </a>
+
+        <a href="#battle" class="btn secondary">
+          Enter Flavor Clash
+        </a>
+
+        <a href="#phase" class="btn ghost">
+          View Development Progress
+        </a>
+
       </div>
+
     </div>
+
   </header>
 
+
+  <!-- =========================================================
+       CURRENT DEVELOPMENT PHASE
+  ========================================================== -->
+
   <section class="section reveal" id="phase">
-    <p class="eyebrow">Current Development Phase</p>
-    <h2>Cancer ♋ Flagship</h2>
+
+    <p class="eyebrow">
+      Current Development Phase
+    </p>
+
+    <h2>
+      Advanced Product Development
+    </h2>
+
     <p class="section-copy">
-      Cancer ♋ Flagship has moved from small-batch testing into bulk-batch refinement.
-      Formula balance, sweetness, carbonation, and concentrate scaling are now being refined for larger production.
+      LumiSips has progressed beyond early concept development and
+      small experimental batches. Cancer ♋ Blue Dragon Flower has
+      advanced through repeated flavor balancing, sweetness and
+      acidity refinement, concentrate development, functional
+      ingredient testing, natural color development, carbonation
+      improvement, and initial bulk-batch scaling.
+    </p>
+
+    <p class="section-copy">
+      The brand is now moving through ingredient stability
+      evaluation, preservation-system selection, packaging
+      development, supplier validation, nutritional analysis,
+      shelf-life testing, and commercial-readiness planning.
     </p>
 
     <div class="phase-status">
-      <span>Status</span>
-      <strong>Bulk Batch Development Started</strong>
+
+      <span>
+        Current Status
+      </span>
+
+      <strong>
+        Advanced Formula Refinement & Commercial Readiness
+      </strong>
+
     </div>
 
     <div class="grid phase-grid">
-      <div class="card phase-card">✅ <h3>Formula Balance Advanced</h3></div>
-      <div class="card phase-card">✅ <h3>Sweetness Nearly Locked</h3></div>
-      <div class="card phase-card">✅ <h3>Carbonation Greatly Improved</h3></div>
-      <div class="card phase-card">✅ <h3>Concentrate System Established</h3></div>
-      <div class="card phase-card">✅ <h3>Bulk Batch Development Started</h3></div>
-      <div class="card phase-card">🟡 <h3>Packaging Selection</h3></div>
-      <div class="card phase-card">🟡 <h3>Nutrition Facts Development</h3></div>
-      <div class="card phase-card">🟡 <h3>Shelf-Life Monitoring</h3></div>
-      <div class="card phase-card">🚀 <h3>Pre-Launch Development Phase</h3></div>
+
+      <div class="card phase-card">
+        ✅
+        <h3>Core Flavor System Established</h3>
+        <p>
+          Blue raspberry, dragon fruit, and hibiscus have formed
+          the foundation of the Cancer flagship.
+        </p>
+      </div>
+
+      <div class="card phase-card">
+        ✅
+        <h3>Sweetness System Advanced</h3>
+        <p>
+          Sweetness, acidity, and flavor intensity have been
+          repeatedly tested and refined.
+        </p>
+      </div>
+
+      <div class="card phase-card">
+        ✅
+        <h3>Concentrate Method Established</h3>
+        <p>
+          A concentrate-to-carbonated-water preparation system has
+          been developed for consistent testing.
+        </p>
+      </div>
+
+      <div class="card phase-card">
+        ✅
+        <h3>Functional Ingredients In Testing</h3>
+        <p>
+          Hydration, focus, wellness, vitamin, and botanical
+          ingredients are being evaluated inside the formula.
+        </p>
+      </div>
+
+      <div class="card phase-card">
+        ✅
+        <h3>Natural Color Development Active</h3>
+        <p>
+          Gemstone-inspired colors are being developed using
+          natural color systems.
+        </p>
+      </div>
+
+      <div class="card phase-card">
+        ✅
+        <h3>Bulk-Batch Scaling Started</h3>
+        <p>
+          Formula measurements are being translated from individual
+          servings into larger concentrate batches.
+        </p>
+      </div>
+
+      <div class="card phase-card">
+        🟡
+        <h3>Preservation System Selection</h3>
+        <p>
+          Preservation options are being evaluated for safety,
+          stability, flavor, and commercial production.
+        </p>
+      </div>
+
+      <div class="card phase-card">
+        🟡
+        <h3>Stability & Shelf-Life Evaluation</h3>
+        <p>
+          Ingredient behavior, settling, color, carbonation, and
+          flavor stability remain under observation.
+        </p>
+      </div>
+
+      <div class="card phase-card">
+        🟡
+        <h3>Packaging Development</h3>
+        <p>
+          Glass bottles, sleek cans, closures, labels, and production
+          compatibility are being researched.
+        </p>
+      </div>
+
+      <div class="card phase-card">
+        🟡
+        <h3>Nutrition Facts & Lab Testing</h3>
+        <p>
+          Nutritional analysis and professional laboratory testing
+          are part of the next commercial-readiness steps.
+        </p>
+      </div>
+
+      <div class="card phase-card">
+        🚀
+        <h3>Commercial Readiness Development</h3>
+        <p>
+          LumiSips is building the systems needed to move from
+          founder-led formulation into professional production.
+        </p>
+      </div>
+
     </div>
+
   </section>
 
+
+  <!-- =========================================================
+       BRAND STATS
+  ========================================================== -->
+
   <section class="section reveal counters-section">
-    <p class="eyebrow">Live Brand Energy</p>
-    <h2>The Numbers Behind LumiSips</h2>
+
+    <p class="eyebrow">
+      Built From The Lab Up
+    </p>
+
+    <h2>
+      The Numbers Behind LumiSips
+    </h2>
 
     <div class="origin-line">
       <span>EST. 2026</span>
@@ -97,213 +326,1471 @@
     </div>
 
     <div class="truth-badges">
-      <span>Zero Sugar</span>
-      <span>All Natural Flavors</span>
-      <span>Healthy Energy</span>
-      <span>Hydration Focused</span>
-      <span>Functional Beverage Development</span>
+      <span>Founder Formulated</span>
+      <span>Zero-Sugar Development</span>
+      <span>Natural Flavor Focus</span>
+      <span>Functional Hydration</span>
+      <span>Wellness Ingredient Testing</span>
+      <span>Community Powered</span>
     </div>
 
     <div class="counter-grid true-stats-grid">
-      <div class="counter-card true-stat-card"><strong data-count="25" data-suffix="+">0</strong><span>Documented Formula Iterations</span></div>
-      <div class="counter-card true-stat-card"><strong data-count="1">0</strong><span>Founder-Led Brand</span></div>
-      <div class="counter-card true-stat-card"><strong data-count="12" data-suffix="+">0</strong><span>Early Community Signals</span></div>
-      <div class="counter-card true-stat-card"><strong data-count="11">0</strong><span>Future Zodiac Signs Coming Soon</span></div>
-      <div class="counter-card true-stat-card text-stat"><strong>Bulk Batches</strong><span>Development Started</span></div>
-      <div class="counter-card true-stat-card text-stat flagship-stat"><strong>Cancer ♋</strong><span>Blue Raspberry • Dragon Fruit • Hibiscus</span></div>
+
+      <div class="counter-card true-stat-card">
+        <strong data-count="25" data-suffix="+">0</strong>
+        <span>Documented Formula Iterations</span>
+      </div>
+
+      <div class="counter-card true-stat-card">
+        <strong data-count="1">0</strong>
+        <span>Founder-Led Beverage Brand</span>
+      </div>
+
+      <div class="counter-card true-stat-card">
+        <strong data-count="12" data-suffix="+">0</strong>
+        <span>Community Flavor Concepts</span>
+      </div>
+
+      <div class="counter-card true-stat-card">
+        <strong data-count="11">0</strong>
+        <span>Future Zodiac Releases</span>
+      </div>
+
+      <div class="counter-card true-stat-card text-stat">
+        <strong>Bulk Batches</strong>
+        <span>Scaling & Refinement Active</span>
+      </div>
+
+      <div class="counter-card true-stat-card text-stat flagship-stat">
+        <strong>Cancer ♋</strong>
+        <span>Blue Raspberry • Dragon Fruit • Hibiscus</span>
+      </div>
+
     </div>
+
   </section>
+
+
+  <!-- =========================================================
+       LIVE FORMULA TRACKER
+  ========================================================== -->
 
   <section class="section reveal" id="lab">
-    <p class="eyebrow">Live Formula Tracker</p>
-    <h2>Bulk Development Progress</h2>
+
+    <p class="eyebrow">
+      Live Formula Tracker
+    </p>
+
+    <h2>
+      Development Progress
+    </h2>
+
+    <p class="section-copy">
+      These percentages represent internal development progress,
+      not a claim that commercial testing or regulatory review has
+      been completed.
+    </p>
 
     <div class="progress-card">
-      <div class="progress-item" data-progress="100"><span>Flavor Balance</span><b>100%</b><div><i></i></div></div>
-      <div class="progress-item" data-progress="95"><span>Sweetness</span><b>95%</b><div><i></i></div></div>
-      <div class="progress-item" data-progress="90"><span>Carbonation</span><b>90%</b><div><i></i></div></div>
-      <div class="progress-item" data-progress="82"><span>Concentrate Scaling</span><b>82%</b><div><i></i></div></div>
-      <div class="progress-item" data-progress="75"><span>Packaging</span><b>75%</b><div><i></i></div></div>
-      <div class="progress-item" data-progress="72"><span>Launch Readiness</span><b>72%</b><div><i></i></div></div>
+
+      <div class="progress-item" data-progress="94">
+        <span>Core Flavor Development</span>
+        <b>94%</b>
+        <div><i></i></div>
+      </div>
+
+      <div class="progress-item" data-progress="90">
+        <span>Sweetness & Acidity Balance</span>
+        <b>90%</b>
+        <div><i></i></div>
+      </div>
+
+      <div class="progress-item" data-progress="84">
+        <span>Carbonation & Concentrate Scaling</span>
+        <b>84%</b>
+        <div><i></i></div>
+      </div>
+
+      <div class="progress-item" data-progress="78">
+        <span>Functional Ingredient Integration</span>
+        <b>78%</b>
+        <div><i></i></div>
+      </div>
+
+      <div class="progress-item" data-progress="72">
+        <span>Natural Gemstone Color Development</span>
+        <b>72%</b>
+        <div><i></i></div>
+      </div>
+
+      <div class="progress-item" data-progress="55">
+        <span>Packaging & Supplier Validation</span>
+        <b>55%</b>
+        <div><i></i></div>
+      </div>
+
+      <div class="progress-item" data-progress="40">
+        <span>Testing & Regulatory Readiness</span>
+        <b>40%</b>
+        <div><i></i></div>
+      </div>
+
+      <div class="progress-item" data-progress="62">
+        <span>Overall Commercial Readiness</span>
+        <b>62%</b>
+        <div><i></i></div>
+      </div>
+
     </div>
+
   </section>
 
-  <section class="section reveal">
-    <p class="eyebrow">Zodiac Universe</p>
-    <h2>The Flavor Line</h2>
+
+  <!-- =========================================================
+       ZODIAC FLAVOR GRID
+  ========================================================== -->
+
+  <section class="section reveal" id="zodiac">
+
+    <p class="eyebrow">
+      Zodiac Universe
+    </p>
+
+    <h2>
+      The LumiSips Flavor Line
+    </h2>
+
+    <p class="section-copy">
+      Cancer ♋ is the flagship. Additional zodiac formulations,
+      gemstone colors, and functional profiles are actively being
+      developed.
+    </p>
+
+    <!-- Your existing script.js can populate this -->
     <div class="grid" id="zodiacGrid"></div>
+
   </section>
+
+
+  <!-- =========================================================
+       COMMUNITY VOTING
+  ========================================================== -->
 
   <section class="section reveal" id="vote">
-    <p class="eyebrow">Community Powered</p>
-    <h2>Vote Next Zodiac Flavor</h2>
-    <p class="section-copy">One zodiac vote per device. Make it count.</p>
+
+    <p class="eyebrow">
+      Community Powered
+    </p>
+
+    <h2>
+      Vote For The Next Zodiac Flavor
+    </h2>
+
+    <p class="section-copy">
+      One zodiac vote per device. Every vote helps shape the future
+      of the LumiSips collection.
+    </p>
+
     <div class="grid" id="voteGrid"></div>
+
     <p id="voteMessage" class="message"></p>
+
   </section>
+
+
+  <!-- =========================================================
+       LEADERBOARD
+  ========================================================== -->
 
   <section class="section reveal" id="leaderboard">
-    <p class="eyebrow">Live Rankings</p>
-    <h2>Zodiac Leaderboard</h2>
-    <div id="leaderboardList" class="leaderboard"></div>
+
+    <p class="eyebrow">
+      Live Community Rankings
+    </p>
+
+    <h2>
+      Zodiac Leaderboard
+    </h2>
+
+    <div
+      id="leaderboardList"
+      class="leaderboard"
+    ></div>
+
   </section>
 
-  <section class="section reveal arena-section" id="battle">
-    <p class="eyebrow">Flavor Clash Arena</p>
-    <h2>Choose Your Side</h2>
-    <p class="section-copy">Pick your side. Every clash helps shape the future of LumiSips.</p>
-    <div class="battle-grid" id="battleGrid"></div>
+
+  <!-- =========================================================
+       FLAVOR CLASH
+  ========================================================== -->
+
+  <section
+    class="section reveal arena-section"
+    id="battle"
+  >
+
+    <p class="eyebrow">
+      Flavor Clash Arena
+    </p>
+
+    <h2>
+      Choose Your Side
+    </h2>
+
+    <p class="section-copy">
+      Pick the flavor combination you believe deserves a place
+      inside the LumiSips zodiac universe.
+    </p>
+
+    <div
+      class="battle-grid"
+      id="battleGrid"
+    ></div>
+
   </section>
+
+
+  <!-- =========================================================
+       COMMUNITY IDEAS DISPLAY
+  ========================================================== -->
 
   <section class="section reveal" id="ideas">
-    <p class="eyebrow">Community Flavor Ideas</p>
-    <h2>Ideas Already In The Lab</h2>
-    <div class="grid" id="suggestionGrid"></div>
+
+    <p class="eyebrow">
+      Community Flavor Ideas
+    </p>
+
+    <h2>
+      Ideas Entering The Lab
+    </h2>
+
+    <div
+      class="grid"
+      id="suggestionGrid"
+    ></div>
+
   </section>
+
+
+  <!-- =========================================================
+       COMMUNITY SUGGESTION FORM
+       No method="POST"
+       No action=""
+       JavaScript sends this directly to Firebase.
+  ========================================================== -->
 
   <section class="section reveal" id="community">
-    <p class="eyebrow">Community</p>
-    <h2>Shape LumiSips</h2>
 
-    <form class="form ajax-form suggestion-form" method="POST" data-success="Thank you for helping shape the future of LumiSips.">
-      <input type="hidden" name="form_type" value="Community Suggestion">
-      <input name="name" placeholder="Name" required>
-      <input type="email" name="email" placeholder="Email" required>
-      <input name="zodiac" placeholder="Zodiac Sign">
-      <input name="flavor" placeholder="Flavor Idea">
-      <input name="ingredient" placeholder="Ingredient Suggestion">
-      <textarea name="message" placeholder="Message"></textarea>
-      <button class="btn primary" type="submit">Submit Idea</button>
-      <p class="form-status"></p>
+    <p class="eyebrow">
+      Community Innovation
+    </p>
+
+    <h2>
+      Help Shape LumiSips
+    </h2>
+
+    <p class="section-copy">
+      Suggest a flavor, ingredient, gemstone color, zodiac concept,
+      or future product idea.
+    </p>
+
+    <form
+      class="form ajax-form suggestion-form"
+      id="suggestionForm"
+      data-collection="suggestions"
+      data-success="Thank you for helping shape the future of LumiSips."
+    >
+
+      <input
+        type="hidden"
+        name="form_type"
+        value="Community Suggestion"
+      >
+
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        maxlength="100"
+        required
+      >
+
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        maxlength="254"
+        required
+      >
+
+      <input
+        type="text"
+        name="zodiac"
+        placeholder="Zodiac Sign"
+        maxlength="30"
+      >
+
+      <input
+        type="text"
+        name="flavor"
+        placeholder="Flavor Idea"
+        maxlength="150"
+      >
+
+      <input
+        type="text"
+        name="ingredient"
+        placeholder="Ingredient Suggestion"
+        maxlength="150"
+      >
+
+      <textarea
+        name="message"
+        placeholder="Tell us more about your idea"
+        maxlength="1000"
+      ></textarea>
+
+      <!-- Spam trap. Real visitors will not see this. -->
+      <input
+        type="text"
+        name="website"
+        class="honeypot"
+        tabindex="-1"
+        autocomplete="off"
+        aria-hidden="true"
+      >
+
+      <button
+        class="btn primary"
+        type="submit"
+      >
+        Submit Idea
+      </button>
+
+      <p
+        class="form-status"
+        aria-live="polite"
+      ></p>
+
     </form>
+
   </section>
+
+
+  <!-- =========================================================
+       JOURNEY TIMELINE
+  ========================================================== -->
 
   <section class="section reveal timeline-section">
-    <p class="eyebrow">The LumiSips Journey</p>
-    <h2>From Idea To Launch</h2>
-    <div class="timeline" id="timeline"></div>
+
+    <p class="eyebrow">
+      The LumiSips Journey
+    </p>
+
+    <h2>
+      From Founder Concept To Commercial Brand
+    </h2>
+
+    <div class="timeline">
+
+      <div class="card">
+        <h3>01 — Brand Foundation</h3>
+        <p>
+          LumiSips LLC was established with a vision for premium
+          zodiac-inspired hydration and functional energy.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>02 — Cancer Flagship Development</h3>
+        <p>
+          Blue raspberry, dragon fruit, and hibiscus became the
+          foundation of Blue Dragon Flower.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>03 — Formula Iteration</h3>
+        <p>
+          Flavor, sweetness, acidity, hydration, functionality,
+          color, and carbonation entered repeated testing.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>04 — Ingredient Partnerships</h3>
+        <p>
+          Flavor, color, botanical, wellness, and functional
+          ingredient suppliers began supporting development.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>05 — Bulk-Batch Scaling</h3>
+        <p>
+          Individual formulations began progressing into larger
+          concentrate and carbonation systems.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>06 — Commercial Readiness</h3>
+        <p>
+          Packaging, preservation, stability, laboratory testing,
+          nutrition information, and production planning are the
+          next major milestones.
+        </p>
+      </div>
+
+    </div>
+
   </section>
+
+
+  <!-- =========================================================
+       SOCIAL MEDIA
+  ========================================================== -->
 
   <section class="section reveal" id="social">
-    <p class="eyebrow">Build LumiSips With Us</p>
-    <h2>Join The Journey</h2>
+
+    <p class="eyebrow">
+      Build LumiSips With Us
+    </p>
+
+    <h2>
+      Join The Journey
+    </h2>
 
     <div class="social-grid">
-      <a class="social-card" href="https://www.tiktok.com/@lumisips?_r=1&_t=ZP-975QSECxHNX" target="_blank" rel="noopener">
-        <div class="social-icon">🎵</div><h3>TikTok</h3><p>Behind The Scenes Videos</p><span>Watch On TikTok →</span>
+
+      <a
+        class="social-card"
+        href="https://www.tiktok.com/@lumisips"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div class="social-icon">🎵</div>
+        <h3>TikTok</h3>
+        <p>Behind-The-Scenes Development</p>
+        <span>Watch On TikTok →</span>
       </a>
 
-      <a class="social-card" href="https://www.instagram.com/lumisips?igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
-        <div class="social-icon">📸</div><h3>Instagram</h3><p>Formula Updates • Reels • Giveaways</p><span>Follow On Instagram →</span>
+      <a
+        class="social-card"
+        href="https://www.instagram.com/lumisips"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div class="social-icon">📸</div>
+        <h3>Instagram</h3>
+        <p>Formula Updates • Reels • Gemstone Colors</p>
+        <span>Follow On Instagram →</span>
       </a>
 
-      <a class="social-card" href="https://youtube.com/@lumisips?si=L2Xftzv-uZPFdEkW" target="_blank" rel="noopener">
-        <div class="social-icon">▶️</div><h3>YouTube</h3><p>Development Videos & Shorts</p><span>Watch On YouTube →</span>
+      <a
+        class="social-card"
+        href="https://youtube.com/@lumisips"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div class="social-icon">▶️</div>
+        <h3>YouTube</h3>
+        <p>Development Videos & Shorts</p>
+        <span>Watch On YouTube →</span>
       </a>
 
-      <a class="social-card" href="https://www.facebook.com/profile.php?id=61590145861444&mibextid=ZbWKwL" target="_blank" rel="noopener">
-        <div class="social-icon">📘</div><h3>Facebook</h3><p>Community Updates & Discussions</p><span>Visit Facebook →</span>
+      <a
+        class="social-card"
+        href="https://www.facebook.com/profile.php?id=61590145861444"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div class="social-icon">📘</div>
+        <h3>Facebook</h3>
+        <p>Community Updates & Discussions</p>
+        <span>Visit Facebook →</span>
       </a>
+
     </div>
+
   </section>
+
+
+  <!-- =========================================================
+       GIVEAWAY
+  ========================================================== -->
 
   <section class="section reveal" id="giveaway">
+
     <div class="special-box">
-      <p class="eyebrow">First LumiSips Giveaway</p>
-      <h2>Most Supported Future Flavor Wins</h2>
-      <p>Comment your flavor idea, share the brand, gain the most engagement, and win a free case when that flavor launches.</p>
+
+      <p class="eyebrow">
+        Future LumiSips Giveaway
+      </p>
+
+      <h2>
+        Support The Flavor You Want To See
+      </h2>
+
+      <p>
+        Share LumiSips, submit flavor ideas, participate in community
+        voting, and help decide which zodiac formulation moves
+        forward next.
+      </p>
+
     </div>
+
   </section>
 
+
+  <!-- =========================================================
+       FOUNDER STORY
+  ========================================================== -->
+
   <section class="section reveal">
-    <p class="eyebrow">Founder Story</p>
-    <h2>Built From The Lab Up</h2>
-    <p class="story">
-      LumiSips started as a small-batch beverage lab focused on building premium zodiac-inspired hydration and energy drinks.
-      Cancer ♋ is the flagship flavor, Taurus ♉ is now in early citrus development, and the future of the brand is shaped by community voting, testing, and real feedback.
+
+    <p class="eyebrow">
+      Founder Story
     </p>
+
+    <h2>
+      Built From The Lab Up
+    </h2>
+
+    <p class="story">
+      LumiSips began as a founder-led beverage development journey
+      focused on creating premium hydration and energy products with
+      real flavor, purposeful functionality, gemstone-inspired
+      visual identity, and zodiac culture.
+    </p>
+
+    <p class="story">
+      Instead of beginning with a finished private-label formula,
+      LumiSips is being built through hands-on experimentation,
+      supplier relationships, repeated formulation, documentation,
+      community feedback, and a commitment to developing a product
+      worthy of commercial production.
+    </p>
+
   </section>
+
+
+  <!-- =========================================================
+       FUTURE COLLECTION
+  ========================================================== -->
 
   <section class="section reveal" id="merch">
-    <p class="eyebrow">Coming Soon</p>
-    <h2>Future Merch</h2>
+
+    <p class="eyebrow">
+      Future Collection
+    </p>
+
+    <h2>
+      The LumiSips Experience
+    </h2>
 
     <div class="grid">
-      <div class="card"><h3>Founder Hoodie</h3><p>Coming Soon</p></div>
-      <div class="card"><h3>Zodiac Hat</h3><p>Coming Soon</p></div>
-      <div class="card"><h3>Sticker Pack</h3><p>Coming Soon</p></div>
-      <div class="card"><h3>LumiSips Bottle</h3><p>Coming Soon</p></div>
-      <div class="card"><h3>Founder Collection</h3><p>Coming Soon</p></div>
+
+      <div class="card">
+        <h3>Founder Hoodie</h3>
+        <p>Coming Soon</p>
+      </div>
+
+      <div class="card">
+        <h3>Zodiac Hat</h3>
+        <p>Coming Soon</p>
+      </div>
+
+      <div class="card">
+        <h3>Gemstone Sticker Pack</h3>
+        <p>Coming Soon</p>
+      </div>
+
+      <div class="card">
+        <h3>LumiSips Glass Bottle</h3>
+        <p>In Packaging Development</p>
+      </div>
+
+      <div class="card">
+        <h3>Founder’s Collection</h3>
+        <p>Coming Soon</p>
+      </div>
+
     </div>
+
   </section>
+
+
+  <!-- =========================================================
+       WAITLIST FORM
+       This form no longer submits a POST request to GitHub Pages.
+  ========================================================== -->
 
   <section class="section reveal" id="join">
-    <p class="eyebrow">Founding Community</p>
-    <h2>Join The Waitlist</h2>
-    <p class="counter">Founding Members: <span id="memberCount">1</span></p>
 
-    <form class="form ajax-form waitlist-form" method="POST" data-success="Welcome to the LumiSips Founding Community.">
-      <input type="hidden" name="form_type" value="Waitlist Signup">
-      <input name="name" placeholder="Name" required>
-      <input type="email" name="email" placeholder="Email" required>
+    <p class="eyebrow">
+      Founding Community
+    </p>
 
-      <select name="favorite_zodiac" required>
+    <h2>
+      Join The LumiSips Waitlist
+    </h2>
+
+    <p class="section-copy">
+      Join for development updates, early flavor reveals, launch
+      announcements, community testing opportunities, giveaways,
+      and first access to future releases.
+    </p>
+
+    <p class="counter">
+      Founding Community Members:
+      <span id="memberCount">1</span>
+    </p>
+
+    <form
+      class="form ajax-form waitlist-form"
+      id="waitlistForm"
+      data-collection="waitlist"
+      data-success="Welcome to the LumiSips Founding Community."
+    >
+
+      <input
+        type="hidden"
+        name="form_type"
+        value="Waitlist Signup"
+      >
+
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        maxlength="100"
+        required
+      >
+
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        maxlength="254"
+        required
+      >
+
+      <select
+        name="favorite_zodiac"
+        required
+      >
         <option value="">Favorite Zodiac Sign</option>
-        <option>Aries</option>
-        <option>Taurus</option>
-        <option>Gemini</option>
-        <option>Cancer</option>
-        <option>Leo</option>
-        <option>Virgo</option>
-        <option>Libra</option>
-        <option>Scorpio</option>
-        <option>Sagittarius</option>
-        <option>Capricorn</option>
-        <option>Aquarius</option>
-        <option>Pisces</option>
+        <option value="Aries">Aries</option>
+        <option value="Taurus">Taurus</option>
+        <option value="Gemini">Gemini</option>
+        <option value="Cancer">Cancer</option>
+        <option value="Leo">Leo</option>
+        <option value="Virgo">Virgo</option>
+        <option value="Libra">Libra</option>
+        <option value="Scorpio">Scorpio</option>
+        <option value="Sagittarius">Sagittarius</option>
+        <option value="Capricorn">Capricorn</option>
+        <option value="Aquarius">Aquarius</option>
+        <option value="Pisces">Pisces</option>
       </select>
 
-      <select name="preferred_line" required>
+      <select
+        name="preferred_line"
+        required
+      >
         <option value="">Preferred Product Line</option>
-        <option>Still Hydration</option>
-        <option>Sparkling Hydration</option>
-        <option>Energy</option>
-        <option>Sparkling Energy</option>
+        <option value="Still Hydration">Still Hydration</option>
+        <option value="Sparkling Hydration">
+          Sparkling Hydration
+        </option>
+        <option value="Still Energy">Still Energy</option>
+        <option value="Sparkling Energy">Sparkling Energy</option>
       </select>
 
-      <button class="btn primary" type="submit">Join Waitlist</button>
-      <p class="form-status"></p>
+      <label class="consent-row">
+        <input
+          type="checkbox"
+          name="email_consent"
+          value="yes"
+          required
+        >
+
+        <span>
+          I agree to receive occasional LumiSips development,
+          waitlist, and launch updates. I understand that I may
+          unsubscribe at any time.
+        </span>
+      </label>
+
+      <!-- Spam trap -->
+      <input
+        type="text"
+        name="website"
+        class="honeypot"
+        tabindex="-1"
+        autocomplete="off"
+        aria-hidden="true"
+      >
+
+      <button
+        class="btn primary"
+        type="submit"
+      >
+        Join The Waitlist
+      </button>
+
+      <p
+        class="form-status"
+        aria-live="polite"
+      ></p>
+
     </form>
+
   </section>
 
-  <section class="section reveal">
-    <p class="eyebrow">Contact</p>
-    <h2>Contact LumiSips</h2>
 
-    <form class="form ajax-form" method="POST" data-success="Your message has been sent to LumiSips.">
-      <input type="hidden" name="form_type" value="Contact Form">
-      <input name="name" placeholder="Name" required>
-      <input type="email" name="email" placeholder="Email" required>
-      <input name="subject" placeholder="Subject" required>
-      <textarea name="message" placeholder="Message" required></textarea>
-      <button class="btn primary" type="submit">Send Message</button>
-      <p class="form-status"></p>
+  <!-- =========================================================
+       CONTACT FORM
+  ========================================================== -->
+
+  <section class="section reveal" id="contact">
+
+    <p class="eyebrow">
+      Business & Community Contact
+    </p>
+
+    <h2>
+      Contact LumiSips
+    </h2>
+
+    <p class="section-copy">
+      Reach out regarding ingredients, flavor development,
+      packaging, production, partnerships, events, investment,
+      retail opportunities, or general questions.
+    </p>
+
+    <form
+      class="form ajax-form contact-form"
+      id="contactForm"
+      data-collection="contactMessages"
+      data-success="Your message has been sent to LumiSips."
+    >
+
+      <input
+        type="hidden"
+        name="form_type"
+        value="Contact Form"
+      >
+
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        maxlength="100"
+        required
+      >
+
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        maxlength="254"
+        required
+      >
+
+      <input
+        type="text"
+        name="subject"
+        placeholder="Subject"
+        maxlength="150"
+        required
+      >
+
+      <textarea
+        name="message"
+        placeholder="Message"
+        maxlength="2000"
+        required
+      ></textarea>
+
+      <!-- Spam trap -->
+      <input
+        type="text"
+        name="website"
+        class="honeypot"
+        tabindex="-1"
+        autocomplete="off"
+        aria-hidden="true"
+      >
+
+      <button
+        class="btn primary"
+        type="submit"
+      >
+        Send Message
+      </button>
+
+      <p
+        class="form-status"
+        aria-live="polite"
+      ></p>
+
     </form>
+
   </section>
+
+
+  <!-- =========================================================
+       FLOATING SOCIAL BUTTONS
+  ========================================================== -->
 
   <div class="floating-socials">
-    <a href="https://www.tiktok.com/@lumisips?_r=1&_t=ZP-975QSECxHNX" target="_blank" rel="noopener">🎵</a>
-    <a href="https://www.instagram.com/lumisips?igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">📸</a>
-    <a href="https://youtube.com/@lumisips?si=L2Xftzv-uZPFdEkW" target="_blank" rel="noopener">▶️</a>
-    <a href="https://www.facebook.com/profile.php?id=61590145861444&mibextid=ZbWKwL" target="_blank" rel="noopener">📘</a>
+
+    <a
+      href="https://www.tiktok.com/@lumisips"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="LumiSips TikTok"
+    >
+      🎵
+    </a>
+
+    <a
+      href="https://www.instagram.com/lumisips"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="LumiSips Instagram"
+    >
+      📸
+    </a>
+
+    <a
+      href="https://youtube.com/@lumisips"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="LumiSips YouTube"
+    >
+      ▶️
+    </a>
+
+    <a
+      href="https://www.facebook.com/profile.php?id=61590145861444"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="LumiSips Facebook"
+    >
+      📘
+    </a>
+
   </div>
 
-  <button id="backTop">↑</button>
+
+  <!-- =========================================================
+       BACK TO TOP
+  ========================================================== -->
+
+  <button
+    id="backTop"
+    type="button"
+    aria-label="Return to top"
+  >
+    ↑
+  </button>
+
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================== -->
 
   <footer>
-    <h2 class="footer-logo">LumiSips</h2>
-    <p>Hydrate • Elevate • Glow</p>
-    <small>© 2026 LumiSips. All rights reserved.</small>
+
+    <h2 class="footer-logo">
+      LumiSips
+    </h2>
+
+    <p>
+      Hydrate • Elevate • Glow
+    </p>
+
+    <p>
+      Founder-Led • Anaheim, California • Established 2026
+    </p>
+
+    <small>
+      © 2026 LumiSips LLC. All rights reserved.
+    </small>
+
   </footer>
 
-  <script src="firebase.js?v=restore1"></script>
+
+  <!-- =========================================================
+       YOUR EXISTING WEBSITE JAVASCRIPT
+  ========================================================== -->
+
+  <script src="script.js?v=development-update-1"></script>
+
+
+  <!-- =========================================================
+       FIREBASE FORM SYSTEM
+
+       IMPORTANT:
+       Delete the old line:
+       <script src="firebase.js?v=restore1"></script>
+
+       This new index contains the Firebase form handling directly.
+
+       COPY YOUR REAL FIREBASE CONFIGURATION INTO THE AREA BELOW.
+  ========================================================== -->
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+
+    /* =========================================================
+       STEP 1: ENTER YOUR FIREBASE INFORMATION HERE
+
+       Firebase Console:
+       Project Settings
+       Your Apps
+       LumiSips Web App
+       SDK Setup And Configuration
+
+       Replace every placeholder below.
+    ========================================================== */
+
+    const firebaseConfig = {
+
+      apiKey: "PASTE_YOUR_API_KEY_HERE",
+
+      authDomain:
+        "PASTE_YOUR_AUTH_DOMAIN_HERE",
+
+      projectId:
+        "PASTE_YOUR_PROJECT_ID_HERE",
+
+      storageBucket:
+        "PASTE_YOUR_STORAGE_BUCKET_HERE",
+
+      messagingSenderId:
+        "PASTE_YOUR_MESSAGING_SENDER_ID_HERE",
+
+      appId:
+        "PASTE_YOUR_APP_ID_HERE"
+
+    };
+
+
+    /* =========================================================
+       FIREBASE INITIALIZATION
+    ========================================================== */
+
+    let db = null;
+
+    let firebaseReady = false;
+
+    try {
+
+      const missingConfig =
+        Object.values(firebaseConfig).some((value) =>
+          String(value).includes("PASTE_YOUR")
+        );
+
+      if (missingConfig) {
+
+        console.error(
+          "Firebase configuration is missing. Add your Firebase values inside index.html."
+        );
+
+      } else {
+
+        const app = initializeApp(firebaseConfig);
+
+        db = getFirestore(app);
+
+        firebaseReady = true;
+
+        console.log(
+          "LumiSips Firebase connection initialized successfully."
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Firebase initialization failed:",
+        error
+      );
+
+    }
+
+
+    /* =========================================================
+       FORM SECURITY AND VALIDATION
+    ========================================================== */
+
+    const allowedCollections = new Set([
+      "waitlist",
+      "suggestions",
+      "contactMessages"
+    ]);
+
+
+    function cleanText(value, maxLength = 2000) {
+
+      return String(value ?? "")
+        .trim()
+        .slice(0, maxLength);
+
+    }
+
+
+    function normalizeEmail(value) {
+
+      return cleanText(value, 254).toLowerCase();
+
+    }
+
+
+    function isValidEmail(email) {
+
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    }
+
+
+    function getStatusElement(form) {
+
+      return form.querySelector(".form-status");
+
+    }
+
+
+    function displayStatus(
+      form,
+      message,
+      state = ""
+    ) {
+
+      const status = getStatusElement(form);
+
+      if (!status) return;
+
+      status.textContent = message;
+
+      status.classList.remove(
+        "success",
+        "error",
+        "loading"
+      );
+
+      if (state) {
+        status.classList.add(state);
+      }
+
+    }
+
+
+    function formDataToObject(form) {
+
+      const formData = new FormData(form);
+
+      const submission = {};
+
+      for (const [key, value] of formData.entries()) {
+
+        if (key === "website") {
+          continue;
+        }
+
+        if (key === "email") {
+
+          submission[key] = normalizeEmail(value);
+
+        } else {
+
+          submission[key] = cleanText(value);
+
+        }
+
+      }
+
+      return submission;
+
+    }
+
+
+    /* =========================================================
+       FORM SUBMISSION HANDLER
+
+       event.preventDefault() is the main part that stops the
+       browser from posting the form to GitHub Pages and creating
+       the 405 Method Not Allowed error.
+    ========================================================== */
+
+    async function submitLumiSipsForm(event) {
+
+      event.preventDefault();
+
+      const form = event.currentTarget;
+
+      const submitButton =
+        form.querySelector('button[type="submit"]');
+
+      const collectionName =
+        form.dataset.collection;
+
+      const successMessage =
+        form.dataset.success ||
+        "Thank you. Your information has been received.";
+
+      const honeypot =
+        form.querySelector('input[name="website"]');
+
+
+      /* Ignore obvious automated spam. */
+
+      if (honeypot && honeypot.value.trim() !== "") {
+
+        displayStatus(
+          form,
+          successMessage,
+          "success"
+        );
+
+        form.reset();
+
+        return;
+
+      }
+
+
+      /* Use the browser's built-in validation. */
+
+      if (!form.checkValidity()) {
+
+        form.reportValidity();
+
+        return;
+
+      }
+
+
+      /* Confirm this form can only write to an approved collection. */
+
+      if (!allowedCollections.has(collectionName)) {
+
+        displayStatus(
+          form,
+          "This form is not configured correctly.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const submission =
+        formDataToObject(form);
+
+
+      if (!isValidEmail(submission.email)) {
+
+        displayStatus(
+          form,
+          "Please enter a valid email address.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (!firebaseReady || !db) {
+
+        displayStatus(
+          form,
+          "The LumiSips form connection has not been configured yet. Please contact Arick@lumisips.com.",
+          "error"
+        );
+
+        console.error(
+          "Submission stopped because Firebase is not configured."
+        );
+
+        return;
+
+      }
+
+
+      const originalButtonText =
+        submitButton
+          ? submitButton.textContent
+          : "Submit";
+
+
+      try {
+
+        if (submitButton) {
+
+          submitButton.disabled = true;
+
+          submitButton.textContent =
+            "Submitting...";
+
+        }
+
+
+        displayStatus(
+          form,
+          "Submitting your information...",
+          "loading"
+        );
+
+
+        await addDoc(
+          collection(db, collectionName),
+          {
+
+            ...submission,
+
+            createdAt:
+              serverTimestamp(),
+
+            source:
+              "lumisips-website",
+
+            pageUrl:
+              window.location.href,
+
+            pageTitle:
+              document.title
+
+          }
+        );
+
+
+        displayStatus(
+          form,
+          successMessage,
+          "success"
+        );
+
+
+        form.reset();
+
+
+        if (collectionName === "waitlist") {
+
+          updateLocalMemberCount();
+
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "LumiSips form submission error:",
+          error
+        );
+
+
+        let publicMessage =
+          "We could not submit your information right now. Please try again.";
+
+
+        if (error?.code === "permission-denied") {
+
+          publicMessage =
+            "The form reached LumiSips, but Firebase permissions need to be updated.";
+
+        }
+
+
+        displayStatus(
+          form,
+          publicMessage,
+          "error"
+        );
+
+
+      } finally {
+
+        if (submitButton) {
+
+          submitButton.disabled = false;
+
+          submitButton.textContent =
+            originalButtonText;
+
+        }
+
+      }
+
+    }
+
+
+    /* =========================================================
+       LOCAL MEMBER COUNT
+
+       This does not expose private waitlist information.
+       Firestore rules should block public reads.
+    ========================================================== */
+
+    function updateLocalMemberCount() {
+
+      const memberCount =
+        document.getElementById("memberCount");
+
+      if (!memberCount) return;
+
+      const storageKey =
+        "lumisipsFoundingMemberCount";
+
+      const displayedCount =
+        Number(memberCount.textContent) || 1;
+
+      const storedCount =
+        Number(localStorage.getItem(storageKey)) ||
+        displayedCount;
+
+      const newCount =
+        Math.max(displayedCount, storedCount) + 1;
+
+      localStorage.setItem(
+        storageKey,
+        String(newCount)
+      );
+
+      memberCount.textContent =
+        String(newCount);
+
+    }
+
+
+    function loadLocalMemberCount() {
+
+      const memberCount =
+        document.getElementById("memberCount");
+
+      if (!memberCount) return;
+
+      const storedCount =
+        Number(
+          localStorage.getItem(
+            "lumisipsFoundingMemberCount"
+          )
+        );
+
+      if (storedCount > 1) {
+
+        memberCount.textContent =
+          String(storedCount);
+
+      }
+
+    }
+
+
+    /* =========================================================
+       CONNECT ALL FORMS
+    ========================================================== */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        loadLocalMemberCount();
+
+        const forms =
+          document.querySelectorAll(".ajax-form");
+
+        forms.forEach((form) => {
+
+          form.addEventListener(
+            "submit",
+            submitLumiSipsForm
+          );
+
+        });
+
+      }
+    );
+
+  </script>
+
+
+  <!-- =========================================================
+       SMALL SAFETY STYLES FOR NEW FORM ELEMENTS
+
+       These can later be moved into style.css.
+  ========================================================== -->
+
+  <style>
+
+    .honeypot {
+      position: absolute !important;
+      left: -9999px !important;
+      width: 1px !important;
+      height: 1px !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    .consent-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-align: left;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      opacity: 0.85;
+    }
+
+    .consent-row input {
+      width: auto;
+      min-width: 18px;
+      margin-top: 4px;
+    }
+
+    .form-status {
+      min-height: 24px;
+      margin-top: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .form-status.loading {
+      opacity: 0.85;
+    }
+
+    .form-status.success {
+      color: #8fffc1;
+    }
+
+    .form-status.error {
+      color: #ff9b9b;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
+  </style>
+
+</body>
+</html>
