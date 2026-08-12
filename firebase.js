@@ -1,10 +1,10 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
   collection,
   addDoc,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDW_HC9OVcpkLc4TFY6MR8brufTPniwXEg",
@@ -12,162 +12,193 @@ const firebaseConfig = {
   projectId: "lumisips-b280f",
   storageBucket: "lumisips-b280f.firebasestorage.app",
   messagingSenderId: "980927514380",
-  appId: "1:980927514380:web:5e92f1aeb27ba46a9eeb29",
-  measurementId: "G-D307MPGWL1"
+  appId: "1:980927514380:web:5e92f1aeb27ba46a9eeb29"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/*
- * LumiSips Firebase form routing
- *
- * data-collection on the form takes priority.
- * This prevents forms from accidentally being written
- * to the wrong Firestore collection.
- */
-function getCollectionName(form) {
-  const declaredCollection = form.dataset.collection?.trim();
+/* -------------------------------------------------
+   HELPERS
+------------------------------------------------- */
 
-  if (declaredCollection) {
-    return declaredCollection;
-  }
+function cleanString(value, maxLength = 500) {
+  return String(value ?? "")
+    .trim()
+    .slice(0, maxLength);
+}
 
-  const formType =
-    form.querySelector('[name="form_type"]')?.value?.trim();
+function cleanEmail(value) {
+  return cleanString(value, 254).toLowerCase();
+}
 
-  switch (formType) {
-    case "Community Idea":
-    case "Community Suggestion":
-      return "communityIdeas";
+function setFormStatus(form, message, state = "") {
+  const status = form.querySelector(".form-status");
 
-    case "Contact Form":
-      return "contactMessages";
+  if (!status) return;
 
-    case "Purchase Request":
-      return "purchaseRequests";
+  status.textContent = message;
 
-    case "Waitlist Signup":
-      return "waitlist";
-
-    default:
-      return "waitlist";
+  if (state) {
+    status.dataset.state = state;
+  } else {
+    status.removeAttribute("data-state");
   }
 }
 
-/*
- * Basic client-side spam protection.
- */
-function isSpam(form) {
+function setSubmitting(form, submitting) {
+  const button = form.querySelector('button[type="submit"]');
+
+  if (!button) return;
+
+  if (!button.dataset.originalText) {
+    button.dataset.originalText = button.textContent.trim();
+  }
+
+  button.disabled = submitting;
+  button.setAttribute("aria-busy", String(submitting));
+
+  button.textContent = submitting
+    ? "Sending..."
+    : button.dataset.originalText;
+}
+
+/* -------------------------------------------------
+   FORM DATA
+------------------------------------------------- */
+
+function getFormPayload(form) {
+  const formData = new FormData(form);
+  const payload = {};
+
+  for (const [key, value] of formData.entries()) {
+    if (key === "website") continue;
+
+    payload[key] = cleanString(value);
+  }
+
+  if (payload.email) {
+    payload.email = cleanEmail(payload.email);
+  }
+
+  payload.formId = form.id || "";
+  payload.page = window.location.pathname;
+  payload.createdAt = serverTimestamp();
+
+  return payload;
+}
+
+/* -------------------------------------------------
+   SPAM PROTECTION
+------------------------------------------------- */
+
+function isSpamSubmission(form) {
   const honeypot = form.querySelector('[name="website"]');
+
   return Boolean(honeypot?.value?.trim());
 }
 
-/*
- * Generic LumiSips AJAX form handler.
- */
-document.querySelectorAll(".ajax-form").forEach((form) => {
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+/* -------------------------------------------------
+   FORM SUBMISSIONS
+------------------------------------------------- */
 
-    const button = form.querySelector('button[type="submit"]');
-    const status = form.querySelector(".form-status");
+async function submitForm(form) {
+  if (isSpamSubmission(form)) {
+    form.reset();
+    setFormStatus(
+      form,
+      "Thanks! Your submission has been received.",
+      "success"
+    );
+    return;
+  }
 
-    if (!button || !status) {
-      console.error("LumiSips form is missing its submit button or status element.");
-      return;
-    }
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
 
-    if (isSpam(form)) {
-      return;
-    }
+  const collectionName =
+    form.dataset.collection || "communitySubmissions";
 
-    const originalButtonText = button.innerText;
+  const successMessage =
+    form.dataset.success ||
+    "Thanks! Your submission has been received.";
 
-    button.disabled = true;
-    button.innerText = "Submitting...";
-    status.innerText = "";
-    status.removeAttribute("data-state");
+  const payload = getFormPayload(form);
 
-    try {
-      const formData = new FormData(form);
-      const data = {};
+  setSubmitting(form, true);
+  setFormStatus(form, "Sending...");
 
-      formData.forEach((value, key) => {
-        if (key !== "website") {
-          data[key] = value;
-        }
+  try {
+    await addDoc(
+      collection(db, collectionName),
+      payload
+    );
+
+    form.reset();
+
+    setFormStatus(
+      form,
+      successMessage,
+      "success"
+    );
+  } catch (error) {
+    console.error(
+      `LumiSips ${collectionName} submission failed:`,
+      error
+    );
+
+    setFormStatus(
+      form,
+      "Something went wrong while sending. Please try again.",
+      "error"
+    );
+  } finally {
+    setSubmitting(form, false);
+  }
+}
+
+/* -------------------------------------------------
+   CONNECT ALL AJAX FORMS
+------------------------------------------------- */
+
+function setupForms() {
+  document
+    .querySelectorAll(".ajax-form")
+    .forEach(form => {
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        submitForm(form);
       });
+    });
+}
 
-      const collectionName = getCollectionName(form);
+/* -------------------------------------------------
+   COMMUNITY VOTING
+------------------------------------------------- */
 
-      await addDoc(collection(db, collectionName), {
-        ...data,
-        submittedAt: serverTimestamp(),
-        source: "lumisips.github.io"
-      });
-
-      status.style.color = "#64ffb4";
-      status.dataset.state = "success";
-      status.innerText =
-        form.dataset.success || "Successfully submitted!";
-
-      form.reset();
-
-    } catch (error) {
-      console.error(
-        `LumiSips submission failed for collection "${getCollectionName(form)}":`,
-        error
-      );
-
-      status.style.color = "#ff6b6b";
-      status.dataset.state = "error";
-      status.innerText =
-        "Something went wrong. Please try again.";
-
-    } finally {
-      button.disabled = false;
-      button.innerText = originalButtonText;
-    }
-  });
-});
-
-
-/*
- * Centralized community voting
- *
- * script.js dispatches:
- *
- * document.dispatchEvent(
- *   new CustomEvent("lumisips:vote", {
- *     detail: {
- *       group,
- *       battleId,
- *       choice
- *     }
- *   })
- * );
- */
-document.addEventListener("lumisips:vote", async (event) => {
-  const { group, battleId, choice } = event.detail || {};
+async function saveVote(detail) {
+  const group = cleanString(detail?.group, 50);
+  const battleId = cleanString(detail?.battleId, 100);
+  const choice = cleanString(detail?.choice, 150);
 
   if (!group || !battleId || !choice) {
-    console.warn("Invalid LumiSips vote:", event.detail);
     return;
   }
 
   try {
-    await addDoc(collection(db, "votes"), {
-      group,
-      battleId,
-      choice,
-      submittedAt: serverTimestamp(),
-      source: "lumisips.github.io"
-    });
+    await addDoc(
+      collection(db, "votes"),
+      {
+        group,
+        battleId,
+        choice,
+        page: window.location.pathname,
+        createdAt: serverTimestamp()
+      }
+    );
 
-    /*
-     * Tell the UI that the vote was successfully saved.
-     */
     document.dispatchEvent(
       new CustomEvent("lumisips:vote-saved", {
         detail: {
@@ -177,19 +208,52 @@ document.addEventListener("lumisips:vote", async (event) => {
         }
       })
     );
-
   } catch (error) {
-    console.error("LumiSips vote submission failed:", error);
+    console.error(
+      "LumiSips vote submission failed:",
+      error
+    );
 
     document.dispatchEvent(
       new CustomEvent("lumisips:vote-error", {
         detail: {
           group,
           battleId,
-          choice,
-          error
+          choice
         }
       })
     );
   }
-});
+}
+
+function setupVoting() {
+  document.addEventListener(
+    "lumisips:vote",
+    event => {
+      saveVote(event.detail);
+    }
+  );
+}
+
+/* -------------------------------------------------
+   INITIALIZE
+------------------------------------------------- */
+
+function initializeLumiSipsFirebase() {
+  setupForms();
+  setupVoting();
+
+  console.info(
+    "LumiSips Firebase connected."
+  );
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeLumiSipsFirebase,
+    { once: true }
+  );
+} else {
+  initializeLumiSipsFirebase();
+}
