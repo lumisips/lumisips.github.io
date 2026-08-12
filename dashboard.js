@@ -54,8 +54,7 @@ const provider =
 ========================================================= */
 
 const FOUNDER_EMAIL =
-  "arick@lumisips.com";
-
+  "arickthomas28@gmail.com";
 
 /* =========================================================
    STATE
