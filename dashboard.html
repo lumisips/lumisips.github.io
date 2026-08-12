@@ -1,75 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>LumiSips Founder Dashboard</title>
-<link rel="stylesheet" href="dashboard.css?v=3001">
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#050816">
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>LumiSips Founder Dashboard</title>
+
+  <link
+    rel="stylesheet"
+    href="dashboard.css?v=20260811-2"
+  >
 </head>
 
 <body>
-<header class="topbar">
-  <div>
-    <h1>LumiSips Founder Dashboard</h1>
-    <p>Live brand command center</p>
-  </div>
-</header>
 
-<main class="container">
+  <header class="topbar">
 
-<section class="stats-grid">
-  <div class="stat-card">
-    <span>Members</span>
-    <strong id="members">0</strong>
-  </div>
+    <div>
 
-  <div class="stat-card">
-    <span>Total Votes</span>
-    <strong id="totalVotes">0</strong>
-  </div>
+      <h1>
+        LumiSips Founder Dashboard
+      </h1>
 
-  <div class="stat-card">
-    <span>Leading Zodiac</span>
-    <strong id="topZodiac">—</strong>
-  </div>
+      <p>
+        Brand command center
+      </p>
 
-  <div class="stat-card">
-    <span>Latest Signup</span>
-    <strong id="latestSignup">—</strong>
-  </div>
-</section>
+    </div>
 
-<section class="card">
-  <div class="card-head">
-    <h2>Waitlist CRM</h2>
-    <button onclick="exportWaitlistCSV()">Export CSV</button>
-  </div>
-  <input id="searchInput" class="search" placeholder="Search name or email...">
-  <div id="waitlist">Loading...</div>
-</section>
+    <a
+      class="site-link"
+      href="/"
+    >
+      View Website
+    </a>
 
-<section class="card">
-  <h2>Vote Analytics</h2>
-  <div id="votes">Loading...</div>
-</section>
+  </header>
 
-<section class="card">
-  <h2>Flavor Suggestions</h2>
-  <div id="suggestions">Loading...</div>
-</section>
 
-<section class="card">
-  <h2>Messages</h2>
-  <div id="messages">Loading...</div>
-</section>
+  <main class="container">
 
-<section class="card">
-  <h2>Notifications</h2>
-  <div id="notifications">Loading...</div>
-</section>
+    <!-- Authentication panel is injected by dashboard.js -->
 
-</main>
 
-<script type="module" src="dashboard.js?v=3001"></script>
+    <section class="stats-grid">
+
+      <div class="stat-card">
+        <span>Waitlist Members</span>
+        <strong id="members">0</strong>
+      </div>
+
+
+      <div class="stat-card">
+        <span>First Release Requests</span>
+        <strong id="purchaseCount">0</strong>
+      </div>
+
+
+      <div class="stat-card">
+        <span>Community Ideas</span>
+        <strong id="ideaCount">0</strong>
+      </div>
+
+
+      <div class="stat-card">
+        <span>Total Votes</span>
+        <strong id="totalVotes">0</strong>
+      </div>
+
+
+      <div class="stat-card stat-card-wide">
+        <span>Leading Vote Choice</span>
+        <strong id="topZodiac">—</strong>
+      </div>
+
+
+      <div class="stat-card stat-card-wide">
+        <span>Latest Activity</span>
+        <strong id="latestSignup">—</strong>
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <div class="card-head">
+
+        <div>
+          <p class="eyebrow">
+            Community growth
+          </p>
+
+          <h2>
+            Waitlist CRM
+          </h2>
+        </div>
+
+
+        <button
+          type="button"
+          onclick="exportWaitlistCSV()"
+        >
+          Export CSV
+        </button>
+
+      </div>
+
+
+      <input
+        id="searchInput"
+        class="search"
+        type="search"
+        placeholder="Search name, email or zodiac..."
+        autocomplete="off"
+      >
+
+
+      <div
+        id="waitlist"
+        class="data-list"
+      >
+        Loading...
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <div class="card-head">
+
+        <div>
+          <p class="eyebrow">
+            Launch demand
+          </p>
+
+          <h2>
+            First Release Requests
+          </h2>
+        </div>
+
+
+        <button
+          type="button"
+          onclick="exportPurchaseRequestsCSV()"
+        >
+          Export CSV
+        </button>
+
+      </div>
+
+
+      <div
+        id="purchaseRequests"
+        class="data-list"
+      >
+        Loading...
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <div class="card-head">
+
+        <div>
+          <p class="eyebrow">
+            Community development
+          </p>
+
+          <h2>
+            Community Lab Ideas
+          </h2>
+        </div>
+
+
+        <button
+          type="button"
+          onclick="exportCommunityIdeasCSV()"
+        >
+          Export CSV
+        </button>
+
+      </div>
+
+
+      <div
+        id="suggestions"
+        class="data-list"
+      >
+        Loading...
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <div class="card-head">
+
+        <div>
+          <p class="eyebrow">
+            Product decisions
+          </p>
+
+          <h2>
+            Vote Analytics
+          </h2>
+        </div>
+
+
+        <button
+          type="button"
+          onclick="exportVotesCSV()"
+        >
+          Export CSV
+        </button>
+
+      </div>
+
+
+      <div
+        id="votes"
+        class="vote-analytics"
+      >
+        Loading...
+      </div>
+
+    </section>
+
+
+    <section class="card dashboard-note">
+
+      <p class="eyebrow">
+        Security
+      </p>
+
+      <h2>
+        Founder-only data
+      </h2>
+
+      <p>
+        This dashboard contains customer names, email addresses,
+        product-interest data and community submissions.
+        Access should remain restricted through Firebase Authentication
+        and Firestore security rules.
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <script
+    type="module"
+    src="dashboard.js?v=20260811-2"
+  ></script>
+
 </body>
 </html>
