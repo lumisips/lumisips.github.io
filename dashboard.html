@@ -1,39 +1,88 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
+
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
-  <meta name="theme-color" content="#050816">
-  <meta name="robots" content="noindex, nofollow">
 
-  <title>LumiSips Founder Dashboard</title>
+  <meta
+    name="theme-color"
+    content="#05070d"
+  >
+
+
+  <!--
+    IMPORTANT:
+    This page should NOT appear
+    in Google search results.
+  -->
+
+  <meta
+    name="robots"
+    content="noindex, nofollow, noarchive"
+  >
+
+
+  <title>
+    LumiSips Founder Dashboard
+  </title>
+
+
+  <meta
+    name="description"
+    content="Private LumiSips founder dashboard."
+  >
+
 
   <link
     rel="stylesheet"
-    href="dashboard.css?v=20260811-2"
+    href="dashboard.css?v=20260916-remaster-1"
   >
+
 </head>
+
+
 
 <body>
 
+
+
+  <!-- ==========================================
+       TOP BAR
+  =========================================== -->
+
   <header class="topbar">
 
+
     <div>
+
+
+      <p class="eyebrow">
+        Private command center
+      </p>
+
 
       <h1>
         LumiSips Founder Dashboard
       </h1>
 
+
       <p>
-        Brand command center
+        Hydrate • Elevate • Glow
       </p>
 
+
     </div>
+
+
 
     <a
       class="site-link"
@@ -42,229 +91,661 @@
       View Website
     </a>
 
+
   </header>
 
 
+
+  <!-- ==========================================
+       DASHBOARD
+  =========================================== -->
+
   <main class="container">
 
-    <!-- Authentication panel is injected by dashboard.js -->
 
+    <!--
+      dashboard.js automatically inserts
+      the Founder Authentication panel here.
+    -->
+
+
+
+    <!-- ==========================================
+         OVERVIEW
+    =========================================== -->
 
     <section class="stats-grid">
 
-      <div class="stat-card">
-        <span>Waitlist Members</span>
-        <strong id="members">0</strong>
-      </div>
-
 
       <div class="stat-card">
-        <span>First Release Requests</span>
-        <strong id="purchaseCount">0</strong>
+
+
+        <span>
+          Waitlist Members
+        </span>
+
+
+        <strong id="members">
+          0
+        </strong>
+
+
       </div>
+
 
 
       <div class="stat-card">
-        <span>Community Ideas</span>
-        <strong id="ideaCount">0</strong>
+
+
+        <span>
+          First Release Requests
+        </span>
+
+
+        <strong id="purchaseCount">
+          0
+        </strong>
+
+
       </div>
+
 
 
       <div class="stat-card">
-        <span>Total Votes</span>
-        <strong id="totalVotes">0</strong>
+
+
+        <span>
+          Community Ideas
+        </span>
+
+
+        <strong id="ideaCount">
+          0
+        </strong>
+
+
       </div>
 
 
-      <div class="stat-card stat-card-wide">
-        <span>Leading Vote Choice</span>
-        <strong id="topZodiac">—</strong>
+
+      <div class="stat-card">
+
+
+        <span>
+          Total Votes
+        </span>
+
+
+        <strong id="totalVotes">
+          0
+        </strong>
+
+
       </div>
 
 
-      <div class="stat-card stat-card-wide">
-        <span>Latest Activity</span>
-        <strong id="latestSignup">—</strong>
+
+      <div
+        class="stat-card stat-card-wide"
+      >
+
+
+        <span>
+          Leading Vote Choice
+        </span>
+
+
+        <strong id="topZodiac">
+          —
+        </strong>
+
+
       </div>
+
+
+
+      <div
+        class="stat-card stat-card-wide"
+      >
+
+
+        <span>
+          Latest Activity
+        </span>
+
+
+        <strong id="latestSignup">
+          —
+        </strong>
+
+
+      </div>
+
 
     </section>
 
 
+
+    <!-- ==========================================
+         EXPORT CENTER
+    =========================================== -->
+
     <section class="card">
+
 
       <div class="card-head">
 
+
         <div>
+
+
+          <p class="eyebrow">
+            Data center
+          </p>
+
+
+          <h2>
+            LumiSips Data Exports
+          </h2>
+
+
+          <p>
+
+            Download current LumiSips
+            customer, product-interest,
+            Community Lab and voting data.
+
+          </p>
+
+
+        </div>
+
+
+
+        <button
+          type="button"
+          onclick="exportAllLumiSipsData()"
+        >
+
+          Export All Data
+
+        </button>
+
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         WAITLIST CRM
+    =========================================== -->
+
+    <section class="card">
+
+
+      <div class="card-head">
+
+
+        <div>
+
+
           <p class="eyebrow">
             Community growth
           </p>
 
+
           <h2>
             Waitlist CRM
           </h2>
+
+
+          <p>
+
+            Review the people joining
+            the LumiSips founding community.
+
+          </p>
+
+
         </div>
+
 
 
         <button
           type="button"
           onclick="exportWaitlistCSV()"
         >
-          Export CSV
+
+          Export Waitlist
+
         </button>
+
 
       </div>
 
 
-      <input
-        id="searchInput"
-        class="search"
-        type="search"
-        placeholder="Search name, email or zodiac..."
-        autocomplete="off"
-      >
+
+      <label for="searchInput">
+
+        <span class="sr-only">
+          Search waitlist
+        </span>
+
+
+        <input
+          id="searchInput"
+          class="search"
+          type="search"
+          placeholder="Search name, email or zodiac..."
+          autocomplete="off"
+        >
+
+      </label>
+
 
 
       <div
         id="waitlist"
         class="data-list"
+        aria-live="polite"
       >
-        Loading...
+
+        Loading waitlist...
+
       </div>
+
 
     </section>
 
 
+
+    <!-- ==========================================
+         FIRST RELEASE REQUESTS
+    =========================================== -->
+
     <section class="card">
+
 
       <div class="card-head">
 
+
         <div>
+
+
           <p class="eyebrow">
             Launch demand
           </p>
 
+
           <h2>
             First Release Requests
           </h2>
+
+
+          <p>
+
+            Track requested quantities,
+            flavor interest, packaging
+            preference and ZIP-code demand.
+
+          </p>
+
+
         </div>
+
 
 
         <button
           type="button"
           onclick="exportPurchaseRequestsCSV()"
         >
-          Export CSV
+
+          Export Requests
+
         </button>
 
+
       </div>
+
 
 
       <div
         id="purchaseRequests"
         class="data-list"
+        aria-live="polite"
       >
-        Loading...
+
+        Loading First Release requests...
+
       </div>
+
 
     </section>
 
 
+
+    <!-- ==========================================
+         COMMUNITY LAB
+    =========================================== -->
+
     <section class="card">
+
 
       <div class="card-head">
 
+
         <div>
+
+
           <p class="eyebrow">
             Community development
           </p>
 
+
           <h2>
             Community Lab Ideas
           </h2>
+
+
+          <p>
+
+            Review Flavor, Color,
+            Function, Packaging and
+            Collaboration submissions.
+
+          </p>
+
+
         </div>
+
 
 
         <button
           type="button"
           onclick="exportCommunityIdeasCSV()"
         >
-          Export CSV
+
+          Export Ideas
+
         </button>
 
+
       </div>
+
 
 
       <div
         id="suggestions"
         class="data-list"
+        aria-live="polite"
       >
-        Loading...
+
+        Loading Community Lab submissions...
+
       </div>
+
 
     </section>
 
 
+
+    <!-- ==========================================
+         VOTE ANALYTICS
+    =========================================== -->
+
     <section class="card">
+
 
       <div class="card-head">
 
+
         <div>
+
+
           <p class="eyebrow">
             Product decisions
           </p>
 
+
           <h2>
             Vote Analytics
           </h2>
+
+
+          <p>
+
+            See which LumiSips concepts
+            the community is choosing
+            across current product votes.
+
+          </p>
+
+
         </div>
+
 
 
         <button
           type="button"
           onclick="exportVotesCSV()"
         >
-          Export CSV
+
+          Export Votes
+
         </button>
 
+
       </div>
+
 
 
       <div
         id="votes"
         class="vote-analytics"
+        aria-live="polite"
       >
-        Loading...
+
+        Loading vote analytics...
+
       </div>
+
 
     </section>
 
 
-    <section class="card dashboard-note">
+
+    <!-- ==========================================
+         COMMUNITY LAB FIELD REFERENCE
+    =========================================== -->
+
+    <section class="card">
+
+
+      <div class="card-head">
+
+
+        <div>
+
+
+          <p class="eyebrow">
+            Community Lab structure
+          </p>
+
+
+          <h2>
+            Idea Categories
+          </h2>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="data-list">
+
+
+        <div class="wait-card">
+
+
+          <h3>
+            Flavor
+          </h3>
+
+
+          <p>
+            New flavor combinations,
+            fruit profiles and taste concepts.
+          </p>
+
+
+        </div>
+
+
+
+        <div class="wait-card">
+
+
+          <h3>
+            Color
+          </h3>
+
+
+          <p>
+            Gemstone colors,
+            liquid appearance and
+            visual product concepts.
+          </p>
+
+
+        </div>
+
+
+
+        <div class="wait-card">
+
+
+          <h3>
+            Function
+          </h3>
+
+
+          <p>
+            Product functionality,
+            wellness direction and
+            beverage experience ideas.
+          </p>
+
+
+        </div>
+
+
+
+        <div class="wait-card">
+
+
+          <h3>
+            Packaging
+          </h3>
+
+
+          <p>
+            Bottle, can, crown cap,
+            label and multipack ideas.
+          </p>
+
+
+        </div>
+
+
+
+        <div class="wait-card">
+
+
+          <h3>
+            Collaboration
+          </h3>
+
+
+          <p>
+            Brands, artists,
+            companies, events and
+            limited-edition concepts.
+          </p>
+
+
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         SECURITY
+    =========================================== -->
+
+    <section
+      class="card dashboard-note"
+    >
+
 
       <p class="eyebrow">
         Security
       </p>
 
+
       <h2>
         Founder-only data
       </h2>
 
+
       <p>
-        This dashboard contains customer names, email addresses,
-        product-interest data and community submissions.
-        Access should remain restricted through Firebase Authentication
-        and Firestore security rules.
+
+        This dashboard contains customer
+        names, email addresses,
+        product-interest information,
+        Community Lab submissions
+        and voting data.
+
       </p>
 
+
+      <p>
+
+        Access should remain protected
+        with Firebase Authentication
+        and restrictive Firestore
+        security rules.
+
+      </p>
+
+
     </section>
+
 
   </main>
 
 
+
+  <!-- ==========================================
+       DASHBOARD JAVASCRIPT
+  =========================================== -->
+
   <script
     type="module"
-    src="dashboard.js?v=20260811-2"
+    src="dashboard.js?v=20260916-remaster-1"
   ></script>
 
+
 </body>
+
 </html>
