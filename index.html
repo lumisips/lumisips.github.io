@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -12,12 +11,16 @@
 
   <meta
     name="theme-color"
-    content="#050816"
+    content="#05070d"
   >
+
+  <title>
+    LumiSips | Hydrate • Elevate • Glow
+  </title>
 
   <meta
     name="description"
-    content="LumiSips is a premium gemstone-inspired hydration and functional beverage brand built through real formulation, community voting and founder-led development."
+    content="LumiSips is a premium gemstone-inspired hydration and functional beverage brand built through real formulation, community feedback and bold product design."
   >
 
   <meta
@@ -29,6 +32,9 @@
     rel="canonical"
     href="https://lumisips.com/"
   >
+
+
+  <!-- SOCIAL SHARING -->
 
   <meta
     property="og:type"
@@ -47,17 +53,45 @@
 
   <meta
     property="og:description"
-    content="Explore LumiSips, vote on future releases and get first access to the gemstone-inspired hydration collection."
+    content="Explore the LumiSips gemstone collection, shape future releases and get first-release access."
   >
+
+  <meta
+    property="og:image"
+    content="https://lumisips.com/assets/images/brand/lumisips-social-share.webp"
+  >
+
 
   <meta
     name="twitter:card"
     content="summary_large_image"
   >
 
-  <title>
-    LumiSips | Hydrate • Elevate • Glow
-  </title>
+  <meta
+    name="twitter:title"
+    content="LumiSips | Hydrate • Elevate • Glow"
+  >
+
+  <meta
+    name="twitter:description"
+    content="Premium gemstone-inspired hydration shaped through real formulation and community feedback."
+  >
+
+  <meta
+    name="twitter:image"
+    content="https://lumisips.com/assets/images/brand/lumisips-social-share.webp"
+  >
+
+
+  <!-- FAVICON -->
+
+  <link
+    rel="icon"
+    href="/assets/images/brand/favicon.png"
+  >
+
+
+  <!-- FONTS -->
 
   <link
     rel="preconnect"
@@ -71,20 +105,51 @@
   >
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700;800;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   >
 
+
+  <!-- MAIN CSS -->
+
   <link
     rel="stylesheet"
-    href="style.css?v=20260818-1"
+    href="style.css?v=20260916-remaster-1"
   >
+
+
+  <!-- ENABLE JAVASCRIPT ENHANCEMENTS -->
+
+  <script>
+    document.documentElement.classList.remove("no-js");
+    document.documentElement.classList.add("js");
+  </script>
+
+
+  <!-- ORGANIZATION STRUCTURED DATA -->
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "LumiSips LLC",
+    "url": "https://lumisips.com/",
+    "logo": "https://lumisips.com/assets/images/brand/lumisips-logo.png",
+    "sameAs": [
+      "https://www.instagram.com/lumisips",
+      "https://www.tiktok.com/@lumisips",
+      "https://youtube.com/@lumisips"
+    ]
+  }
+  </script>
 
 </head>
 
 
 <body>
 
+
+  <!-- ACCESSIBILITY -->
 
   <a
     class="skip-link"
@@ -94,51 +159,43 @@
   </a>
 
 
-  <canvas
-    id="starfield"
-    aria-hidden="true"
-  ></canvas>
 
-
-  <div
-    class="ambient ambient-one"
-    aria-hidden="true"
-  ></div>
-
-
-  <div
-    class="ambient ambient-two"
-    aria-hidden="true"
-  ></div>
-
-
-  <div
-    id="scrollProgress"
-    aria-hidden="true"
-  ></div>
-
-
-
-  <!-- ========================================
+  <!-- ==========================================
        NAVIGATION
-  ========================================= -->
+  =========================================== -->
 
-
-  <nav
-    class="navbar"
-    aria-label="Primary navigation"
+  <header
+    class="site-header"
+    id="top"
   >
 
     <div class="nav-shell">
 
 
       <a
-        class="brand"
+        class="brand-link"
         href="#home"
         aria-label="LumiSips home"
       >
-        LumiSips
+
+        <img
+          class="brand-logo"
+          src="assets/images/brand/lumisips-logo.png"
+          alt="LumiSips"
+          width="180"
+          height="64"
+          onerror="this.hidden=true;this.nextElementSibling.hidden=false"
+        >
+
+        <span
+          class="brand-fallback"
+          hidden
+        >
+          LumiSips
+        </span>
+
       </a>
+
 
 
       <button
@@ -146,51 +203,60 @@
         id="menuToggle"
         type="button"
         aria-expanded="false"
-        aria-controls="navLinks"
-        aria-label="Open navigation menu"
+        aria-controls="primaryNav"
       >
-        ☰
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+        <span class="sr-only">
+          Open menu
+        </span>
+
       </button>
 
 
-      <div
-        class="nav-links"
-        id="navLinks"
+
+      <nav
+        class="primary-nav"
+        id="primaryNav"
+        aria-label="Primary navigation"
       >
 
         <a href="#collection">
           Collection
         </a>
 
-        <a href="#shop">
-          First Release
+        <a href="#difference">
+          Why LumiSips
         </a>
 
-        <a href="#arena">
-          Vote
-        </a>
-
-        <a href="#story">
-          Story
+        <a href="#lab">
+          R&amp;D
         </a>
 
         <a href="#community">
-          Community
+          Community Lab
+        </a>
+
+        <a href="#first-release">
+          First Release
         </a>
 
         <a
           class="nav-cta"
           href="#join"
         >
-          Join Waitlist
+          Get First Access
         </a>
 
-      </div>
+      </nav>
 
 
     </div>
 
-  </nav>
+  </header>
 
 
 
@@ -198,18 +264,30 @@
 
 
 
-    <!-- ========================================
-         HERO — PRODUCT FIRST
-    ========================================= -->
+    <!-- ==========================================
+         HERO
+    =========================================== -->
 
-
-    <header
-      class="hero section-shell"
+    <section
+      class="hero"
       id="home"
     >
 
-      <div class="hero-grid">
+      <div
+        class="hero-ambient hero-ambient-blue"
+        aria-hidden="true"
+      ></div>
 
+      <div
+        class="hero-ambient hero-ambient-violet"
+        aria-hidden="true"
+      ></div>
+
+
+      <div class="shell hero-grid">
+
+
+        <!-- HERO COPY -->
 
         <div class="hero-copy reveal">
 
@@ -219,67 +297,89 @@
           </p>
 
 
-          <h1 class="hero-logo">
-            LumiSips
-          </h1>
+          <div class="hero-brand-lockup">
 
+            <h1 class="display-logo">
+              LumiSips
+            </h1>
 
-          <p class="hero-tagline">
-            Hydrate • Elevate • Glow
-          </p>
+            <p>
+              Hydrate • Elevate • Glow
+            </p>
+
+          </div>
 
 
           <h2>
-            Hydration designed to look unforgettable
-            and taste just as bold.
+            Hydration designed to look unforgettable.
           </h2>
 
 
           <p class="hero-description">
 
-            LumiSips combines premium flavor,
-            functional hydration, gemstone-inspired
-            color and community-led product development
-            into a beverage experience built to stand out.
+            Premium flavor, gemstone-inspired color
+            and real product development come together
+            in a beverage experience built to stand out.
 
           </p>
 
 
           <div class="hero-actions">
 
-
             <a
-              class="btn btn-primary"
-              href="#shop"
+              class="button button-primary"
+              href="#first-release"
             >
               Get First-Release Access
             </a>
 
-
             <a
-              class="btn btn-secondary"
+              class="button button-ghost"
               href="#collection"
             >
               Explore the Collection
             </a>
 
-
           </div>
 
 
-          <div class="hero-proof">
+          <div
+            class="proof-row"
+            aria-label="LumiSips development highlights"
+          >
 
-            <span>
-              70+ formulation batches
-            </span>
+            <div>
+              <strong>
+                90+
+              </strong>
 
-            <span>
-              Founder-built
-            </span>
+              <span>
+                R&amp;D batches
+              </span>
+            </div>
 
-            <span>
-              Community-shaped
-            </span>
+
+            <div>
+              <strong>
+                6
+              </strong>
+
+              <span>
+                featured flavors
+              </span>
+            </div>
+
+
+            <div>
+              <strong>
+                12
+              </strong>
+
+              <span>
+                zodiac concepts
+              </span>
+            </div>
+
 
           </div>
 
@@ -288,204 +388,61 @@
 
 
 
-        <aside
-          class="hero-product-card reveal"
-          aria-label="Featured LumiSips flagship"
-        >
+        <!-- HERO PRODUCT -->
+
+        <div class="hero-media reveal">
 
 
           <div
-            class="product-glow product-glow-blue"
+            class="hero-orbit"
+            aria-hidden="true"
           ></div>
 
 
-          <div class="product-stage">
+          <picture class="hero-product-picture">
+
+            <source
+              srcset="assets/images/products/cancer-blue-sapphire.webp"
+              type="image/webp"
+            >
+
+            <img
+              src="assets/images/products/cancer-blue-sapphire.png"
+              alt="LumiSips Cancer Blue Sapphire clear glass bottle"
+              width="820"
+              height="1100"
+              fetchpriority="high"
+              onerror="this.closest('.hero-product-picture').classList.add('missing-product-image')"
+            >
+
+          </picture>
 
 
-            <div class="bottle-shell">
+
+          <div class="hero-product-meta">
 
 
-              <div class="bottle-cap"></div>
+            <span class="status-dot"></span>
 
 
-              <div class="bottle-neck"></div>
+            <div>
 
+              <small>
+                Flagship
+              </small>
 
-              <div
-                class="bottle-body bottle-cancer"
-              >
+              <strong>
+                Cancer ♋ — Blue Dragon Flower
+              </strong>
 
-
-                <div
-                  class="bottle-highlight"
-                ></div>
-
-
-                <div class="bottle-label">
-
-
-                  <span class="bottle-brand">
-                    LumiSips
-                  </span>
-
-
-                  <span class="bottle-zodiac">
-                    ♋
-                  </span>
-
-
-                  <strong>
-                    Cancer
-                  </strong>
-
-
-                  <small>
-                    Blue Dragon Flower
-                  </small>
-
-
-                </div>
-
-
-              </div>
-
+              <span>
+                Blue Raspberry • Dragon Fruit • Hibiscus
+              </span>
 
             </div>
 
 
           </div>
-
-
-          <div class="hero-product-copy">
-
-
-            <p class="card-kicker">
-              Flagship
-            </p>
-
-
-            <h3>
-              Cancer ♋
-            </h3>
-
-
-            <strong>
-              Blue Raspberry • Dragon Fruit • Hibiscus
-            </strong>
-
-
-            <p>
-              Blue Sapphire
-            </p>
-
-
-            <div class="status-pill">
-              Advanced refinement
-            </div>
-
-
-          </div>
-
-
-        </aside>
-
-
-      </div>
-
-
-    </header>
-
-
-
-    <!-- ========================================
-         BRAND PILLARS
-    ========================================= -->
-
-
-    <section class="section brand-pillars">
-
-
-      <div class="section-shell">
-
-
-        <div class="pillar-grid">
-
-
-          <article class="pillar-card reveal">
-
-            <span>
-              01
-            </span>
-
-            <h3>
-              Gemstone Identity
-            </h3>
-
-            <p>
-              Each release is shaped around a bold
-              gemstone color and visual personality.
-            </p>
-
-          </article>
-
-
-
-          <article class="pillar-card reveal">
-
-            <span>
-              02
-            </span>
-
-            <h3>
-              Premium Flavor
-            </h3>
-
-            <p>
-              Layered fruit combinations designed
-              for a memorable finish, not a generic
-              sports-drink profile.
-            </p>
-
-          </article>
-
-
-
-          <article class="pillar-card reveal">
-
-            <span>
-              03
-            </span>
-
-            <h3>
-              Functional Hydration
-            </h3>
-
-            <p>
-              Beverage development focused on
-              hydration, functionality and
-              repeatable formulation.
-            </p>
-
-          </article>
-
-
-
-          <article class="pillar-card reveal">
-
-            <span>
-              04
-            </span>
-
-            <h3>
-              Community Built
-            </h3>
-
-            <p>
-              Flavor, packaging and color decisions
-              are shaped with real community feedback.
-            </p>
-
-          </article>
 
 
         </div>
@@ -498,36 +455,132 @@
 
 
 
-    <!-- ========================================
-         FEATURED COLLECTION
-    ========================================= -->
-
+    <!-- ==========================================
+         BRAND PILLARS
+    =========================================== -->
 
     <section
-      class="section-shell section"
+      class="brand-strip"
+      aria-label="LumiSips brand pillars"
+    >
+
+
+      <div class="shell brand-strip-grid">
+
+
+        <article>
+
+          <span>
+            01
+          </span>
+
+          <strong>
+            Gemstone Identity
+          </strong>
+
+          <p>
+            Distinct color personalities designed
+            to be recognizable before the first sip.
+          </p>
+
+        </article>
+
+
+
+        <article>
+
+          <span>
+            02
+          </span>
+
+          <strong>
+            Premium Flavor
+          </strong>
+
+          <p>
+            Layered fruit profiles developed to feel
+            memorable rather than generic.
+          </p>
+
+        </article>
+
+
+
+        <article>
+
+          <span>
+            03
+          </span>
+
+          <strong>
+            Functional Hydration
+          </strong>
+
+          <p>
+            A product platform built around hydration,
+            formulation discipline and future functionality.
+          </p>
+
+        </article>
+
+
+
+        <article>
+
+          <span>
+            04
+          </span>
+
+          <strong>
+            Community Built
+          </strong>
+
+          <p>
+            Real feedback helps shape flavor, color,
+            packaging and future collaborations.
+          </p>
+
+        </article>
+
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         FEATURED COLLECTION
+    =========================================== -->
+
+    <section
+      class="section shell"
       id="collection"
     >
 
 
-      <div class="section-heading reveal">
+      <div class="section-heading section-heading-split reveal">
 
 
-        <p class="eyebrow">
-          Featured collection
-        </p>
+        <div>
 
+          <p class="eyebrow">
+            The collection
+          </p>
 
-        <h2>
-          Meet the gemstone flavors
-        </h2>
+          <h2>
+            Meet the gemstone flavors.
+          </h2>
+
+        </div>
 
 
         <p>
 
-          The first LumiSips collection is being
-          refined around bold fruit profiles,
-          zodiac personalities and distinct
-          gemstone color identities.
+          Each LumiSips concept pairs a distinctive
+          flavor direction with its own gemstone
+          color identity.
 
         </p>
 
@@ -536,322 +589,33 @@
 
 
 
-      <div class="featured-collection-grid">
+      <!-- PRODUCT CARDS GENERATED FROM data.js -->
 
+      <div
+        class="product-grid"
+        id="productGrid"
+      ></div>
 
 
-        <!-- CANCER -->
 
+      <!-- FULL ZODIAC -->
 
-        <article
-          class="featured-product featured-cancer reveal"
-        >
-
-
-          <div class="featured-product-visual">
-
-            <div
-              class="mini-bottle mini-blue"
-            ></div>
-
-          </div>
-
-
-          <div class="featured-product-copy">
-
-
-            <span class="featured-badge">
-              Flagship
-            </span>
-
-
-            <h3>
-              Cancer ♋
-            </h3>
-
-
-            <strong>
-              Blue Dragon Flower
-            </strong>
-
-
-            <p>
-              Blue Raspberry • Dragon Fruit • Hibiscus
-            </p>
-
-
-            <small>
-              Blue Sapphire
-            </small>
-
-
-          </div>
-
-
-        </article>
-
-
-
-        <!-- CAPRICORN -->
-
-
-        <article class="featured-product reveal">
-
-
-          <div class="featured-product-visual">
-
-            <div
-              class="mini-bottle mini-ruby"
-            ></div>
-
-          </div>
-
-
-          <div class="featured-product-copy">
-
-
-            <span class="featured-badge">
-              Advanced
-            </span>
-
-
-            <h3>
-              Capricorn ♑
-            </h3>
-
-
-            <strong>
-              Strawberry • Sour Watermelon
-            </strong>
-
-
-            <p>
-              Sharp, juicy and candy-forward.
-            </p>
-
-
-            <small>
-              Ruby
-            </small>
-
-
-          </div>
-
-
-        </article>
-
-
-
-        <!-- VIRGO -->
-
-
-        <article class="featured-product reveal">
-
-
-          <div class="featured-product-visual">
-
-            <div
-              class="mini-bottle mini-emerald"
-            ></div>
-
-          </div>
-
-
-          <div class="featured-product-copy">
-
-
-            <span class="featured-badge">
-              Active R&amp;D
-            </span>
-
-
-            <h3>
-              Virgo ♍
-            </h3>
-
-
-            <strong>
-              Pineapple • Watermelon • Coconut
-            </strong>
-
-
-            <p>
-              Tropical, refreshing and smooth.
-            </p>
-
-
-            <small>
-              Emerald
-            </small>
-
-
-          </div>
-
-
-        </article>
-
-
-
-        <!-- SCORPIO -->
-
-
-        <article class="featured-product reveal">
-
-
-          <div class="featured-product-visual">
-
-            <div
-              class="mini-bottle mini-kunzite"
-            ></div>
-
-          </div>
-
-
-          <div class="featured-product-copy">
-
-
-            <span class="featured-badge">
-              Active R&amp;D
-            </span>
-
-
-            <h3>
-              Scorpio ♏
-            </h3>
-
-
-            <strong>
-              Strawberry • Pineapple • Dragon Fruit
-            </strong>
-
-
-            <p>
-              Bright tropical fruit with a seductive
-              purple identity.
-            </p>
-
-
-            <small>
-              Purple Kunzite
-            </small>
-
-
-          </div>
-
-
-        </article>
-
-
-
-        <!-- SAGITTARIUS -->
-
-
-        <article class="featured-product reveal">
-
-
-          <div class="featured-product-visual">
-
-            <div
-              class="mini-bottle mini-topaz"
-            ></div>
-
-          </div>
-
-
-          <div class="featured-product-copy">
-
-
-            <span class="featured-badge">
-              Active R&amp;D
-            </span>
-
-
-            <h3>
-              Sagittarius ♐
-            </h3>
-
-
-            <strong>
-              Black Cherry • Dragon Fruit • Pineapple
-            </strong>
-
-
-            <p>
-              Dark fruit lifted with bright tropical acidity.
-            </p>
-
-
-            <small>
-              Pink Topaz
-            </small>
-
-
-          </div>
-
-
-        </article>
-
-
-
-        <!-- PISCES -->
-
-
-        <article class="featured-product reveal">
-
-
-          <div class="featured-product-visual">
-
-            <div
-              class="mini-bottle mini-amethyst"
-            ></div>
-
-          </div>
-
-
-          <div class="featured-product-copy">
-
-
-            <span class="featured-badge">
-              Active R&amp;D
-            </span>
-
-
-            <h3>
-              Pisces ♓
-            </h3>
-
-
-            <strong>
-              Strawberry • Açaí • Pomegranate
-            </strong>
-
-
-            <p>
-              Deep berry flavor with a luxurious
-              amethyst direction.
-            </p>
-
-
-            <small>
-              Deep Amethyst
-            </small>
-
-
-          </div>
-
-
-        </article>
-
-
-      </div>
-
-
-
-      <details class="full-zodiac-details reveal">
+      <details class="zodiac-expander reveal">
 
 
         <summary>
-          Explore the full 12-sign zodiac universe
+
+          <span>
+            Explore the full 12-sign LumiSips universe
+          </span>
+
+          <span
+            class="summary-icon"
+            aria-hidden="true"
+          >
+            +
+          </span>
+
         </summary>
 
 
@@ -868,18 +632,907 @@
 
 
 
-    <!-- ========================================
-         FIRST RELEASE
-    ========================================= -->
-
+    <!-- ==========================================
+         WHY LUMISIPS
+    =========================================== -->
 
     <section
-      class="section section-dark commerce-section"
-      id="shop"
+      class="section section-dark"
+      id="difference"
     >
 
 
-      <div class="section-shell">
+      <div class="shell difference-grid">
+
+
+
+        <!-- LAB IMAGE -->
+
+        <div class="difference-media reveal">
+
+
+          <div class="editorial-frame">
+
+
+            <picture>
+
+              <source
+                srcset="assets/images/lab/lumisips-lab.webp"
+                type="image/webp"
+              >
+
+              <img
+                src="assets/images/lab/lumisips-lab.jpg"
+                alt="LumiSips beverage research and development"
+                width="1000"
+                height="760"
+                loading="lazy"
+                onerror="this.parentElement.classList.add('missing-editorial-image')"
+              >
+
+            </picture>
+
+
+
+            <div class="editorial-label">
+
+              <small>
+                Behind the bottle
+              </small>
+
+              <strong>
+                Real formulation. Real iteration.
+              </strong>
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- WHY COPY -->
+
+        <div class="difference-copy reveal">
+
+
+          <p class="eyebrow">
+            Why LumiSips
+          </p>
+
+
+          <h2>
+            Built like a beverage company,
+            not a mood board.
+          </h2>
+
+
+          <p>
+
+            The brand is being developed through repeat
+            formulation, ingredient evaluation, color testing,
+            packaging decisions and shelf-stability work.
+
+          </p>
+
+
+
+          <div class="difference-points">
+
+
+            <article>
+
+              <span>
+                Flavor
+              </span>
+
+              <strong>
+                Advanced refinement
+              </strong>
+
+              <p>
+                Layering sweetness, acidity and fruit character
+                until the profile holds together.
+              </p>
+
+            </article>
+
+
+
+            <article>
+
+              <span>
+                Color
+              </span>
+
+              <strong>
+                Gemstone development
+              </strong>
+
+              <p>
+                Matching visual identity to flavor without
+                sacrificing beverage stability.
+              </p>
+
+            </article>
+
+
+
+            <article>
+
+              <span>
+                Stability
+              </span>
+
+              <strong>
+                Active testing
+              </strong>
+
+              <p>
+                Preservation and shelf-life systems are being
+                monitored over time.
+              </p>
+
+            </article>
+
+
+
+            <article>
+
+              <span>
+                Packaging
+              </span>
+
+              <strong>
+                Validation
+              </strong>
+
+              <p>
+                Clear glass and sleek-can directions are being
+                evaluated for the right launch experience.
+              </p>
+
+            </article>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         RESEARCH & DEVELOPMENT
+    =========================================== -->
+
+    <section
+      class="section shell"
+      id="lab"
+    >
+
+
+      <div class="section-heading reveal">
+
+
+        <p class="eyebrow">
+          Research &amp; development
+        </p>
+
+
+        <h2>
+          More than 90 batches deep.
+        </h2>
+
+
+        <p>
+
+          LumiSips has moved through repeated flavor trials,
+          concentrate scaling, carbonation testing,
+          functional-ingredient work, natural color development
+          and preservation testing.
+
+        </p>
+
+
+      </div>
+
+
+
+      <div class="lab-metrics">
+
+
+        <article class="metric-card reveal">
+
+          <strong>
+            90+
+          </strong>
+
+          <span>
+            Formulation batches
+          </span>
+
+        </article>
+
+
+
+        <article class="metric-card reveal">
+
+          <strong>
+            4
+          </strong>
+
+          <span>
+            Product-line formats
+          </span>
+
+        </article>
+
+
+
+        <article class="metric-card reveal">
+
+          <strong>
+            12
+          </strong>
+
+          <span>
+            Zodiac identities
+          </span>
+
+        </article>
+
+
+
+        <article class="metric-card reveal">
+
+          <strong>
+            1
+          </strong>
+
+          <span>
+            Community shaping the launch
+          </span>
+
+        </article>
+
+
+      </div>
+
+
+
+      <!-- DEVELOPMENT ROADMAP -->
+
+      <div class="development-timeline reveal">
+
+
+        <article class="is-complete">
+
+          <span>
+            Complete
+          </span>
+
+          <h3>
+            Brand + core flavor foundation
+          </h3>
+
+          <p>
+            Primary brand language, product identity
+            and flagship flavor direction established.
+          </p>
+
+        </article>
+
+
+
+        <article class="is-active">
+
+          <span>
+            Active now
+          </span>
+
+          <h3>
+            Formula + stability refinement
+          </h3>
+
+          <p>
+            Flavor balance, sweetener systems,
+            preservation, color and packaging compatibility.
+          </p>
+
+        </article>
+
+
+
+        <article>
+
+          <span>
+            Next
+          </span>
+
+          <h3>
+            Pilot production preparation
+          </h3>
+
+          <p>
+            Translate development work into a
+            repeatable production-ready process.
+          </p>
+
+        </article>
+
+
+
+        <article>
+
+          <span>
+            Future
+          </span>
+
+          <h3>
+            Commercial launch
+          </h3>
+
+          <p>
+            Move the strongest validated products
+            into first-release production.
+          </p>
+
+        </article>
+
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         COMMUNITY LAB
+    =========================================== -->
+
+    <section
+      class="section section-dark community-section"
+      id="community"
+    >
+
+
+      <div class="shell">
+
+
+
+        <div class="community-intro reveal">
+
+
+          <p class="eyebrow">
+            LumiSips Community Lab
+          </p>
+
+
+          <h2>
+            Build an idea with us.
+          </h2>
+
+
+          <p>
+
+            Open any category you care about,
+            add your idea, and submit only the
+            pieces you want to contribute.
+
+          </p>
+
+
+        </div>
+
+
+
+        <form
+          class="community-form ajax-form reveal"
+          id="ideaForm"
+          data-collection="communityIdeas"
+          data-success="Your idea is officially inside the LumiSips Community Lab."
+        >
+
+
+          <input
+            type="hidden"
+            name="form_type"
+            value="Community Idea"
+          >
+
+
+
+          <!-- NAME + EMAIL -->
+
+          <div class="identity-grid">
+
+
+            <label>
+
+              <span>
+                Name
+              </span>
+
+              <input
+                name="name"
+                type="text"
+                maxlength="100"
+                autocomplete="name"
+                placeholder="Your name"
+                required
+              >
+
+            </label>
+
+
+
+            <label>
+
+              <span>
+                Email
+              </span>
+
+              <input
+                name="email"
+                type="email"
+                maxlength="254"
+                autocomplete="email"
+                placeholder="you@example.com"
+                required
+              >
+
+            </label>
+
+
+          </div>
+
+
+
+          <!-- IDEA CATEGORIES -->
+
+          <div class="idea-modules">
+
+
+
+            <!-- FLAVOR -->
+
+            <details class="idea-module">
+
+
+              <summary>
+
+                <span class="idea-number">
+                  01
+                </span>
+
+
+                <span class="idea-copy">
+
+                  <strong>
+                    Flavor
+                  </strong>
+
+                  <small>
+                    Suggest a flavor combination or taste direction.
+                  </small>
+
+                </span>
+
+
+                <span class="idea-action">
+                  Add idea
+                </span>
+
+              </summary>
+
+
+
+              <div class="idea-panel">
+
+
+                <label>
+
+                  <span>
+                    What flavor should LumiSips explore?
+                  </span>
+
+                  <textarea
+                    name="flavor_idea"
+                    maxlength="1500"
+                    placeholder="Example: Blackberry • Watermelon • Black Cherry"
+                  ></textarea>
+
+                </label>
+
+
+              </div>
+
+
+            </details>
+
+
+
+            <!-- COLOR -->
+
+            <details class="idea-module">
+
+
+              <summary>
+
+                <span class="idea-number">
+                  02
+                </span>
+
+
+                <span class="idea-copy">
+
+                  <strong>
+                    Color
+                  </strong>
+
+                  <small>
+                    Suggest a gemstone, color or liquid appearance.
+                  </small>
+
+                </span>
+
+
+                <span class="idea-action">
+                  Add idea
+                </span>
+
+              </summary>
+
+
+
+              <div class="idea-panel">
+
+
+                <label>
+
+                  <span>
+                    What should the color direction look like?
+                  </span>
+
+                  <textarea
+                    name="color_idea"
+                    maxlength="1500"
+                    placeholder="Example: Deep sapphire blue with a bright aquamarine edge"
+                  ></textarea>
+
+                </label>
+
+
+              </div>
+
+
+            </details>
+
+
+
+            <!-- FUNCTION -->
+
+            <details class="idea-module">
+
+
+              <summary>
+
+                <span class="idea-number">
+                  03
+                </span>
+
+
+                <span class="idea-copy">
+
+                  <strong>
+                    Function
+                  </strong>
+
+                  <small>
+                    Suggest a product function or development direction.
+                  </small>
+
+                </span>
+
+
+                <span class="idea-action">
+                  Add idea
+                </span>
+
+              </summary>
+
+
+
+              <div class="idea-panel">
+
+
+                <label>
+
+                  <span>
+                    What functionality should LumiSips explore?
+                  </span>
+
+                  <textarea
+                    name="function_idea"
+                    maxlength="1500"
+                    placeholder="Share the function or product experience you want to see"
+                  ></textarea>
+
+                </label>
+
+
+              </div>
+
+
+            </details>
+
+
+
+            <!-- PACKAGING -->
+
+            <details class="idea-module">
+
+
+              <summary>
+
+                <span class="idea-number">
+                  04
+                </span>
+
+
+                <span class="idea-copy">
+
+                  <strong>
+                    Packaging
+                  </strong>
+
+                  <small>
+                    Suggest a bottle, can, cap, label or pack concept.
+                  </small>
+
+                </span>
+
+
+                <span class="idea-action">
+                  Add idea
+                </span>
+
+              </summary>
+
+
+
+              <div class="idea-panel">
+
+
+                <label>
+
+                  <span>
+                    What packaging concept should we explore?
+                  </span>
+
+                  <textarea
+                    name="packaging_idea"
+                    maxlength="1500"
+                    placeholder="Example: Frosted clear glass with a matte black zodiac crown cap"
+                  ></textarea>
+
+                </label>
+
+
+              </div>
+
+
+            </details>
+
+
+
+            <!-- COLLABORATION -->
+
+            <details class="idea-module">
+
+
+              <summary>
+
+                <span class="idea-number">
+                  05
+                </span>
+
+
+                <span class="idea-copy">
+
+                  <strong>
+                    Collaboration
+                  </strong>
+
+                  <small>
+                    Suggest a brand, artist, creator or concept.
+                  </small>
+
+                </span>
+
+
+                <span class="idea-action">
+                  Add idea
+                </span>
+
+              </summary>
+
+
+
+              <div class="idea-panel">
+
+
+                <label>
+
+                  <span>
+                    Who or what should LumiSips collaborate with?
+                  </span>
+
+                  <textarea
+                    name="collaboration_idea"
+                    maxlength="1500"
+                    placeholder="Brand, artist, company, event or limited-edition concept"
+                  ></textarea>
+
+                </label>
+
+
+              </div>
+
+
+            </details>
+
+
+          </div>
+
+
+
+          <!-- OPTIONAL ZODIAC -->
+
+          <label class="optional-field">
+
+
+            <span>
+              Zodiac sign
+              <small>
+                optional
+              </small>
+            </span>
+
+
+            <input
+              name="zodiac"
+              type="text"
+              maxlength="30"
+              placeholder="Example: Cancer"
+            >
+
+
+          </label>
+
+
+
+          <!-- SPAM TRAP -->
+
+          <input
+            class="honeypot"
+            name="website"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          >
+
+
+
+          <div class="form-submit-row">
+
+
+            <button
+              class="button button-primary"
+              type="submit"
+            >
+              Submit to the Community Lab
+            </button>
+
+
+            <p
+              class="form-status"
+              aria-live="polite"
+            ></p>
+
+
+          </div>
+
+
+        </form>
+
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         COMMUNITY VOTING
+    =========================================== -->
+
+    <section
+      class="section shell"
+      id="vote"
+    >
+
+
+      <div class="section-heading section-heading-split reveal">
+
+
+        <div>
+
+          <p class="eyebrow">
+            Community voting
+          </p>
+
+          <h2>
+            Help shape what comes next.
+          </h2>
+
+        </div>
+
+
+        <p>
+
+          Quick product-development questions let the
+          community influence future packaging, flavor
+          and release decisions.
+
+        </p>
+
+
+      </div>
+
+
+
+      <div
+        class="vote-grid"
+        id="voteGrid"
+      ></div>
+
+
+      <p
+        class="vote-feedback"
+        id="voteFeedback"
+        aria-live="polite"
+      ></p>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         FIRST RELEASE
+    =========================================== -->
+
+    <section
+      class="section section-dark release-section"
+      id="first-release"
+    >
+
+
+      <div class="shell">
+
 
 
         <div class="section-heading reveal">
@@ -891,16 +1544,15 @@
 
 
           <h2>
-            Be first in line for LumiSips
+            Be first in line for LumiSips.
           </h2>
 
 
           <p>
 
-            Reserve your interest for the first
-            LumiSips release.
-
-            No payment is collected yet.
+            No payment is collected.
+            This helps LumiSips understand
+            first-release demand.
 
           </p>
 
@@ -909,121 +1561,33 @@
 
 
 
-        <!-- ====================================
-             FEATURED PRICE TIERS
-        ===================================== -->
+        <!-- PRICES GENERATED FROM data.js -->
 
-
-        <div class="price-grid">
-
-
-
-          <article class="price-card reveal">
-
-            <span>
-              Single
-            </span>
-
-            <strong>
-              $6.99
-            </strong>
-
-            <small>
-              1 bottle
-            </small>
-
-          </article>
+        <div
+          class="price-grid"
+          id="priceGrid"
+        ></div>
 
 
 
-          <article class="price-card reveal">
-
-            <span>
-              Duo
-            </span>
-
-            <strong>
-              $13
-            </strong>
-
-            <small>
-              2 bottles
-            </small>
-
-          </article>
+        <div class="release-layout">
 
 
 
-          <article class="price-card reveal">
-
-            <span>
-              4-Pack
-            </span>
-
-            <strong>
-              $25
-            </strong>
-
-            <small>
-              4 bottles
-            </small>
-
-          </article>
+          <div class="release-copy reveal">
 
 
-
-          <article class="price-card featured reveal">
-
-            <span>
-              6-Pack
-            </span>
-
-            <strong>
-              $36
-            </strong>
-
-            <small>
-              6 bottles
-            </small>
-
-            <b>
-              Best Value
-            </b>
-
-          </article>
-
-
-        </div>
-
-
-
-        <div class="commerce-grid">
-
-
-
-          <article class="commerce-card reveal">
-
-
-            <p class="card-kicker">
-              Founder’s release
+            <p class="eyebrow">
+              Founding community
             </p>
 
 
             <h3>
-              Reserve your place
+              Reserve your interest.
             </h3>
 
 
-            <p>
-
-              Help LumiSips forecast first-release
-              demand and prioritize flavors,
-              packaging and launch regions.
-
-            </p>
-
-
-            <ul class="commerce-list">
+            <ul>
 
               <li>
                 Priority first-release notice
@@ -1038,20 +1602,17 @@
               </li>
 
               <li>
-                No payment collected yet
+                No payment collected today
               </li>
 
             </ul>
 
 
-          </article>
+          </div>
 
 
 
-          <!-- ==================================
-               FIRST RELEASE INTEREST FORM
-          =================================== -->
-
+          <!-- FIRST RELEASE FORM -->
 
           <form
             class="form-card ajax-form reveal"
@@ -1069,13 +1630,15 @@
 
 
 
-            <div class="form-grid">
+            <div class="identity-grid">
 
 
 
               <label>
 
-                Name
+                <span>
+                  Name
+                </span>
 
                 <input
                   name="name"
@@ -1091,7 +1654,9 @@
 
               <label>
 
-                Email
+                <span>
+                  Email
+                </span>
 
                 <input
                   name="email"
@@ -1108,20 +1673,19 @@
 
 
 
-            <!-- ================================
-                 UPDATED PRICING DROPDOWN
-            ================================= -->
-
-
             <label>
 
-              Quantity
+
+              <span>
+                Quantity
+              </span>
+
 
               <select
                 name="quantity"
+                id="quantitySelect"
                 required
               >
-
 
                 <option
                   value=""
@@ -1131,37 +1695,6 @@
                   Select quantity
                 </option>
 
-
-                <option value="1">
-                  1 bottle — $6.99
-                </option>
-
-
-                <option value="2">
-                  2 bottles — $13
-                </option>
-
-
-                <option value="3">
-                  3 bottles — $19.99
-                </option>
-
-
-                <option value="4">
-                  4 bottles — $25
-                </option>
-
-
-                <option value="5">
-                  5 bottles — $31.99
-                </option>
-
-
-                <option value="6">
-                  6 bottles — $36
-                </option>
-
-
               </select>
 
 
@@ -1169,10 +1702,7 @@
 
 
 
-            <!-- ================================
-                 FLAVOR SELECTION
-            ================================= -->
-
+            <!-- FLAVOR CHOICES GENERATED FROM data.js -->
 
             <fieldset class="choice-fieldset">
 
@@ -1182,117 +1712,17 @@
               </legend>
 
 
-              <div class="choice-grid">
-
-
-
-                <label class="choice-chip">
-
-                  <input
-                    type="radio"
-                    name="flavor_interest"
-                    value="Cancer"
-                    required
-                  >
-
-                  <span>
-                    ♋ Cancer
-                  </span>
-
-                </label>
-
-
-
-                <label class="choice-chip">
-
-                  <input
-                    type="radio"
-                    name="flavor_interest"
-                    value="Capricorn"
-                  >
-
-                  <span>
-                    ♑ Capricorn
-                  </span>
-
-                </label>
-
-
-
-                <label class="choice-chip">
-
-                  <input
-                    type="radio"
-                    name="flavor_interest"
-                    value="Virgo"
-                  >
-
-                  <span>
-                    ♍ Virgo
-                  </span>
-
-                </label>
-
-
-
-                <label class="choice-chip">
-
-                  <input
-                    type="radio"
-                    name="flavor_interest"
-                    value="Scorpio"
-                  >
-
-                  <span>
-                    ♏ Scorpio
-                  </span>
-
-                </label>
-
-
-
-                <label class="choice-chip">
-
-                  <input
-                    type="radio"
-                    name="flavor_interest"
-                    value="Sagittarius"
-                  >
-
-                  <span>
-                    ♐ Sagittarius
-                  </span>
-
-                </label>
-
-
-
-                <label class="choice-chip">
-
-                  <input
-                    type="radio"
-                    name="flavor_interest"
-                    value="Pisces"
-                  >
-
-                  <span>
-                    ♓ Pisces
-                  </span>
-
-                </label>
-
-
-              </div>
+              <div
+                class="choice-grid"
+                id="flavorChoices"
+              ></div>
 
 
             </fieldset>
 
 
 
-            <!-- ================================
-                 PACKAGING SELECTION
-            ================================= -->
-
+            <!-- PACKAGING -->
 
             <fieldset class="choice-fieldset">
 
@@ -1320,7 +1750,7 @@
 
 
                   <span>
-                    Glass Bottle
+                    16 oz Glass Bottle
                   </span>
 
 
@@ -1339,7 +1769,7 @@
 
 
                   <span>
-                    Sleek Can
+                    16 oz Sleek Can
                   </span>
 
 
@@ -1355,7 +1785,17 @@
 
             <label>
 
-              ZIP code
+
+              <span>
+
+                ZIP code
+
+                <small>
+                  optional
+                </small>
+
+              </span>
+
 
               <input
                 name="zip_code"
@@ -1363,8 +1803,9 @@
                 inputmode="numeric"
                 maxlength="10"
                 autocomplete="postal-code"
-                placeholder="Optional"
+                placeholder="92801"
               >
+
 
             </label>
 
@@ -1381,7 +1822,7 @@
 
 
             <button
-              class="btn btn-primary"
+              class="button button-primary"
               type="submit"
             >
               Request First-Release Access
@@ -1402,13 +1843,10 @@
 
 
 
-        <p class="commerce-note">
+        <p class="release-note">
 
-          Pricing reflects current launch-target
-          pricing and may change before commercial
-          release.
-
-          This page does not process payment.
+          Pricing shown is current target pricing
+          and may change before commercial release.
 
         </p>
 
@@ -1420,842 +1858,17 @@
 
 
 
-    <!-- ========================================
-         COMMUNITY VOTING
-    ========================================= -->
-
-
-    <section
-      class="section-shell section"
-      id="arena"
-    >
-
-
-      <div class="section-heading reveal">
-
-
-        <p class="eyebrow">
-          Community voting
-        </p>
-
-
-        <h2>
-          Help shape what launches next
-        </h2>
-
-
-        <p>
-
-          LumiSips uses community input to help
-          evaluate packaging, flavor direction,
-          functional priorities and future releases.
-
-        </p>
-
-
-      </div>
-
-
-      <div
-        class="battle-grid"
-        id="battleGrid"
-      ></div>
-
-
-      <p
-        class="vote-feedback"
-        id="battleFeedback"
-        aria-live="polite"
-      ></p>
-
-
-    </section>
-
-
-
-    <!-- ========================================
-         GEMSTONE LAB
-    ========================================= -->
-
-
-    <section
-      class="section section-dark"
-      id="gemstones"
-    >
-
-
-      <div class="section-shell">
-
-
-        <div class="section-heading reveal">
-
-
-          <p class="eyebrow">
-            Gemstone color lab
-          </p>
-
-
-          <h2>
-            Choose the visual direction
-          </h2>
-
-
-          <p>
-
-            Vote on the gemstone color identity
-            that should represent each flavor
-            inside the bottle.
-
-          </p>
-
-
-        </div>
-
-
-        <div
-          class="gemstone-grid"
-          id="gemstoneGrid"
-        ></div>
-
-
-        <p
-          class="vote-feedback"
-          id="gemstoneFeedback"
-          aria-live="polite"
-        ></p>
-
-
-      </div>
-
-
-    </section>
-
-
-
-    <!-- ========================================
-         STORY / R&D
-    ========================================= -->
-
-
-    <section
-      class="section-shell section"
-      id="story"
-    >
-
-
-      <div class="story-grid">
-
-
-
-        <div class="section-heading reveal">
-
-
-          <p class="eyebrow">
-            Behind the bottle
-          </p>
-
-
-          <h2>
-            Built through more than 70 formulation batches
-          </h2>
-
-
-          <p>
-
-            LumiSips has been developed through
-            repeated testing, concentrate scaling,
-            carbonation trials, ingredient refinement,
-            color work and real-world feedback.
-
-          </p>
-
-
-        </div>
-
-
-
-        <div class="story-stats">
-
-
-
-          <article class="metric-card reveal">
-
-            <strong
-              data-count="70"
-              data-suffix="+"
-            >
-              0
-            </strong>
-
-            <span>
-              Documented batches
-            </span>
-
-          </article>
-
-
-
-          <article class="metric-card reveal">
-
-            <strong data-count="4">
-              0
-            </strong>
-
-            <span>
-              Batch formats tested
-            </span>
-
-          </article>
-
-
-
-          <article class="metric-card reveal">
-
-            <strong
-              data-count="6"
-              data-suffix="+"
-            >
-              0
-            </strong>
-
-            <span>
-              Supplier relationships
-            </span>
-
-          </article>
-
-
-
-          <article class="metric-card reveal">
-
-            <strong data-count="12">
-              0
-            </strong>
-
-            <span>
-              Zodiac concepts
-            </span>
-
-          </article>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <div class="lab-layout">
-
-
-
-        <div class="progress-panel reveal">
-
-
-
-          <div
-            class="progress-row"
-            data-progress="94"
-          >
-
-            <div>
-
-              <span>
-                Flavor architecture
-              </span>
-
-              <b>
-                94%
-              </b>
-
-            </div>
-
-            <div class="bar">
-              <i></i>
-            </div>
-
-          </div>
-
-
-
-          <div
-            class="progress-row"
-            data-progress="90"
-          >
-
-            <div>
-
-              <span>
-                Sweetness and acidity
-              </span>
-
-              <b>
-                90%
-              </b>
-
-            </div>
-
-            <div class="bar">
-              <i></i>
-            </div>
-
-          </div>
-
-
-
-          <div
-            class="progress-row"
-            data-progress="86"
-          >
-
-            <div>
-
-              <span>
-                Concentrate scaling
-              </span>
-
-              <b>
-                86%
-              </b>
-
-            </div>
-
-            <div class="bar">
-              <i></i>
-            </div>
-
-          </div>
-
-
-
-          <div
-            class="progress-row"
-            data-progress="82"
-          >
-
-            <div>
-
-              <span>
-                Functional integration
-              </span>
-
-              <b>
-                82%
-              </b>
-
-            </div>
-
-            <div class="bar">
-              <i></i>
-            </div>
-
-          </div>
-
-
-
-          <div
-            class="progress-row"
-            data-progress="78"
-          >
-
-            <div>
-
-              <span>
-                Gemstone color development
-              </span>
-
-              <b>
-                78%
-              </b>
-
-            </div>
-
-            <div class="bar">
-              <i></i>
-            </div>
-
-          </div>
-
-
-        </div>
-
-
-
-        <div class="fail-grid">
-
-
-
-          <article class="fail-card reveal">
-
-            <span>
-              Flavor
-            </span>
-
-            <h3>
-              Balance testing
-            </h3>
-
-            <p>
-
-              Small adjustments can completely
-              change sweetness, acidity and
-              fruit perception.
-
-            </p>
-
-          </article>
-
-
-
-          <article class="fail-card reveal">
-
-            <span>
-              Color
-            </span>
-
-            <h3>
-              Gemstone development
-            </h3>
-
-            <p>
-
-              Natural color systems change with
-              pH, dilution and ingredient interaction.
-
-            </p>
-
-          </article>
-
-
-
-          <article class="fail-card reveal">
-
-            <span>
-              Carbonation
-            </span>
-
-            <h3>
-              Sparkling refinement
-            </h3>
-
-            <p>
-
-              Temperature, acids, powders and
-              mixing order all influence
-              carbonation quality.
-
-            </p>
-
-          </article>
-
-
-
-          <article class="fail-card reveal">
-
-            <span>
-              Scale
-            </span>
-
-            <h3>
-              From ounces to gallons
-            </h3>
-
-            <p>
-
-              Larger batches help expose problems
-              that smaller development tests can hide.
-
-            </p>
-
-          </article>
-
-
-        </div>
-
-
-      </div>
-
-
-    </section>
-
-
-
-    <!-- ========================================
-         ROADMAP
-    ========================================= -->
-
-
-    <section class="section section-dark">
-
-
-      <div class="section-shell">
-
-
-        <div class="section-heading reveal">
-
-
-          <p class="eyebrow">
-            Launch roadmap
-          </p>
-
-
-          <h2>
-            From founder lab to first release
-          </h2>
-
-
-        </div>
-
-
-
-        <div class="roadmap roadmap-simple">
-
-
-
-          <article
-            class="roadmap-item complete reveal"
-          >
-
-            <span>
-              Complete
-            </span>
-
-            <h3>
-              Brand and core flavor development
-            </h3>
-
-          </article>
-
-
-
-          <article
-            class="roadmap-item active reveal"
-          >
-
-            <span>
-              Active
-            </span>
-
-            <h3>
-              Formula refinement and packaging validation
-            </h3>
-
-          </article>
-
-
-
-          <article
-            class="roadmap-item upcoming reveal"
-          >
-
-            <span>
-              Next
-            </span>
-
-            <h3>
-              Pilot production preparation
-            </h3>
-
-          </article>
-
-
-
-          <article
-            class="roadmap-item upcoming reveal"
-          >
-
-            <span>
-              Future
-            </span>
-
-            <h3>
-              Commercial launch
-            </h3>
-
-          </article>
-
-
-        </div>
-
-
-      </div>
-
-
-    </section>
-
-
-
-    <!-- ========================================
-         COMMUNITY LAB
-    ========================================= -->
-
-
-    <section
-      class="section community-section"
-      id="community"
-    >
-
-
-      <div class="section-shell">
-
-
-        <div class="section-heading reveal">
-
-
-          <p class="eyebrow">
-            Enter the LumiSips Lab
-          </p>
-
-
-          <h2>
-            Submit an idea to the community lab
-          </h2>
-
-
-          <p>
-
-            Share a flavor, color, functional
-            ingredient, packaging concept,
-            collaboration or event idea.
-
-          </p>
-
-
-        </div>
-
-
-
-        <form
-          class="form-card ajax-form reveal"
-          id="ideaForm"
-          data-collection="communityIdeas"
-          data-success="Your idea is officially inside the LumiSips Community Lab."
-        >
-
-
-          <input
-            type="hidden"
-            name="form_type"
-            value="Community Idea"
-          >
-
-
-
-          <div class="form-grid">
-
-
-
-            <label>
-
-              Name
-
-              <input
-                name="name"
-                type="text"
-                maxlength="100"
-                autocomplete="name"
-                required
-              >
-
-            </label>
-
-
-
-            <label>
-
-              Email
-
-              <input
-                name="email"
-                type="email"
-                maxlength="254"
-                autocomplete="email"
-                required
-              >
-
-            </label>
-
-
-          </div>
-
-
-
-          <fieldset class="choice-fieldset">
-
-
-            <legend>
-              Idea category
-            </legend>
-
-
-            <div class="choice-grid">
-
-
-
-              <label class="choice-chip">
-
-                <input
-                  type="radio"
-                  name="category"
-                  value="Flavor concept"
-                  required
-                >
-
-                <span>
-                  Flavor
-                </span>
-
-              </label>
-
-
-
-              <label class="choice-chip">
-
-                <input
-                  type="radio"
-                  name="category"
-                  value="Gemstone color"
-                >
-
-                <span>
-                  Color
-                </span>
-
-              </label>
-
-
-
-              <label class="choice-chip">
-
-                <input
-                  type="radio"
-                  name="category"
-                  value="Functional ingredient"
-                >
-
-                <span>
-                  Function
-                </span>
-
-              </label>
-
-
-
-              <label class="choice-chip">
-
-                <input
-                  type="radio"
-                  name="category"
-                  value="Packaging concept"
-                >
-
-                <span>
-                  Packaging
-                </span>
-
-              </label>
-
-
-
-              <label class="choice-chip">
-
-                <input
-                  type="radio"
-                  name="category"
-                  value="Event or collaboration"
-                >
-
-                <span>
-                  Collaboration
-                </span>
-
-              </label>
-
-
-            </div>
-
-
-          </fieldset>
-
-
-
-          <label>
-
-            Zodiac sign
-
-            <input
-              name="zodiac"
-              type="text"
-              maxlength="30"
-              placeholder="Optional"
-            >
-
-          </label>
-
-
-
-          <label>
-
-            Your idea
-
-            <textarea
-              name="message"
-              maxlength="1500"
-              required
-            ></textarea>
-
-          </label>
-
-
-
-          <input
-            class="honeypot"
-            name="website"
-            tabindex="-1"
-            autocomplete="off"
-            aria-hidden="true"
-          >
-
-
-
-          <button
-            class="btn btn-primary"
-            type="submit"
-          >
-            Submit to the Lab
-          </button>
-
-
-
-          <p
-            class="form-status"
-            aria-live="polite"
-          ></p>
-
-
-        </form>
-
-
-      </div>
-
-
-    </section>
-
-
-
-    <!-- ========================================
+    <!-- ==========================================
          WAITLIST
-    ========================================= -->
-
+    =========================================== -->
 
     <section
-      class="section-shell section"
+      class="section shell"
       id="join"
     >
 
 
-      <div class="join-layout">
+      <div class="waitlist-layout">
 
 
 
@@ -2263,50 +1876,21 @@
 
 
           <p class="eyebrow">
-            Founding community
+            Stay close to the build
           </p>
 
 
           <h2>
-            Get first access to the LumiSips journey
+            Join the LumiSips founding community.
           </h2>
 
 
           <p>
 
-            Join for launch announcements,
-            formulation updates, early voting,
-            flavor reveals and future taste-test
-            opportunities.
+            Get development updates, flavor reveals,
+            early voting and first-release information.
 
           </p>
-
-
-
-          <div class="join-perks">
-
-
-            <span>
-              Development updates
-            </span>
-
-
-            <span>
-              Early voting
-            </span>
-
-
-            <span>
-              Taste-test opportunities
-            </span>
-
-
-            <span>
-              Launch access
-            </span>
-
-
-          </div>
 
 
         </div>
@@ -2314,7 +1898,7 @@
 
 
         <form
-          class="form-card ajax-form reveal"
+          class="waitlist-card ajax-form reveal"
           id="waitlistForm"
           data-collection="waitlist"
           data-success="Welcome to the LumiSips Founding Community."
@@ -2329,163 +1913,135 @@
 
 
 
-          <label>
-
-            Name
-
-            <input
-              name="name"
-              type="text"
-              maxlength="100"
-              autocomplete="name"
-              required
-            >
-
-          </label>
-
-
+          <!-- EMAIL FIRST -->
 
           <label>
 
-            Email
+
+            <span>
+              Email
+            </span>
+
 
             <input
               name="email"
               type="email"
               maxlength="254"
               autocomplete="email"
+              placeholder="you@example.com"
               required
             >
-
-          </label>
-
-
-
-          <label>
-
-            Favorite zodiac sign
-
-
-            <select
-              name="favorite_zodiac"
-              required
-            >
-
-
-              <option value="">
-                Select a sign
-              </option>
-
-
-              <option>
-                Aries
-              </option>
-
-
-              <option>
-                Taurus
-              </option>
-
-
-              <option>
-                Gemini
-              </option>
-
-
-              <option>
-                Cancer
-              </option>
-
-
-              <option>
-                Leo
-              </option>
-
-
-              <option>
-                Virgo
-              </option>
-
-
-              <option>
-                Libra
-              </option>
-
-
-              <option>
-                Scorpio
-              </option>
-
-
-              <option>
-                Sagittarius
-              </option>
-
-
-              <option>
-                Capricorn
-              </option>
-
-
-              <option>
-                Aquarius
-              </option>
-
-
-              <option>
-                Pisces
-              </option>
-
-
-            </select>
 
 
           </label>
 
 
 
-          <label>
+          <!-- OPTIONAL PROFILE -->
 
-            Preferred line
-
-
-            <select
-              name="preferred_line"
-              required
-            >
+          <details class="optional-profile">
 
 
-              <option value="">
-                Select a line
-              </option>
+            <summary>
+              Add optional preferences
+            </summary>
 
 
-              <option>
-                Still Hydration
-              </option>
+            <div class="optional-profile-grid">
 
 
-              <option>
-                Sparkling Hydration
-              </option>
+
+              <label>
 
 
-              <option>
-                Still Energy
-              </option>
+                <span>
+                  Name
+                </span>
 
 
-              <option>
-                Sparkling Energy
-              </option>
+                <input
+                  name="name"
+                  type="text"
+                  maxlength="100"
+                  autocomplete="name"
+                >
 
 
-            </select>
+              </label>
 
 
-          </label>
+
+              <label>
 
 
+                <span>
+                  Favorite zodiac
+                </span>
+
+
+                <select
+                  name="favorite_zodiac"
+                  id="waitlistZodiac"
+                >
+
+                  <option value="">
+                    Select a sign
+                  </option>
+
+                </select>
+
+
+              </label>
+
+
+
+              <label>
+
+
+                <span>
+                  Preferred line
+                </span>
+
+
+                <select name="preferred_line">
+
+
+                  <option value="">
+                    Select a line
+                  </option>
+
+
+                  <option>
+                    Still Hydration
+                  </option>
+
+                  <option>
+                    Sparkling Hydration
+                  </option>
+
+                  <option>
+                    Still Energy
+                  </option>
+
+                  <option>
+                    Sparkling Energy
+                  </option>
+
+
+                </select>
+
+
+              </label>
+
+
+            </div>
+
+
+          </details>
+
+
+
+          <!-- EMAIL CONSENT -->
 
           <label class="consent">
 
@@ -2521,10 +2077,10 @@
 
 
           <button
-            class="btn btn-primary"
+            class="button button-primary"
             type="submit"
           >
-            Join the Waitlist
+            Get First Access
           </button>
 
 
@@ -2544,27 +2100,38 @@
     </section>
 
 
-
   </main>
 
 
 
-  <!-- ========================================
+  <!-- ==========================================
        FOOTER
-  ========================================= -->
+  =========================================== -->
+
+  <footer class="site-footer">
 
 
-  <footer>
-
-
-    <div class="footer-shell">
+    <div class="shell footer-grid">
 
 
 
-      <div class="footer-brand">
+      <div>
 
 
-        <div class="footer-logo">
+        <img
+          class="footer-logo-img"
+          src="assets/images/brand/lumisips-logo.png"
+          alt="LumiSips"
+          width="170"
+          height="60"
+          onerror="this.hidden=true;this.nextElementSibling.hidden=false"
+        >
+
+
+        <div
+          class="footer-logo-fallback"
+          hidden
+        >
           LumiSips
         </div>
 
@@ -2586,19 +2153,26 @@
         </a>
 
 
-        <a href="#shop">
+        <a href="#community">
+          Community Lab
+        </a>
+
+
+        <a href="#first-release">
           First Release
         </a>
 
 
-        <a href="#arena">
-          Vote
+        <a href="mailto:Arick@lumisips.com">
+          Contact
         </a>
 
 
-        <a href="#community">
-          Community
-        </a>
+      </div>
+
+
+
+      <div class="footer-social">
 
 
         <a
@@ -2628,11 +2202,6 @@
         </a>
 
 
-        <a href="mailto:Arick@lumisips.com">
-          Contact
-        </a>
-
-
       </div>
 
 
@@ -2646,12 +2215,7 @@
 
 
         <span>
-          Founder-built in Anaheim, California
-        </span>
-
-
-        <span>
-          Privacy and terms pages coming before commercial checkout
+          Orange County, California
         </span>
 
 
@@ -2665,12 +2229,10 @@
 
 
 
-  <!-- ========================================
-       BACK TO TOP
-  ========================================= -->
-
+  <!-- BACK TO TOP -->
 
   <button
+    class="back-top"
     id="backTop"
     type="button"
     aria-label="Back to top"
@@ -2680,22 +2242,26 @@
 
 
 
-  <!-- ========================================
-       SCRIPTS
-  ========================================= -->
+  <!-- ==========================================
+       JAVASCRIPT
+  =========================================== -->
+
+  <script
+    src="data.js?v=20260916-remaster-1"
+  ></script>
 
 
   <script
-    src="script.js?v=20260818-1"
+    src="script.js?v=20260916-remaster-1"
   ></script>
 
 
   <script
     type="module"
-    src="firebase.js?v=20260818-1"
+    src="firebase.js?v=20260916-remaster-1"
   ></script>
 
 
 </body>
 
-    </html>
+</html>
