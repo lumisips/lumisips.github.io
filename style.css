@@ -3121,3 +3121,8 @@ input:focus-visible + span {
   }
 
 }
+/* Prevent broken brand image from appearing when logo file is missing */
+.brand-logo[hidden],
+.footer-logo-img[hidden] {
+  display: none !important;
+}
