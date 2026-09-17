@@ -83,7 +83,7 @@ const provider =
 ========================================================= */
 
 const FOUNDER_EMAIL =
-  "YOUR_AUTHORIZED_GOOGLE_EMAIL";
+  "Lumisips@gmail.com";
 
 
 
