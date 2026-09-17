@@ -10,7 +10,7 @@ window.LUMISIPS_DATA = {
       flavor: "Blue Raspberry • Dragon Fruit • Hibiscus",
       gem: "Blue Sapphire",
       stage: "Flagship",
-      image: "assets/images/products/cancer-blue-sapphire.webp",
+      image: "assets/images/products/2026-06-27-161842845(1).jpg",
       accent: "#2fc8ff"
     },
 
